@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>홈 | Restaurant Search</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="home-container">
+    <!-- 검색 영역 -->
+    <section class="home-search-section">
+      <h1 class="home-title">주변 맛집을 검색해보세요!</h1>
+      <form action="/search" method="get" class="home-search-form">
+        <input type="text" name="query" placeholder="맛집 키워드를 입력하세요" class="home-search-input" required>
+        <button type="submit" class="home-search-button">검색</button>
+      </form>
+    </section>
+
+    <!-- 추천 맛집 섹션 -->
+    <section class="home-recommend-section">
+      <h2 class="home-section-title">인기 맛집 추천</h2>
+      <div class="home-recommend-list">
+        <% if (recommendedRestaurants && recommendedRestaurants.length > 0) { %>
+          <% recommendedRestaurants.forEach(function(restaurant) { %>
+            <div class="home-recommend-card">
+              <a href="/details/<%= restaurant.id %>" class="home-recommend-link">
+                <img src="<%= restaurant.imageUrl %>" alt="<%= restaurant.name %>" class="home-recommend-image">
+                <div class="home-recommend-info">
+                  <h3 class="home-recommend-name"><%= restaurant.name %></h3>
+                  <p class="home-recommend-rating">평점: <%= restaurant.rating %></p>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="home-no-recommend">추천할 맛집이 없습니다. 검색을 통해 찾아보세요!</p>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

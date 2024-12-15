@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>로그인 | Restaurant Search</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="login-container">
+    <section class="login-form-section">
+      <h1 class="login-title">로그인</h1>
+      
+      <!-- 에러 메시지 표시 (로그인 실패 시) -->
+      <% if (errorMessage) { %>
+        <div class="login-error-message"><%= errorMessage %></div>
+      <% } %>
+      
+      <!-- 성공 메시지 표시 (회원가입 후 로그인 유도 시 등) -->
+      <% if (successMessage) { %>
+        <div class="login-success-message"><%= successMessage %></div>
+      <% } %>
+      
+      <form action="/auth/login" method="post" class="login-form">
+        <label for="email" class="login-label">이메일</label>
+        <input type="email" id="email" name="email" class="login-input" required>

@@ -1,0 +1,31 @@
+<header class="header-container">
+  <div class="header-content">
+    <!-- 로고 및 홈으로 돌아가는 링크 -->
+    <div class="header-logo">
+      <a href="/">
+        <img src="/images/logo.png" alt="Restaurant Search Logo" class="header-logo-image">
+        <span class="header-logo-text">Restaurant Search</span>
+      </a>
+    </div>
+    
+    <!-- 네비게이션 메뉴 (검색, 로그인/회원가입 또는 사용자 정보 표시) -->
+    <nav class="header-nav">
+      <ul class="header-nav-list">
+        <!-- 로그인 여부에 따라 다른 UI 표시 -->
+        <% if (user) { %>
+          <li class="header-nav-item header-nav-user">
+            <span class="header-username"><%= user.username %>님</span>
+            <a href="/auth/logout" class="header-nav-link header-logout-link">로그아웃</a>
+          </li>
+        <% } else { %>
+          <li class="header-nav-item">
+            <a href="/auth/login" class="header-nav-link header-login-link">로그인</a>
+          </li>
+          <li class="header-nav-item">
+            <a href="/auth/signup" class="header-nav-link header-signup-link">회원가입</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</header>
