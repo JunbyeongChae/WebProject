@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- 로고 -->
+        <div class="text-center mb-4">
+          <img src="/images/CI.png" alt="Logo" class="mb-3" width="80">
+          <h3>Create an Account</h3>
+        </div>
+
+        <!-- 프로필 사진 등록 -->
+        <div class="text-center mb-4">
+          <label for="profileImage" class="d-block">
+            <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
+              style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
+          </label>
+          <input type="file" id="profileImage" accept="image/*" class="d-none">
+          <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
+        </div>
+
+        <!-- 회원가입 폼 -->
+        <form>
+          <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+          </div>
+          <div class="form-group mb-3">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+          </div>
+          <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+          </div>
+          <div class="form-group mb-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+          </div>
+          <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
+        </form>
+
+        <!-- 로그인 링크 -->
+        <div class="text-center">
+          <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>

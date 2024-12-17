@@ -1,0 +1,103 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.ci{
+  width: 100px;
+  height: 60px;
+}
+
+.card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.btn-dark {
+  background-color: #343a40;
+  color: white;
+}
+
+.btn-dark:hover {
+  background-color: #23272b;
+}
+
+.card-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+#map-placeholder {
+  color: #888;
+  font-size: 1.1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.img-fluid {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.text-warning {
+  font-size: 1.2rem;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+}
+
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+
+/* 구글 로그인 버튼 스타일 */
+.btn-light img {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* 프로필 사진 미리보기 스타일 */
+#profilePreview {
+  border: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+#profilePreview:hover {
+  border-color: #aaa;
+}
+
+#map {
+  height: 100%; /* 중간 칸의 높이에 맞게 설정 */
+  background-color: #e9ecef; /* 지도 영역에 배경색 추가 (임시) */
+}
+
+/* 중간 칸 스크롤 영역 */
+.flex-grow-1 {
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+}
+
+/* 검색 결과 카드 이미지 스타일 */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* 프로필 이미지 스타일 */
+img.rounded-circle {
+  border: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+img.rounded-circle:hover {
+  border-color: #aaa;
+}
+
+/* 지도 높이 */
+#map {
+  height: 500px; /* 고정된 지도 높이 */
+  background-color: #e9ecef; /* 임시 배경색 */
+}
