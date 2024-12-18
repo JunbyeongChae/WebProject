@@ -1,50 +1,78 @@
 <%- include('../partials/header') %>
 
-  <div class="container my-5">
-    <div class="row">
-      <!-- 왼쪽 칸: 회원정보 수정 -->
-      <div class="col-md-6">
-        <h4 class="mb-4">내 정보</h4>
-        <!-- 프로필 사진 업로드 -->
-        <div class="text-center mb-4">
-          <label for="profileImage" class="d-block">
-            <img src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
-              style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
-            </label>
-            <small class="form-text text-muted">프로필 사진을 등록해주세요</small>
-          <input type="file" id="profileImage" class="form-control-file mt-2">
-        </div>
-
-        <!-- 회원정보 수정 양식 -->
-        <form>
-          <div class="form-group mb-3">
-            <label for="name">이름</label>
-            <input type="text" class="form-control" id="name" value="John Doe">
-          </div>
-          <div class="form-group mb-3">
-            <label for="email">이메일</label>
-            <input type="email" class="form-control" id="email" value="john@example.com">
-          </div>
-          <div class="form-group mb-3">
-            <label for="phone">전화번호</label>
-            <input type="text" class="form-control" id="phone" value="010-1234-5678">
-          </div>
-          <div class="form-group mb-3">
-            <label for="address">주소</label>
-            <input type="text" class="form-control" id="address" value="Seoul, Korea">
-          </div>
-          <button type="submit" class="btn btn-dark w-100">정보 수정하기</button>
-        </form>
+<div class="container my-5">
+  <div class="row">
+    <!-- 왼쪽 칸: 회원정보 수정 -->
+    <div class="col-md-6">
+      <h4 class="mb-4">내 정보</h4>
+      <!-- 프로필 사진 업로드 -->
+      <div class="text-center mb-4">
+        <label for="profileImage" class="d-block">
+          <img src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
+            style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;" id="profilePreview">
+        </label>
+        <small class="form-text text-muted">프로필 사진을 등록해주세요</small>
+        <input type="file" id="profileImage" class="form-control-file mt-2" onchange="previewImage(event)">
       </div>
 
-      <!-- 오른쪽 칸: 지도 -->
-      <div class="col-md-6">
-        <h4>내 즐겨찾기 목록</h4>
-        <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
-          <p class="text-center my-5">Map Area</p>
+      <!-- 회원정보 수정 양식 -->
+      <form id="infoForm">
+        <div class="form-group mb-3">
+          <label for="name">이름</label>
+          <input type="text" class="form-control" id="name" value="John Doe">
         </div>
+        <div class="form-group mb-3">
+          <label for="email">이메일</label>
+          <input type="email" class="form-control" id="email" value="john@example.com">
+        </div>
+        <div class="form-group mb-3">
+          <label for="phone">전화번호</label>
+          <input type="text" class="form-control" id="phone" value="010-1234-5678">
+        </div>
+        <div class="form-group mb-3">
+          <label for="address">주소</label>
+          <input type="text" class="form-control" id="address" value="Seoul, Korea">
+        </div>
+        <button type="submit" class="btn btn-dark w-100">정보 수정하기</button>
+      </form>
+    </div>
+
+    <!-- 오른쪽 칸: 지도 -->
+    <div class="col-md-6">
+      <h4>내 즐겨찾기 목록</h4>
+      <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
+        <p class="text-center my-5">Map Area</p>
       </div>
     </div>
   </div>
+</div>
 
-  <%- include('../partials/footer') %>
+<%- include('../partials/footer') %>
+
+<script>
+  // 이미지 미리보기 기능
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const output = document.getElementById('profilePreview');
+      output.src = reader.result; // 이미지 미리보기
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  // 폼 제출 시 화면에 수정된 정보 표시
+  document.getElementById('infoForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // 폼 제출 시 페이지 새로 고침 방지
+
+    // 수정된 값 가져오기
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+
+    // 화면에 저장된 정보 표시 (예시로 콘솔에 출력)
+    console.log('수정된 정보:', { name, email, phone, address });
+
+    // 여기서 서버에 데이터를 보내는 로직을 추가할 수 있음.
+  });
+</script>
