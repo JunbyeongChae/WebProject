@@ -7,18 +7,19 @@
   },
   "dependencies": {
     "-": "^0.0.1",
+    "bootstrap": "^5.3.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.4.7",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.18.1",
-    "firebase": "^11.0.2",
+    "firebase": "^11.1.0",
     "firebase-admin": "^13.0.1",
     "g": "^2.0.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.9"
   },
   "devDependencies": {
     "http-proxy-middleware": "^3.0.3"
