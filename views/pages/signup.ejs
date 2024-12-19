@@ -1,52 +1,69 @@
 <%- include('../partials/header') %>
 
-  <div class="container my-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <!-- 로고 -->
-        <div class="text-center mb-4">
-          <img src="/images/CI.png" alt="Logo" class="mb-3" width="80">
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- 로고 -->
+      <div class="text-center mb-4">
+        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80">
           <h3>Create an Account</h3>
-        </div>
+      </div>
 
-        <!-- 프로필 사진 등록 -->
-        <div class="text-center mb-4">
-          <label for="profileImage" class="d-block">
-            <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
-              style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
-          </label>
+      <!-- 프로필 사진 등록 -->
+      <div class="text-center mb-4">
+        <label for="profileImage" class="d-block">
+          <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
+            style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
+        </label>
+        <!-- 첫 번째 input은 이미지를 클릭하면 파일 선택 창을 열기 위한 input -->
+        <input type="file" id="profileImage" accept="image/*" class="d-none" onchange="previewImage(event)">
           <input type="file" id="profileImage" accept="image/*" class="d-none">
           <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
           <input type="file" id="profileImage" class="form-control-file mt-2">
-        </div>
+        
+        <!-- 두 번째 input은 실제 파일을 선택할 수 있는 input (파일을 선택 후 preview가 갱신됨) -->
+        <input type="file" id="profileImage2" class="form-control-file mt-2" onchange="previewImage(event)">
+      </div>
 
-        <!-- 회원가입 폼 -->
-        <form>
-          <div class="form-group mb-3">
+      <!-- 회원가입 폼 -->
+      <form>
+        <div class="form-group mb-3">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" placeholder="Enter your name">
-          </div>
-          <div class="form-group mb-3">
+        </div>
+        <div class="form-group mb-3">
             <label for="email">Email address</label>
             <input type="email" class="form-control" id="email" placeholder="Enter your email">
-          </div>
-          <div class="form-group mb-3">
+        </div>
+        <div class="form-group mb-3">
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" placeholder="Enter your password">
-          </div>
-          <div class="form-group mb-3">
+        </div>
+        <div class="form-group mb-3">
             <label for="confirmPassword">Confirm Password</label>
             <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
-          </div>
-          <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
-        </form>
-
-        <!-- 로그인 링크 -->
-        <div class="text-center">
-          <p>Already have an account? <a href="/login">Log in</a></p>
         </div>
+          <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
+      </form>
+
+      <!-- 로그인 링크 -->
+      <div class="text-center">
+          <p>Already have an account? <a href="/login">Log in</a></p>
       </div>
     </div>
   </div>
+</div>
 
-  <%- include('../partials/footer') %>
+<%- include('../partials/footer') %>
+
+<script>
+  // 이미지 미리보기 기능
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const output = document.getElementById('profilePreview');
+      output.src = reader.result; // 선택된 이미지를 미리보기로 설정
+    };
+    reader.readAsDataURL(event.target.files[0]); // 파일을 읽어서 Data URL로 변환
+  }
+</script>

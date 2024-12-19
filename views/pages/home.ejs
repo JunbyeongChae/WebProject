@@ -5,9 +5,9 @@
   <div class="row justify-content-center mb-4">
     <div class="col-md-8">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for restaurants or cuisines">
+        <input type="text" class="form-control" placeholder="찾고 싶은 음식점을 검색하세요!">
         <div class="input-group-append">
-          <button class="btn btn-dark" type="button" onclick="window.location.href = '/search'">Search</button>
+          <button class="btn btn-dark" type="button" onclick="window.location.href = '/search'">검색</button>
         </div>
       </div>
     </div>
@@ -17,10 +17,10 @@
   <h3 class="mb-4 text-center">Recommended Restaurants</h3>
   <div class="row">
     <% const restaurants = [
-      { img: 'https://placehold.co/100x100', title: 'The Italian Corner', info: 'Italian • $$ • 1.2 miles', rating: 4.8 },
-      { img: 'https://placehold.co/100x100', title: 'Sushi Master', info: 'Japanese • $$$ • 0.8 miles', rating: 4.9 },
-      { img: 'https://placehold.co/100x100', title: 'Burger House', info: 'American • $ • 0.5 miles', rating: 4.7 },
-      { img: 'https://placehold.co/100x100', title: 'The Grand Bistro', info: 'French • $$$ • 0.6 miles', rating: 4.8 }
+      { img: 'images/돈가스.jpg', title: '헤키', info: '서울 마포구 동교로9길 33 1층 헤키', rating: 4.8 },
+      { img: 'images/GTS버거.jpg', title: 'GTS버거 성수점', info: '서울 성동구 뚝섬로17가길 48 1층 GTS BURGER', rating: 4.9 },
+      { img: 'images/pasta.jpg', title: '포노 부오노', info: '서울 강남구 도산대로45길 8-7 2층', rating: 4.7 },
+      { img: 'images/하이디라오.jpg', title: '하이디라오 서초지점', info: '서울 서초구 서초대로77길 54 2층 하이디라오 훠궈', rating: 4.8 }
     ]; %>
 
     <% restaurants.forEach(restaurant => { %>
@@ -37,5 +37,13 @@
     <% }); %>
   </div>
 </div>
+
+<style>
+  .card-img-top {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+  }
+</style>
 
 <%- include('../partials/footer') %>
