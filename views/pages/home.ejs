@@ -26,7 +26,7 @@
     <% restaurants.forEach(restaurant => { %>
       <div class="col-md-3 mb-4">
         <div class="card">
-          <img src="<%= restaurant.img %>" class="card-img-top" alt="<%= restaurant.title %>">
+          <img src="<%= restaurant.img %>" class="home-card-img-top" alt="<%= restaurant.title %>">
           <div class="card-body text-center">
             <h5 class="card-title"><%= restaurant.title %></h5>
             <p class="card-text"><%= restaurant.info %></p>
@@ -39,11 +39,7 @@
 </div>
 
 <style>
-  .card-img-top {
-    width: 250px;
-    height: 200px;
-    object-fit: cover;
-  }
+  
 </style>
 
 <%- include('../partials/footer') %>
