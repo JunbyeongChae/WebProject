@@ -1,5 +1,5 @@
  // 이미지 미리보기 기능
- function previewImage(event) {
+  function previewImage(event) {
     const reader = new FileReader();
     reader.onload = function() {
       const output = document.getElementById('profilePreview');

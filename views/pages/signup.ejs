@@ -6,7 +6,7 @@
       <!-- 로고 -->
       <div class="text-center mb-4">
         <img src="/images/CI.png" alt="Logo" class="mb-3" width="80">
-          <h3>Create an Account</h3>
+        <h3>계정 생성하기</h3>
       </div>
 
       <!-- 프로필 사진 등록 -->
@@ -17,9 +17,7 @@
         </label>
         <!-- 첫 번째 input은 이미지를 클릭하면 파일 선택 창을 열기 위한 input -->
         <input type="file" id="profileImage" accept="image/*" class="d-none" onchange="previewImage(event)">
-          <input type="file" id="profileImage" accept="image/*" class="d-none">
-          <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
-          <input type="file" id="profileImage" class="form-control-file mt-2">
+        <small class="form-text text-muted">위 이미지를 클릭하고 프로필 사진을 등록해보세요</small>
         
         <!-- 두 번째 input은 실제 파일을 선택할 수 있는 input (파일을 선택 후 preview가 갱신됨) -->
         <input type="file" id="profileImage2" class="form-control-file mt-2" onchange="previewImage(event)">
@@ -28,27 +26,27 @@
       <!-- 회원가입 폼 -->
       <form>
         <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+          <label for="name">이름</label>
+          <input type="text" class="form-control" id="name" placeholder="이름을 입력하세요">
         </div>
         <div class="form-group mb-3">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+          <label for="email">이메일</label>
+          <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요">
         </div>
         <div class="form-group mb-3">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+          <label for="password">비밀번호</label>
+          <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요">
         </div>
         <div class="form-group mb-3">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+          <label for="confirmPassword">비밀번호 확인</label>
+          <input type="password" class="form-control" id="confirmPassword" placeholder="비밀번호를 다시 입력하세요">
         </div>
-          <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
+        <button type="submit" class="btn btn-dark w-100 mb-3">회원가입하기</button>
       </form>
 
       <!-- 로그인 링크 -->
       <div class="text-center">
-          <p>Already have an account? <a href="/login">Log in</a></p>
+        <p>이미 계정을 가지고 있나요? <a href="/login">로그인</a></p>
       </div>
     </div>
   </div>
