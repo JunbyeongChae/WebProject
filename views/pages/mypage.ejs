@@ -12,11 +12,11 @@
             style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;" id="profilePreview">
         </label>
         <small class="form-text text-muted">Upload your profile picture</small>
-        <input type="file" id="profileImage" class="form-control-file mt-2" onchange="previewImage(event)">
+        <input type="file" id="profileImage" class="form-control-file mt-2">
       </div>
 
         <!-- 회원정보 수정 양식 -->
-        <form>
+        <form id="infoForm">
           <div class="form-group mb-3">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" value="John Doe">
@@ -26,7 +26,7 @@
             <input type="email" class="form-control" id="email" value="john@example.com">
           </div>
           <div class="form-group mb-3">
-            <label for="password">password</label>
+            <label for="password">Password</label>
             <input type="password" class="form-control" id="password" value="password">
           </div>
           <div class="form-group mb-3">
@@ -52,3 +52,13 @@
 </div>
 
 <%- include('../partials/footer') %>
+
+<script type="module">
+  import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
+
+  // 프로필 이미지 미리보기 설정
+  document.getElementById('profileImage').addEventListener('change', PreviewImage);
+
+  // 회원정보 수정 폼 초기화
+  initializeSignupPage();
+</script>
