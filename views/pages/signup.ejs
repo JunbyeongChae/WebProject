@@ -51,6 +51,19 @@
     </div>
   </div>
 
+  <%- include('../partials/footer') %>
+
+  <!-- JavaScript 파일 연결 -->
+  <script type="module">
+    import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
+  
+    // 이벤트 리스너 설정
+    document.getElementById('profileImage').addEventListener('change', PreviewImage);
+    initializeSignupPage();
+  </script>
+
+
+<!-- 수정 필요 :  firebase.js, client.js로 각각 목적에 맞게 정리해주세요-->
   <script type="module">
     import { app } from "/javascript/firebase.js";
     import {
@@ -68,18 +81,6 @@
   
     const auth = getAuth(app);
     const storage = getStorage(app);
-  
-    // 프로필 이미지 미리보기 기능 추가
-    $("#profileImage").on("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          $("#profilePreview").attr("src", event.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
   
     // 폼 제출 처리
     $("#signupForm").on("submit", async (e) => {
@@ -132,14 +133,3 @@
       );
     };
   </script>
-
-<%- include('../partials/footer') %>
-
-<!-- JavaScript 파일 연결 -->
-<script type="module">
-  import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
-
-  // 이벤트 리스너 설정
-  document.getElementById('profileImage').addEventListener('change', PreviewImage);
-  initializeSignupPage();
-</script>

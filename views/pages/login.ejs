@@ -43,6 +43,10 @@
   </div>
 </div>
 
+<%- include('../partials/footer') %>
+
+
+<!-- 수정 필요 :  firebase.js, client.js로 각각 목적에 맞게 정리해주세요-->
 <script type="module">
   import { app } from "/javascript/firebase.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
@@ -71,6 +75,3 @@
       });
   });
 </script>
-
-
-<%- include('../partials/footer') %>
