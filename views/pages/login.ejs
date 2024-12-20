@@ -1,3 +1,5 @@
+<!-- 2024-12-19 이희범 -->
+
 <%- include('../partials/header') %>
 
 <div class="container my-5">
@@ -10,14 +12,15 @@
       </div>
 
       <!-- 로그인 폼 -->
-      <form>
+      <!-- form태그에 id를 추가 -->
+      <form id="frm" method="post"> <!-- 폼 시작 -->
         <div class="form-group mb-3">
           <label for="email">E-mail</label>
           <input type="email" class="form-control" id="email" placeholder="Insert your email">
         </div>
         <div class="form-group mb-3">
           <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Insert your password">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
         </div>
         <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>
       </form>
@@ -39,5 +42,35 @@
     </div>
   </div>
 </div>
+
+<script type="module">
+  import { app } from "/javascript/firebase.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+  console.log("Firebase App:", app);
+
+  const auth = getAuth(app);
+
+  // 로그인 폼 제출 처리
+  $('#frm').on('submit', (e) => {
+    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data) => {
+        console.log(`uid ===> ${data.user.uid}`);
+        console.log(`email ===> ${data.user.email}`);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("uid", data.user.uid);
+        location.href = "/";
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(`Login failed: ${errorMessage}`);
+      });
+  });
+</script>
+
 
 <%- include('../partials/footer') %>
