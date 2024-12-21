@@ -7,129 +7,100 @@
     <div class="col-md-6">
       <!-- 로고 -->
       <div class="text-center mb-4">
-        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80">
+        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
         <h3>Create an Account</h3>
       </div>
 
       <!-- 프로필 사진 등록 -->
       <div class="text-center mb-4">
         <label for="profileImage" class="d-block">
-          <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
-            style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
+          <img
+            id="profilePreview"
+            src="https://placehold.co/120x120"
+            alt="Profile Image"
+            class="rounded-circle"
+            style="
+              width: 120px;
+              height: 120px;
+              object-fit: cover;
+              cursor: pointer;
+            "
+          />
         </label>
-        <input type="file" id="profileImage" accept="image/*" class="d-none">
-        <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
+        <input type="file" id="profileImage" accept="image/*" class="d-none" />
+        <small class="form-text text-muted"
+          >Click on the image to upload your profile picture.</small
+        >
       </div>
 
-        <!-- 회원가입 폼 -->
-        <!-- form 태그에 id 추가 -->
-        <form id="signupForm">
-          <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter your name">
-          </div>
-          <div class="form-group mb-3">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email">
-          </div>
-          <div class="form-group mb-3">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter your password">
-          </div>
-          <div class="form-group mb-3">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
-          </div>
-          <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
-        </form>
-
-        <!-- 로그인 링크 -->
-        <div class="text-center">
-          <p>Already have an account? <a href="/login">Log in</a></p>
+      <!-- 회원가입 폼 -->
+      <!-- form 태그에 id 추가 -->
+      <form id="signupForm">
+        <div class="form-group mb-3">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Enter your name"
+          />
         </div>
+        <div class="form-group mb-3">
+          <label for="email">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            placeholder="Confirm your password"
+          />
+        </div>
+        <button type="submit" class="btn btn-dark w-100 mb-3">
+          Sign Up
+        </button>
+      </form>
+
+      <!-- 로그인 링크 -->
+      <div class="text-center">
+        <p>Already have an account? <a href="/login">Log in</a></p>
       </div>
     </div>
   </div>
+</div>
 
-  <%- include('../partials/footer') %>
+<%- include('../partials/footer') %>
 
-  <!-- JavaScript 파일 연결 -->
-  <script type="module">
-    import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
-  
-    // 이벤트 리스너 설정
-    document.getElementById('profileImage').addEventListener('change', PreviewImage);
+<!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="module">
+  import { PreviewImage, initializeSignupPage, signup } from "/javascript/client.js";
+
+  // 이벤트 리스너 설정
+  document
+    .getElementById("profileImage")
+    .addEventListener("change", PreviewImage);
     initializeSignupPage();
-  </script>
+    //client.js에 구현되어 있는 회원가입 함수인 signup 호출
+    signup()
+</script>
 
 
-<!-- 수정 필요 :  firebase.js, client.js로 각각 목적에 맞게 정리해주세요-->
-  <script type="module">
-    import { app } from "/javascript/firebase.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
 
-    /*  */
-    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import {
-      getStorage,
-      ref,
-      uploadBytes, //지정된 경로에 파일을 업로드 추가
-      getDownloadURL, // 업로드된 파일의 다운로드 URL을 가져옴 이 URL을 사용하면 클라이언트에서 파일에 접근가능 추가
-    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
-  
-    const auth = getAuth(app);
-    const storage = getStorage(app);
-  
-    // 폼 제출 처리
-    $("#signupForm").on("submit", async (e) => {
-      e.preventDefault();
-  
-      let email = $("#email").val();
-      let password = $("#password").val();
-      let confirmPassword = $("#confirmPassword").val(); //password 확인 기능을 추가
-      const file = $("#profileImage")[0].files[0];
-  
-      if (password !== confirmPassword) { // password를 대조하는 if문을 추가
-        alert("비밀번호가 일치하지 않습니다.");
-        return;
-      }
-  
-      try {
-        let profileImageUrl = "";
-        if (file) {
-          //비동기 함수 uploadProfileImage를 호출하여 파일을 업로드 하고
-          // 그 결과 반환된 업로드된 파일의 URL profileImageUrl에 저장함.
-          profileImageUrl = await uploadProfileImage(file);
-        }
-        //새로운 이메일, 비밀번호를 통해 새 사용자를 등록
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log("User created:", userCredential.user);
-  
-        //프로필 이미지 url이 존재하면 홈화면으로 이동
-        if (profileImageUrl) {
-          console.log("Profile image URL:", profileImageUrl);
-        }
-  
-        location.href = "/";
-      } catch (error) { // 회원가입 실패
-        console.error(error.code, error.message);
-        alert(`회원가입 실패: ${error.message}`);
-      }
-    });
-  
-      // Firebase Storage에서 파일이 저장될 위치를 정의하고 해당파일을 업로드 하며
-      //업로드가 완료되면 getDownloadURL() 통해 업로드된 파일의 다운로드 URL을 가져옴
-      //이 url을 반환하여 다른곳에서 사용할 수 있도록 함
-    const uploadProfileImage = (file) => {
-      const storageRef = ref(storage, `profileImages/${file.name}`);
-      return uploadBytes(storageRef, file).then((snapshot) =>
-        getDownloadURL(snapshot.ref)
-      );
-    };
-  </script>
