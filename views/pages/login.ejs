@@ -13,7 +13,7 @@
 
       <!-- 로그인 폼 -->
       <!-- form태그에 id를 추가 -->
-      <form id="frm" method="post"> <!-- 폼 시작 -->
+      <form id="frm"> <!-- 폼 시작 -->
         <div class="form-group mb-3">
           <label for="email">E-mail</label>
           <input type="email" class="form-control" id="email" placeholder="Insert your email">
@@ -45,33 +45,11 @@
 
 <%- include('../partials/footer') %>
 
+<!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- 수정 필요 :  firebase.js, client.js로 각각 목적에 맞게 정리해주세요-->
+<!-- client.js에 구현된 로그인 함수 호출 -->
 <script type="module">
-  import { app } from "/javascript/firebase.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
-  console.log("Firebase App:", app);
-
-  const auth = getAuth(app);
-
-  // 로그인 폼 제출 처리
-  $('#frm').on('submit', (e) => {
-    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
-    const email = $('#email').val();
-    const password = $('#password').val();
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((data) => {
-        console.log(`uid ===> ${data.user.uid}`);
-        console.log(`email ===> ${data.user.email}`);
-        localStorage.setItem("email", data.user.email);
-        localStorage.setItem("uid", data.user.uid);
-        location.href = "/";
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        alert(`Login failed: ${errorMessage}`);
-      });
-  });
+  import { login } from "/javascript/client.js";
+    login()
 </script>
