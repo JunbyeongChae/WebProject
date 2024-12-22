@@ -1,15 +1,49 @@
-//app을 import 해오는 경로 변경
-import { app } from "/config/firebase.js";
+// Firebase 초기화 객체를 전역 변수로 선언
+export let app; // 전역 변수 선언
+
+// Firebase 설정 데이터를 가져오는 함수
+export async function fetchFirebaseConfig() {
+  try {
+    // 서버에서 Firebase 설정 데이터를 가져옴
+    const response = await fetch("/config");
+    console.log("Fetch Response Status:", response.status);
+
+    if (!response.ok) {
+      console.error("Failed to fetch config. Status:", response.status);
+      throw new Error("Failed to fetch config");
+    }
+
+    const config = await response.json();
+    console.log("Firebase Config Loaded:", config); // 디버깅 출력
+
+    // Firebase 초기화 (동적 import 사용)
+    const { initializeApp } = await import(
+      "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
+    );
+
+    // 서버에서 내려준 JSON에서 firebase 설정만 꺼내서 초기화
+    app = initializeApp(config.firebase);
+  } catch (error) {
+    console.error("Error loading Firebase config:", error); // 에러 메시지 출력
+    alert("Firebase config 로드에 실패했습니다. 관리자에게 문의하세요.");
+  }
+}
+
+// 페이지 로드 시 Firebase 설정 데이터를 먼저 가져오기
+//fetchFirebaseConfig(); //중복검사시 에러 발생하여 일단 주석처리: 20241222채준병
+
+// Firebase 관련 모듈 import
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
 import {
   getStorage,
   ref,
-  uploadBytes, //지정된 경로에 파일을 업로드 추가
-  getDownloadURL, // 업로드된 파일의 다운로드 URL을 가져옴 이 URL을 사용하면 클라이언트에서 파일에 접근가능 추가
+  uploadBytes,
+  getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
 // 이미지 미리보기 기능
@@ -26,100 +60,70 @@ export function PreviewImage(event) {
   }
 }
 
-// 페이지별 초기화 함수
-export function initializeSignupPage() {
-  const form = document.getElementById("infoForm");
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // 폼 제출 시 새로고침 방지
-
-      // 수정된 값 가져오기
-      const name = document.getElementById("name")?.value || "";
-      const email = document.getElementById("email")?.value || "";
-      const phone = document.getElementById("phone")?.value || "";
-      const address = document.getElementById("address")?.value || "";
-
-      // 화면에 저장된 정보 표시
-      console.log("수정된 정보:", { name, email, phone, address });
-
-      // 서버에 데이터를 보내는 로직 추가 가능
-    });
-  }
-}
-
-////////////////////////////////////////////////////////////////2024-12-21 심유정
-//회원가입 함수 구현
+// 회원가입 함수
 export function signup() {
-  const auth = getAuth(app);
-  const storage = getStorage(app);
+  // 폼 제출 이벤트
+const auth = getAuth(app); // 전역 변수 app 사용
+const storage = getStorage(app);
 
-  $("#signupForm").on("submit", async (e) => {
-    e.preventDefault();
-    console.log("Signup form submitted!");
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let confirmPassword = $("#confirmPassword").val(); //password 확인 기능을 추가
-    const file = $("#profileImage")[0].files[0];
+$("#signupForm").on("submit", async (e) => {
+  e.preventDefault();
+  console.log("Signup form submitted!");
 
-    if (password !== confirmPassword) {
-      // password를 대조하는 if문을 추가
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
+  const email = $("#email").val();
+  const password = $("#password").val();
+  const confirmPassword = $("#confirmPassword").val();
+  const file = $("#profileImage")[0].files[0];
+
+  if (password !== confirmPassword) {
+    alert("비밀번호가 일치하지 않습니다.");
+    return;
+  }
+
+  try {
+    let profileImageUrl = "";
+    if (file) {
+      profileImageUrl = await uploadProfileImage(file);
     }
 
-    try {
-      let profileImageUrl = "";
-      if (file) {
-        //비동기 함수 uploadProfileImage를 호출하여 파일을 업로드 하고
-        // 그 결과 반환된 업로드된 파일의 URL profileImageUrl에 저장함.
-        profileImageUrl = await uploadProfileImage(file);
-      }
-      //새로운 이메일, 비밀번호를 통해 새 사용자를 등록
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("User created:", userCredential.user);
+    // ======== 중복가입 방지 (Firebase가 제공) ========
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("User created:", userCredential.user);
 
-      //프로필 이미지 url이 존재하면 홈화면으로 이동
-      if (profileImageUrl) {
-        console.log("Profile image URL:", profileImageUrl);
-      }
-      
-      // 가입 축하 메시지 표시
-      alert("회원가입이 완료되었습니다! 축하합니다!");
-      location.href = "/";
-    } catch (error) {
-      // 회원가입 실패
-      console.error(error.code, error.message);
-      alert(`회원가입 실패: ${error.message}`);
+    if (profileImageUrl) {
+      console.log("Profile image URL:", profileImageUrl);
     }
-  });
+    
+    alert("회원가입이 완료되었습니다! 축하합니다!");
+    location.href = "/";
+  } catch (error) {
+    // ======== 중복가입 에러 처리 ========
+    if (error.code === 'auth/email-already-in-use') {
+      alert("이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.");
+    } else {
+    console.error(error.code, error.message);
+    alert(`회원가입 실패: ${error.message}`);
+  }
+  }
+});
 
-  // Firebase Storage에서 파일이 저장될 위치를 정의하고 해당파일을 업로드 하며
-  //업로드가 완료되면 getDownloadURL() 통해 업로드된 파일의 다운로드 URL을 가져옴
-  //이 url을 반환하여 다른곳에서 사용할 수 있도록 함
-  const uploadProfileImage = (file) => {
-    const storageRef = ref(storage, `profileImages/${file.name}`);
-    return uploadBytes(storageRef, file).then((snapshot) =>
-      getDownloadURL(snapshot.ref)
-    );
-  };
+// 프로필 이미지 업로드 함수
+const uploadProfileImage = (file) => {
+  const storageRef = ref(storage, `profileImages/${file.name}`);
+  return uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref));
+};
 }
 
-////////////////////////////////////////////////////////////////2024-12-21 심유정
-//로그인 함수 구현
+// 로그인 함수
 export function login() {
   console.log("Firebase App:", app);
-  const auth = getAuth(app);
 
-  // 로그인 폼 제출 처리
   $("#frm").on("submit", (e) => {
-    e.preventDefault(); //폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
+    e.preventDefault();
     const email = $("#email").val();
     const password = $("#password").val();
 
+    const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
       .then((data) => {
         console.log(`uid ===> ${data.user.uid}`);
@@ -133,4 +137,21 @@ export function login() {
         alert(`Login failed: ${errorMessage}`);
       });
   });
+}
+
+// 페이지별 초기화 함수 (예: 추가로 회원정보 수정 등을 처리)
+export function initializeSignupPage() {
+  const form = document.getElementById("infoForm");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name")?.value || "";
+      const email = document.getElementById("email")?.value || "";
+      const phone = document.getElementById("phone")?.value || "";
+      const address = document.getElementById("address")?.value || "";
+
+      console.log("수정된 정보:", { name, email, phone, address });
+    });
+  }
 }

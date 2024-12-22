@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const apiKeysRouter = require("./config/apiKeys"); // 라우터 불러오기
+
 const app = express();
 
 // 뷰 엔진 설정
@@ -11,7 +13,6 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
 // API 키 관련 라우터 설정
-const apiKeysRouter = require("./config/apiKeys");
 app.use("/config", apiKeysRouter);
 
 // 라우트 설정

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/config", (req, res) => {
+router.get("/", (req, res) => {
   res.json({
     firebase: {
       apiKey: process.env.FIREBASE_API_KEY,
