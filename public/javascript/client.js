@@ -45,6 +45,14 @@ import {
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
+
+// 2024-12-23 이희범
+import {
+  signOut,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+ // 2024-12-23 이희범 
+
+
 import {
   getStorage,
   ref,
@@ -163,6 +171,31 @@ export function login() {
   });
 }
 
+// 2024-12-23 이희범 
+
+// 로그아웃 함수
+export function logout() {
+  const auth = getAuth(app); // Firebase 인증 객체 가져오기
+  $("#logout").on("click", (e) => {
+    // Firebase 로그아웃 처리
+    signOut(auth).then(() => {
+      alert("로그아웃 되었습니다.");
+      console.log("로그아웃 성공");
+
+      // 로그아웃 후 localStorage 초기화
+      localStorage.clear();
+
+      // 홈 페이지로 리다이렉트
+      location.href = "/";
+    }).catch((error) => {
+      alert("로그아웃 실패");
+      console.log(error);
+    });
+  });
+}
+
+// 2024-12-23 이희범
+
 // 페이지별 초기화 함수 (예: 추가로 회원정보 수정 등을 처리)
 export function initializeSignupPage() {
   const form = document.getElementById("infoForm");
@@ -179,6 +212,8 @@ export function initializeSignupPage() {
     });
   }
 }
+
+
 
 // 홈화면 캐로셀 - 장원준 > 20241223 채준병 수정
 export function initCarousel() {

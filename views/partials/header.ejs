@@ -19,20 +19,63 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- My Page 링크 -->
-        <li class="nav-item">
+        <li class="nav-item" id="mypage" style="display: none;">
           <p class="mb-0 mr-3">
             <a href="/mypage" class="text-dark" style="text-decoration: none;">My page</a>
           </p>
         </li>
         <!-- 로그인 링크 -->
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
+        <!-- 2024-12-23 이희범 -->
+        <!-- id, aria-current 추가 -->
+        <li class="nav-item" id="login">
+          <a class="nav-link active" aria-current="page" href="/login">Login</a>
         </li>
         <!-- 회원가입 버튼 -->
-        <li class="nav-item">
+        <!-- id, aria-current 추가 -->
+        <li class="nav-item" id="signup">
           <a class="nav-link btn btn-dark text-white" href="/signup">signup</a>
         </li>
+        <!-- 로그아웃 버튼 -->
+        <!-- id, style, aria-current 추가 -->
+        <li class="nav-item" id="logout" style="display: none;">
+          <a class="nav-link active" aria-current="page" href="#">Logout</a>
+        <!-- 2024-12-23 이희범 -->
       </ul>
     </div>
   </div>
 </nav>
+
+
+<!-- 2024-12-23 이희범 -->
+
+<!-- jQuery (로그아웃 폼 이벤트를 위해 사용) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- client.js에 구현된 로그아웃 함수 호출 -->
+<script type="module">
+  import { fetchFirebaseConfig, logout } from "/javascript/client.js"
+
+  (async () => {
+    // 1) Firebase 설정 받아와서 initializeApp
+    await fetchFirebaseConfig();
+
+    // 2) 로그아웃 폼 이벤트 등록 (getAuth(app)가 이제 정상 동작)
+    logout();
+  })();
+</script>
+
+<script>
+  //로그인 성공시 로그인 버튼과 회원가입 버튼 숨기고 mypage, logout 버튼 활성화
+console.log(`로그인 성공시 uid ===> ${localStorage.getItem("uid")}, ${localStorage.getItem("email")}`)
+    if(localStorage.getItem("email")){
+      console.log("email이 존재하면....")
+      //메뉴바에 메뉴가 로그인일때와 로그인 이전일 때 달라야 함.
+      //jquery에서 제공하는 toggle()을 사용하면 보이는 건 안보이게 안보이는건 보이게 처리해줌
+      $("#login, #logout, #mypage, #email, #signup").toggle()
+
+      //구현 미정
+      //$("#email a").html(localStorage.getItem("email")) 
+      
+    }
+</script>
+<!-- 2024-12-23 이희범 -->
