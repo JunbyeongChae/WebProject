@@ -1,17 +1,3 @@
-// 이미지 미리보기 기능
-export function PreviewImage(event) {
-  const reader = new FileReader();
-  reader.onload = function () {
-    const output = document.getElementById("profilePreview");
-    if (output) {
-      output.src = reader.result; // 이미지 미리보기
-    }
-  };
-  if (event.target.files[0]) {
-    reader.readAsDataURL(event.target.files[0]);
-  }
-}
-
 // Firebase 초기화 객체를 전역 변수로 선언
 export let app; // 전역 변수 선언
 
@@ -59,6 +45,20 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
+// 이미지 미리보기 기능
+export function PreviewImage(event) {
+  const reader = new FileReader();
+  reader.onload = function () {
+    const output = document.getElementById("profilePreview");
+    if (output) {
+      output.src = reader.result; // 이미지 미리보기
+    }
+  };
+  if (event.target.files[0]) {
+    reader.readAsDataURL(event.target.files[0]);
+  }
+}
 
 // 회원가입 함수
 export function signup() {
@@ -118,10 +118,8 @@ const uploadProfileImage = (file) => {
 export function login() {
   console.log("Firebase App:", app);
 
-  // 로그인 폼 제출 이벤트 처리
   $("#frm").on("submit", (e) => {
-    e.preventDefault(); // 기본 폼 동작 방지
-
+    e.preventDefault();
     const email = $("#email").val();
     const password = $("#password").val();
 
@@ -130,23 +128,13 @@ export function login() {
       .then((data) => {
         console.log(`uid ===> ${data.user.uid}`);
         console.log(`email ===> ${data.user.email}`);
-
-        // 로그인 성공 시, 사용자 정보 저장 및 페이지 이동
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("uid", data.user.uid);
-        location.href = "/"; // 홈 화면으로 이동
+        location.href = "/";
       })
       .catch((error) => {
         const errorMessage = error.message;
-        console.log(`Login failed: ${errorMessage}`);
-
-        // 실패 시, 사용자에게 회원가입 유도
-        const shouldSignup = confirm(
-          "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.\n회원가입 페이지로 이동하시겠습니까?"
-        );
-        if (shouldSignup) {
-          location.href = "/signup"; // 회원가입 페이지로 이동
-        }
+        alert(`Login failed: ${errorMessage}`);
       });
   });
 }
