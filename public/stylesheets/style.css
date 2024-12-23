@@ -127,3 +127,54 @@ h4, h5, h6 {
   margin-top: auto;
 }
 
+/* ======== 슬라이드 스타일 ======== */
+.carousel-wrapper {
+  position: relative;
+  width: calc(250px * 4); /* 사진 4개가 보이도록 설정 */
+  margin: auto;
+  overflow: visible; /* 버튼이 보이도록 설정 */
+}
+
+.carousel-container {
+  overflow: hidden; /* 카드 슬라이드 내부만 잘림 */
+  display: flex;
+}
+
+.carousel-slide {
+  display: flex;
+  width: max-content; /* 슬라이드가 카드 전체를 감싸도록 설정 */
+  transition: transform 0.4s ease-in-out;
+}
+
+.carousel-slide .card {
+  min-width: 250px;
+  height: auto;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#prevBtn {
+  left: -80px; /* 섹션 바깥으로 버튼 이동 */
+}
+
+#nextBtn {
+  right: -80px; /* 섹션 바깥으로 버튼 이동 */
+}
+
+
+
+
+
+
+
