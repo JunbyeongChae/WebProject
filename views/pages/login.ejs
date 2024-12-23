@@ -26,12 +26,12 @@
       </form>
 
       <!-- 소셜 로그인 -->
-      <div class="text-center">
-        <p class="mb-2">Sign in with</p>
-        <a href="/auth/google" class="btn btn-light border w-100">
+      <div class="text-center mb-4">
+        <p>Sign in with</p>
+        <button id="googleLoginBtn" class="btn btn-light border w-100">
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20" class="mr-2">
           Sign in with Google
-        </a>
+        </button>
       </div>
 
       <!-- 회원가입 링크 -->
@@ -59,4 +59,12 @@
     // 2) 로그인 폼 이벤트 등록 (getAuth(app)가 이제 정상 동작)
     login();
   })();
+</script>
+
+<script type="module">
+  import { login, googleLogin } from "/javascript/client.js";
+
+  document
+    .getElementById("googleLoginBtn")
+    .addEventListener("click", googleLogin);
 </script>
