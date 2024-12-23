@@ -1,22 +1,22 @@
 <%- include('../partials/header') %>
 
-  <div class="container my-5">
-    <div class="row">
-      <!-- 왼쪽 칸: 회원정보 수정 -->
-      <div class="col-md-6">
-        <h4 class="mb-4">My Information</h4>
-        <!-- 프로필 사진 업로드 -->
-        <div class="text-center mb-4">
-          <label for="profileImage" class="d-block">
-            <img src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
-              style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;">
-            </label>
-            <small class="form-text text-muted">Upload your profile picture</small>
-          <input type="file" id="profileImage" class="form-control-file mt-2">
-        </div>
+<div class="container my-5">
+  <div class="row">
+    <!-- 왼쪽 칸: 회원정보 수정 -->
+    <div class="col-md-6">
+      <h4 class="mb-4">내 정보</h4>
+      <!-- 프로필 사진 업로드 -->
+      <div class="text-center mb-4">
+        <label for="profileImage" class="d-block">
+          <img src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
+            style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;" id="profilePreview">
+        </label>
+        <small class="form-text text-muted">Upload your profile picture</small>
+        <input type="file" id="profileImage" class="form-control-file mt-2">
+      </div>
 
         <!-- 회원정보 수정 양식 -->
-        <form>
+        <form id="infoForm">
           <div class="form-group mb-3">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" value="John Doe">
@@ -26,7 +26,7 @@
             <input type="email" class="form-control" id="email" value="john@example.com">
           </div>
           <div class="form-group mb-3">
-            <label for="email">Password</label>
+            <label for="password">Password</label>
             <input type="password" class="form-control" id="password" value="password">
           </div>
           <div class="form-group mb-3">
@@ -41,14 +41,24 @@
         </form>
       </div>
 
-      <!-- 오른쪽 칸: 지도 -->
-      <div class="col-md-6">
-        <h4>My Favorite Locations</h4>
-        <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
-          <p class="text-center my-5">Map Area</p>
-        </div>
+    <!-- 오른쪽 칸: 지도 -->
+    <div class="col-md-6">
+      <h4>My Favorite Locations</h4>
+      <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
+        <p class="text-center my-5">Map Area</p>
       </div>
     </div>
   </div>
+</div>
 
-  <%- include('../partials/footer') %>
+<%- include('../partials/footer') %>
+
+<script type="module">
+  import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
+
+  // 프로필 이미지 미리보기 설정
+  document.getElementById('profileImage').addEventListener('change', PreviewImage);
+
+  // 회원정보 수정 폼 초기화
+  initializeSignupPage();
+</script>

@@ -17,6 +17,12 @@ h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
+.home-card-img-top {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+}
+
 /* 버튼 스타일 */
 .btn-dark {
   background-color: #343a40;

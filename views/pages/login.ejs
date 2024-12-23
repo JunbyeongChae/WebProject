@@ -1,3 +1,5 @@
+<!-- 2024-12-19 이희범 -->
+
 <%- include('../partials/header') %>
 
 <div class="container my-5">
@@ -10,21 +12,22 @@
       </div>
 
       <!-- 로그인 폼 -->
-      <form>
+      <!-- form태그에 id를 추가 -->
+      <form id="frm"> <!-- 폼 시작 -->
         <div class="form-group mb-3">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="Enter your email">
+          <label for="email">E-mail</label>
+          <input type="email" class="form-control" id="email" placeholder="Insert your email">
         </div>
         <div class="form-group mb-3">
           <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Enter your password">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
         </div>
-        <button type="submit" class="btn btn-dark w-100 mb-3">Sign In</button>
+        <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>
       </form>
 
       <!-- 소셜 로그인 -->
       <div class="text-center">
-        <p class="mb-2">Or sign in with</p>
+        <p class="mb-2">Sign in with</p>
         <a href="/auth/google" class="btn btn-light border w-100">
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20" class="mr-2">
           Sign in with Google
@@ -41,3 +44,19 @@
 </div>
 
 <%- include('../partials/footer') %>
+
+<!-- jQuery (로그인 폼 이벤트를 위해 사용) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- client.js에 구현된 로그인 함수 호출 -->
+<script type="module">
+  import { fetchFirebaseConfig, login } from "/javascript/client.js";
+
+  (async () => {
+    // 1) Firebase 설정 받아와서 initializeApp
+    await fetchFirebaseConfig();
+
+    // 2) 로그인 폼 이벤트 등록 (getAuth(app)가 이제 정상 동작)
+    login();
+  })();
+</script>
