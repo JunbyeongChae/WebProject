@@ -27,7 +27,7 @@
 
       <!-- 소셜 로그인 -->
       <div class="text-center">
-        <p class="mb-2">Sigin in with</p>
+        <p class="mb-2">Sign in with</p>
         <a href="/auth/google" class="btn btn-light border w-100">
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20" class="mr-2">
           Sign in with Google
@@ -45,11 +45,18 @@
 
 <%- include('../partials/footer') %>
 
-<!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
+<!-- jQuery (로그인 폼 이벤트를 위해 사용) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- client.js에 구현된 로그인 함수 호출 -->
 <script type="module">
-  import { login } from "/javascript/client.js";
-    login()
+  import { fetchFirebaseConfig, login } from "/javascript/client.js";
+
+  (async () => {
+    // 1) Firebase 설정 받아와서 initializeApp
+    await fetchFirebaseConfig();
+
+    // 2) 로그인 폼 이벤트 등록 (getAuth(app)가 이제 정상 동작)
+    login();
+  })();
 </script>
