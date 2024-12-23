@@ -155,3 +155,71 @@ export function initializeSignupPage() {
     });
   }
 }
+
+export function initCarousel() {
+  const carouselSlide = document.querySelector('.carousel-slide');
+  const carouselItems = document.querySelectorAll('.carousel-slide .card');
+
+  const prevBtn = document.querySelector('#prevBtn');
+  const nextBtn = document.querySelector('#nextBtn');
+
+  let counter = 1;
+  const size = carouselItems[0].offsetWidth; // 카드 하나의 너비 계산
+  const visibleItems = 4; // 화면에 보여질 항목 수
+
+  // 슬라이드에 클론 이미지 추가
+  const firstClone = carouselItems[0].cloneNode(true);
+  const lastClone = carouselItems[carouselItems.length - 1].cloneNode(true);
+  carouselSlide.appendChild(firstClone);
+  carouselSlide.insertBefore(lastClone, carouselItems[0]);
+
+  // 슬라이드 초기 위치 설정
+  carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+
+  // 다음 버튼 이벤트
+  nextBtn.addEventListener('click', () => {
+    if (counter >= carouselItems.length + 1) return;
+    counter++;
+    carouselSlide.style.transition = "transform 0.4s ease-in-out";
+    carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+
+    if (counter === carouselItems.length + 1) {
+      setTimeout(() => {
+        carouselSlide.style.transition = "none";
+        counter = 1;
+        carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+      }, 400);
+    }
+  });
+
+  // 이전 버튼 이벤트
+  prevBtn.addEventListener('click', () => {
+    if (counter <= 0) return;
+    counter--;
+    carouselSlide.style.transition = "transform 0.4s ease-in-out";
+    carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+
+    if (counter === 0) {
+      setTimeout(() => {
+        carouselSlide.style.transition = "none";
+        counter = carouselItems.length;
+        carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+      }, 400);
+    }
+  });
+
+  // 무한 슬라이드를 위해 클론 아이템 처리
+  carouselSlide.addEventListener('transitionend', () => {
+    if (carouselItems[counter] === firstClone) {
+      carouselSlide.style.transition = "none";
+      counter = 1;
+      carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+    }
+
+    if (carouselItems[counter] === lastClone) {
+      carouselSlide.style.transition = "none";
+      counter = carouselItems.length - 1;
+      carouselSlide.style.transform = `translateX(-${size * counter}px)`;
+    }
+  });
+}
