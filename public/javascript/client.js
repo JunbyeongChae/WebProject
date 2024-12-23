@@ -41,6 +41,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile // 사용자 프로필 업데이트 함수 추가
   GoogleAuthProvider,
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
@@ -60,6 +61,12 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
 // 이미지 미리보기 기능
 export function PreviewImage(event) {
   const reader = new FileReader();
@@ -76,25 +83,25 @@ export function PreviewImage(event) {
 
 // 회원가입 함수
 export function signup() {
-  // 폼 제출 이벤트
-const auth = getAuth(app); // 전역 변수 app 사용
-const storage = getStorage(app);
+  const auth = getAuth(app); // 전역 변수 app 사용
+  const storage = getStorage(app);
+  const firestore = getFirestore(app); // Firestore 초기화
 
-$("#signupForm").on("submit", async (e) => {
-  e.preventDefault();
-  console.log("Signup form submitted!");
+  $("#signupForm").on("submit", async (e) => {
+    e.preventDefault();
+    console.log("Signup form submitted!");
 
-  const name = $("#name").val();
-  const email = $("#email").val();
-  const password = $("#password").val();
-  const confirmPassword = $("#confirmPassword").val();
-  const phoneNumber = $("#phoneNumber").val();
-  const file = $("#profileImage")[0].files[0];
+    const name = $("#name").val();
+    const email = $("#email").val();
+    const password = $("#password").val();
+    const confirmPassword = $("#confirmPassword").val();
+    const phoneNumber = $("#phoneNumber").val();
+    const file = $("#profileImage")[0].files[0];
 
-  if (password !== confirmPassword) {
-    alert("비밀번호가 일치하지 않습니다.");
-    return;
-  }
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
   try {
     let profileImageUrl = null;
@@ -105,33 +112,42 @@ $("#signupForm").on("submit", async (e) => {
         }
     }
 
-    // ======== 중복가입 방지 (Firebase가 제공) ========
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    console.log("User created:", userCredential.user);
+      // Firebase 사용자 생성
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const user = userCredential.user;
+    console.log("User created:", user);
 
-    if (profileImageUrl) {
-      console.log("Profile image URL:", profileImageUrl);
+      // 추가 사용자 정보 Firestore에 저장
+      await setDoc(doc(firestore, "users", user.uid), {
+        displayName: name,
+        phoneNumber: phoneNumber,
+        photoURL: profileImageUrl,
+        email: email
+      });
+
+      // 추가 사용자 정보 업데이트 (Firebase Authentication에서 표시 이름과 프로필 사진 업데이트)
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: profileImageUrl
+      });
+
+      alert("회원가입이 완료되었습니다! 축하합니다!");
+      location.href = "/login"; // 로그인 페이지로 리다이렉트
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        alert("이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.");
+      } else {
+        console.error(error.code, error.message);
+        alert(`회원가입 실패: ${error.message}`);
+      }
     }
-    
-    alert("회원가입이 완료되었습니다! 축하합니다!");
-    location.href = "/login"; // 로그인 페이지로 리다이렉트
-  } catch (error) {
-    // ======== 중복가입 에러 처리 ========
-    if (error.code === 'auth/email-already-in-use') {
-      alert("이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.");
-    } else {
-    console.error(error.code, error.message);
-    alert(`회원가입 실패: ${error.message}`);
-  }
-  }
-});
+  });
 
-// 프로필 이미지 업로드 함수
-const uploadProfileImage = (file) => {
-  const storageRef = ref(storage, `profileImages/${file.name}`);
-  return uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref));
-};
+  const uploadProfileImage = (file) => {
+    const storageRef = ref(storage, `profileImages/${file.name}`);
+    return uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref));
+  };
 }
 
 // 로그인 함수
@@ -212,8 +228,6 @@ export function initializeSignupPage() {
     });
   }
 }
-
-
 
 // 홈화면 캐로셀 - 장원준 > 20241223 채준병 수정
 export function initCarousel() {
