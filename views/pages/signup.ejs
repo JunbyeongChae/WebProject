@@ -93,13 +93,15 @@
   import {
     fetchFirebaseConfig,    // Firebase 초기화 함수
     initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
-    signup                  // 회원가입 함수
+    signup,                  // 회원가입 함수
+    PreviewImage            // 프로필 이미지 미리보기 함수
     } from "/javascript/client.js";
 
   (async () => {
     // 1) Firebase 설정 먼저 로드 + 초기화
     await fetchFirebaseConfig();
     
+    document.getElementById("profileImage").addEventListener("change", PreviewImage);
     // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
     signup();
 

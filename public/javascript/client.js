@@ -70,9 +70,11 @@ $("#signupForm").on("submit", async (e) => {
   e.preventDefault();
   console.log("Signup form submitted!");
 
+  const name = $("#name").val();
   const email = $("#email").val();
   const password = $("#password").val();
   const confirmPassword = $("#confirmPassword").val();
+  const phoneNumber = $("#phoneNumber").val();
   const file = $("#profileImage")[0].files[0];
 
   if (password !== confirmPassword) {
@@ -95,7 +97,7 @@ $("#signupForm").on("submit", async (e) => {
     }
     
     alert("회원가입이 완료되었습니다! 축하합니다!");
-    location.href = "/";
+    location.href = "/login";
   } catch (error) {
     // ======== 중복가입 에러 처리 ========
     if (error.code === 'auth/email-already-in-use') {
