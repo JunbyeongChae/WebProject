@@ -1,5 +1,8 @@
 <%- include('../partials/header') %>
 
+<!-- CSS 파일 import -->
+<link rel="stylesheet" href="/stylesheets/style.css">
+
 <div class="container my-5">
   <div class="row">
     <!-- 왼쪽 칸: 회원정보 수정 -->
@@ -15,27 +18,27 @@
         <input type="file" id="profileImage" class="form-control-file mt-2">
       </div>
 
-        <!-- 회원정보 수정 양식 -->
-        <form id="infoForm">
-          <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" value="John Doe">
-          </div>
-          <div class="form-group mb-3">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" value="john@example.com">
-          </div>
-          <div class="form-group mb-3">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" value="password">
-          </div>
-          <div class="form-group mb-3">
-            <label for="phone">Phone Number</label>
-            <input type="text" class="form-control" id="phone" value="010-1234-5678">
-          </div>
-          <button type="submit" class="btn btn-dark w-100">Update Information</button>
-        </form>
-      </div>
+      <!-- 회원정보 수정 양식 -->
+      <form id="infoForm">
+        <div class="form-group mb-3">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" value="">
+        </div>
+        <div class="form-group mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" value="">
+        </div>
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" value="********">
+        </div>
+        <div class="form-group mb-3">
+          <label for="phone">Phone Number</label>
+          <input type="text" class="form-control" id="phone" value="">
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Update Information</button>
+      </form>
+    </div>
 
     <!-- 오른쪽 칸: 지도 -->
     <div class="col-md-6">
@@ -50,7 +53,49 @@
 <%- include('../partials/footer') %>
 
 <script type="module">
-  import { PreviewImage, initializeSignupPage } from '/javascript/client.js';
+  import { PreviewImage, initializeSignupPage, getUserData, fetchFirebaseConfig, updateUserData } from '/javascript/client.js';
+
+  // Firebase 앱 초기화
+  (async () => {
+    await fetchFirebaseConfig();
+
+    // Firestore에서 사용자 정보 가져오기
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      try {
+        const userData = await getUserData(uid);
+        document.getElementById('name').value = userData.displayName;
+        document.getElementById('email').value = userData.email;
+        document.getElementById('password').value = '********'; // 비밀번호는 표시하지 않음
+        document.getElementById('phone').value = userData.phoneNumber;
+      } catch (error) {
+        console.error("Error getting user data:", error);
+        alert("사용자 정보를 가져오는 데 실패했습니다. 다시 시도해주세요.");
+      }
+    }
+  })();
+
+  // 회원정보 수정 폼 제출 이벤트 처리
+  document.getElementById('infoForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); // 기본 폼 동작 방지
+
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      const updatedUserData = {
+        displayName: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phoneNumber: document.getElementById('phone').value,
+      };
+
+      try {
+        await updateUserData(uid, updatedUserData);
+        alert('정보가 성공적으로 업데이트되었습니다!');
+      } catch (error) {
+        console.error('Error updating user data:', error);
+        alert('정보 업데이트에 실패했습니다. 다시 시도해주세요.');
+      }
+    }
+  });
 
   // 프로필 이미지 미리보기 설정
   document.getElementById('profileImage').addEventListener('change', PreviewImage);

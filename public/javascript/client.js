@@ -34,7 +34,7 @@ export async function fetchFirebaseConfig() {
 }
 
 // 페이지 로드 시 Firebase 설정 데이터를 먼저 가져오기
-//fetchFirebaseConfig(); //중복검사시 에러 발생하여 일단 주석처리: 20241222채준병
+fetchFirebaseConfig(); //중복검사시 에러 발생하여 일단 주석처리: 20241222채준병
 
 // Firebase 관련 모듈 import
 import {
@@ -61,6 +61,8 @@ import {
   getFirestore,
   doc,
   setDoc,
+  getDoc,
+  updateDoc,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
@@ -154,6 +156,23 @@ export function signup() {
       return null;
     }
   };
+}
+
+// Firestore에서 사용자 정보 가져오기 함수 export
+export async function getUserData(uid) {
+  const firestore = getFirestore(app);
+  const userDoc = await getDoc(doc(firestore, "users", uid));
+  if (userDoc.exists()) {
+    return userDoc.data();
+  }
+  throw new Error("사용자 데이터를 찾을 수 없습니다.");
+}
+
+// Firestore에서 사용자 정보 수정하기 함수 export
+export async function updateUserData(uid, updatedData) {
+  const firestore = getFirestore(app);
+  const userDocRef = doc(firestore, "users", uid);
+  await updateDoc(userDocRef, updatedData);
 }
 
 // 로그인 함수
