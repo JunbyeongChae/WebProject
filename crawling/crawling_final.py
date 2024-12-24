@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import time
 import csv
 import json
+import os
 
 # User-Agent 설정 및 Selenium WebDriver 옵션 추가
 def setup_driver():
@@ -181,6 +182,7 @@ def get_restaurant_details(rid):
     opening_hours = get_opening_hours()
 
     return {
+        "RID": rid,
         "이름": name,
         "주소": address,
         "전화번호": phone,
@@ -189,7 +191,7 @@ def get_restaurant_details(rid):
     }
 
 # 전체 데이터 수집
-def get_restaurant_data(query):
+def get_restaurant_data(query, category):
     base_url = f"https://www.diningcode.com/list.dc?query={query}"
     rids = get_rid_from_list_page(base_url, max_rid=100)
     restaurant_data = []
@@ -201,29 +203,50 @@ def get_restaurant_data(query):
             restaurant_data.append(details)
     return restaurant_data
 
+# CSV 저장 함수
+def save_to_csv(data, filename):
+    with open(filename, mode='w', newline='', encoding='utf-8-sig') as file:
+        writer = csv.writer(file)
+        writer.writerow(["RID", "이름", "주소", "전화번호", "메뉴", "영업시간"])  # 헤더
+        for entry in data:
+            writer.writerow([entry["RID"], entry["이름"], entry["주소"], entry["전화번호"], entry["메뉴"], entry["영업시간"]])
+
 # 메인 코드 실행
 if __name__ == "__main__":
     driver = setup_driver()
-    query_list = ["광명시 한식", "광명시 중식", "광명시 양식", "광명시 일식", "광명시 카페", 
-                  "금천구 한식", "금천구 중식", "금천구 양식", "금천구 일식", "금천구 카페", 
-                  "구로구 한식", "구로구 중식", "구로구 양식", "구로구 일식", "구로구 카페"]
+    queries = {
+        "광명시 한식": "한식",
+        "광명시 중식": "중식",
+        "광명시 양식": "양식",
+        "광명시 일식": "일식",
+        "광명시 카페": "카페",
+        "금천구 한식": "한식",
+        "금천구 중식": "중식",
+        "금천구 양식": "양식",
+        "금천구 일식": "일식",
+        "금천구 카페": "카페",
+        "구로구 한식": "한식",
+        "구로구 중식": "중식",
+        "구로구 양식": "양식",
+        "구로구 일식": "일식",
+        "구로구 카페": "카페"
+    }
 
-    for query in query_list:
+    # 지역별로 파일 저장
+    for query, category in queries.items():
         print(f"'{query}' 검색어로 데이터 수집 시작...")
-        new_data = get_restaurant_data(query)
+        new_data = get_restaurant_data(query, category)
 
-        csv_file = f"{query.replace(' ', '_')}_data.csv"
-        json_file = f"{query.replace(' ', '_')}_data.json"
+        if new_data:
+            file_name_json = f"{query.split()[0]}_{category}.json"
+            file_name_csv = f"{query.split()[0]}_{category}.csv"
+            # JSON 저장
+            with open(file_name_json, "w", encoding="utf-8-sig") as file:
+                json.dump({category: new_data}, file, ensure_ascii=False, indent=4)
+            # CSV 저장
+            save_to_csv(new_data, file_name_csv)
 
-        with open(csv_file, "w", encoding="utf-8-sig", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=["이름", "주소", "전화번호", "메뉴", "영업시간"])
-            writer.writeheader()
-            writer.writerows(new_data)
-
-        with open(json_file, "w", encoding="utf-8-sig") as file:
-            json.dump(new_data, file, ensure_ascii=False, indent=4)
-
-        print(f"'{query}' 데이터 수집 완료! CSV: {csv_file}, JSON: {json_file}")
+        print(f"'{query}' 데이터 수집 완료!")
 
     driver.quit()
 
