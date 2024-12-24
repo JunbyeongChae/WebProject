@@ -25,10 +25,14 @@
           </p>
         </li>
         <!-- 로그인 링크 -->
-        <!-- 2024-12-23 이희범 -->
         <!-- id, aria-current 추가 -->
         <li class="nav-item" id="login">
           <a class="nav-link active" aria-current="page" href="/login">Login</a>
+        </li>
+        <!-- displayName -->
+        <!-- 2024-12-24 이희범 현 사용자 이름 출력 추가 -->
+        <li class="nav-item" id="displayName" style="display: none;">
+          <a href="#" aria-current="page" class="nav-link active">현사용자이름출력자리</a>
         </li>
         <!-- 회원가입 버튼 -->
         <!-- id, aria-current 추가 -->
@@ -39,14 +43,10 @@
         <!-- id, style, aria-current 추가 -->
         <li class="nav-item" id="logout" style="display: none;">
           <a class="nav-link active" aria-current="page" href="#">Logout</a>
-        <!-- 2024-12-23 이희범 -->
       </ul>
     </div>
   </div>
 </nav>
-
-
-<!-- 2024-12-23 이희범 -->
 
 <!-- jQuery (로그아웃 폼 이벤트를 위해 사용) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -62,20 +62,21 @@
     // 2) 로그아웃 폼 이벤트 등록 (getAuth(app)가 이제 정상 동작)
     logout();
   })();
-</script>
 
-<script>
-  //로그인 성공시 로그인 버튼과 회원가입 버튼 숨기고 mypage, logout 버튼 활성화
-console.log(`로그인 성공시 uid ===> ${localStorage.getItem("uid")}, ${localStorage.getItem("email")}`)
-    if(localStorage.getItem("email")){
-      console.log("email이 존재하면....")
-      //메뉴바에 메뉴가 로그인일때와 로그인 이전일 때 달라야 함.
-      //jquery에서 제공하는 toggle()을 사용하면 보이는 건 안보이게 안보이는건 보이게 처리해줌
-      $("#login, #logout, #mypage, #email, #signup").toggle()
+  /* 2024-12-24 이희범 dispalyName 값 적용 및 수정 */
+  // 로그인 상태 확인
+  const uid = localStorage.getItem("uid");
+  const email = localStorage.getItem("email");
+  const displayName = localStorage.getItem("displayName");
 
-      //구현 미정
-      //$("#email a").html(localStorage.getItem("email")) 
-      
-    }
+  console.log(`로그인 상태 확인: uid=${uid}, email=${email}, displayName=${displayName}`);
+
+  if (email) {
+    console.log("로그인 상태 감지: 헤더 메뉴 업데이트 실행");
+
+    // 헤더 메뉴 표시 상태 업데이트
+    $("#login, #signup").hide(); // 로그인 전 버튼 숨기기
+    $("#logout, #mypage, #displayName").show(); // 로그인 후 버튼 활성화
+    $("#displayName a").html(`${displayName}님 환영합니다!`); // 디스플레이 이름 설정
+  }
 </script>
-<!-- 2024-12-23 이희범 -->
