@@ -1,3 +1,5 @@
+//public/javascript/client.js
+
 // Firebase 초기화 객체를 전역 변수로 선언
 export let app; // 전역 변수 선언
 

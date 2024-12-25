@@ -1,3 +1,5 @@
+// config/apiKeys.js
+
 const express = require("express");
 const router = express.Router();
 
@@ -12,7 +14,12 @@ router.get("/", (req, res) => {
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.FIREBASE_APP_ID,
     },
-    kakao: { apiKey: process.env.KAKAO_API_KEY },
+    kakao: {
+      appKey: process.env.KAKAO_APP_KEY,
+      apiKey: process.env.KAKAO_API_KEY,
+      javascriptKey: process.env.KAKAO_JAVASCRIPT_KEY,
+      adminKey: process.env.KAKAO_ADMIN_KEY,
+    },
     naver: {
       clientId: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET,
