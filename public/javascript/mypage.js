@@ -29,6 +29,8 @@ async function uploadProfileImage(file) {
   }
 }
 
+let userData = null;
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Firebase 초기화
   await fetchFirebaseConfig();
@@ -37,19 +39,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   const uid = localStorage.getItem("uid");
   if (uid) {
     try {
-      const userData = await getUserData(uid);
+      userData = await getUserData(uid);
       document.getElementById("name").value = userData.displayName;
       document.getElementById("email").value = userData.email;
       document.getElementById("password").value = "********"; // 비밀번호는 표시하지 않음
       document.getElementById("phone").value = userData.phoneNumber;
-      
+
       if (userData.photoURL) {
-        document.getElementById('profilePreview').src = userData.photoURL;
+        document.getElementById("profilePreview").src = userData.photoURL;
       }
     } catch (error) {
       console.error("사용자 데이터를 가져오는 데 실패:", error);
     }
   }
+
+  // 회원정보 수정 폼 제출 이벤트 처리
+  document
+    .getElementById("infoForm")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const file = document.getElementById("profileImage").files[0];
+      let profileImageUrl = null;
+
+      // 사진 업로드 또는 기존 사진 유지
+      if (file) {
+        profileImageUrl = await uploadProfileImage(file);
+        if (!profileImageUrl) {
+          alert("프로필 이미지 업로드에 실패했습니다.");
+          return;
+        }
+      } else if (userData && userData.photoURL) {
+        profileImageUrl = userData.photoURL; // 기존 사진 유지
+      }
+
+      // Firestore에 저장할 데이터
+  const updatedUserData = {
+    displayName: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    phoneNumber: document.getElementById('phone').value,
+    photoURL: profileImageUrl, // 업로드된 URL 또는 기존 URL 유지
+  };
+
+  try {
+    await updateUserData(localStorage.getItem('uid'), updatedUserData); // Firestore 업데이트
+    alert("정보가 성공적으로 업데이트되었습니다!");
+  } catch (error) {
+    console.error("데이터 업데이트 실패:", error);
+    alert("정보 업데이트에 실패했습니다.");
+  }
+});
 
   // 지도 초기화
   if (typeof kakao !== "undefined") {
@@ -96,42 +135,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
-
-  // 회원정보 수정 폼 제출 이벤트 처리
-  document.getElementById('infoForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const uid = localStorage.getItem('uid');
-    const file = document.getElementById('profileImage').files[0];
-
-    if (uid) {
-      let profileImageUrl = null;
-
-      if (file) {
-        profileImageUrl = await uploadProfileImage(file);
-        if (!profileImageUrl) {
-          alert("프로필 이미지 업로드에 실패했습니다.");
-          return;
-        }
-      }
-
-      const updatedUserData = {
-        displayName: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phoneNumber: document.getElementById('phone').value,
-        photoURL: profileImageUrl,
-      };
-
-      try {
-        await updateUserData(uid, updatedUserData);
-        alert("정보가 성공적으로 업데이트되었습니다!");
-      } catch (error) {
-        console.error("데이터 업데이트 실패:", error);
-        alert("정보 업데이트에 실패했습니다.");
-      }
-    }
-  });
-
 
   // 프로필 이미지 미리보기 설정
   document
