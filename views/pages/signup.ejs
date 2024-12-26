@@ -1,4 +1,4 @@
-<!-- 2024-12-19 이희범 -->
+<!-- views/pages/signup.ejs -->
 
 <%- include('../partials/header') %>
 
@@ -71,6 +71,11 @@
             placeholder="Confirm your password"
           />
         </div>
+        <!-- 전화번호 입력란 추가 -->
+        <div class="form-group mb-3">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
+        </div>
         <button type="submit" class="btn btn-dark w-100 mb-3">
           Sign Up
         </button>
@@ -93,13 +98,15 @@
   import {
     fetchFirebaseConfig,    // Firebase 초기화 함수
     initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
-    signup                  // 회원가입 함수
+    signup,                  // 회원가입 함수
+    PreviewImage            // 프로필 이미지 미리보기 함수
     } from "/javascript/client.js";
 
   (async () => {
     // 1) Firebase 설정 먼저 로드 + 초기화
     await fetchFirebaseConfig();
     
+    document.getElementById("profileImage").addEventListener("change", PreviewImage);
     // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
     signup();
 
