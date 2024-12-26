@@ -353,7 +353,7 @@ export function googleLogin() {
       localStorage.setItem("email", user.email);
       localStorage.setItem("uid", user.uid);
 
-       /* 이희범 추가 */
+       /* 2024-12-24 이희범 추가 */
        // displayName을 fetch 후 localStorage에 저장
       await fetchDisplayName(user.uid).then((displayName) => {
       
