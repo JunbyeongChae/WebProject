@@ -13,17 +13,18 @@
         <button class="btn btn-dark w-100">Serch</button>
       </div>
       <!-- 옵션 선택 콤보박스 -->
+      <!-- 241230 박제성 지역명 변경 및 카테고리 id 변경.  -->
       <div>
         <label for="region" class="font-weight-bold">Select Region:</label>
-        <select id="region" class="form-control">
-          <option>광명</option>
-          <option>구로</option>
-          <option>금천</option>
+        <select id="regionSelect" class="form-control">
+          <option>광명시</option>
+          <option>구로구</option>
+          <option>금천구</option>
         </select>
       </div>
       <div>
-        <label for="region" class="font-weight-bold">Select Category:</label>
-        <select id="region" class="form-control">
+        <label for="Category" class="font-weight-bold">Select Category:</label>
+        <select id="categorySelect" class="form-control">
           <option>한식</option>
           <option>중식</option>
           <option>양식</option>
@@ -81,6 +82,7 @@
 <%- include('../partials/footer') %>
 <!-- 241224 박제성 맵 호출 및 스크립트 호출 -->
 <!-- 카카오 지도 API 스크립트 -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false"></script>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&libraries=services"></script>
+
 <script type="module" src="/javascript/search.js"></script>
 <!-- 241224 맵 호출 및 스크립트 호출 끝-->
