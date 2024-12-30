@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .env
+.kosmo-exp-2024-firebase-adminsdk-ynt9g-f3065fbbdf.js
 
 # testing
 /coverage

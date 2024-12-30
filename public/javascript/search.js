@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const mapContainer = document.getElementById("map");
       const mapOption = {
-        center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
-        level: 5,
+        center: new kakao.maps.LatLng(37.476823, 126.879512), // 한국소프트웨어인재개발원
+        level: 7,
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
       console.log("검색 페이지 지도 초기화 완료");
@@ -117,6 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                   // 새로운 정보 창 열기
                   newInfoWindow.open(map, marker);
                   infoWindow = newInfoWindow; // 새로운 정보 창 설정
+                  
+                  kakao.maps.event.addListener(map, "click", () => {
+                    if (infoWindow) {
+                      infoWindow.close();
+                      infoWindow = null; // 닫은 후 정보 창 초기화
+                    }
+                  })
                 });
               } else {
                 console.error(`주소 변환 실패: ${address}`);
