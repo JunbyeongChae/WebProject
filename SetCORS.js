@@ -7,7 +7,7 @@ const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
 const FIREBASE_STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET;
 
 // 서비스 계정 키 파일 경로 (Firebase Console에서 다운로드한 JSON 파일)
-const keyFilePath = path.join(__dirname, './kosmo-exp-2024-firebase-adminsdk-ynt9g-f3065fbbdf.json');
+const keyFilePath = path.join(__dirname, './여기에 서비스계정 파일 json 파일명'); //최상위 루트에 키 파일을 놓고 node SetCORS.js
 
 // cors.json 파일 경로 (CORS 설정 JSON 파일)
 const corsConfigPath = path.join(__dirname, 'cors.json');

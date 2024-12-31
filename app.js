@@ -38,11 +38,11 @@ app.set("view engine", "ejs");
 // 정적 파일 제공
 app.use(express.static(path.join(__dirname, "public")));
 
-// 기본 라우트
+/* // 기본 라우트
 app.get('/api/data', (req, res) => {
   res.send('서버가 정상적으로 실행 중입니다.');
 });
-
+ */
 // API 키 관련 라우터 설정
 app.use("/config", apiKeysRouter);
 
@@ -52,10 +52,10 @@ app.use("/mypage", mypageRouter); // mypageroute.js 연결
 app.use("/search", searchRouter); // /search 경로
 app.use("/details", detailsRouter); // /details 경로
 
-// 서버 실행
+/* // 서버 실행
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
+ */
 module.exports = app;

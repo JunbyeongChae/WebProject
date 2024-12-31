@@ -1,21 +1,14 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+// public/javascript/search.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
   getStorage,
   ref,
   getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-storage.js";
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
-// Firebase 설정 하드코딩
-const firebaseConfig = {
-  apiKey: "AIzaSyAfGyZZrTil91DY1vvcjSBWs4sEVzCmiTw",
-  authDomain: "kosmo-exp-2024.firebaseapp.com",
-  databaseURL:
-    "https://kosmo-exp-2024-default-rtdb.asia-southeast1.firebasedatabase.app",
-  messagingSenderId: "256155535167",
-  projectId: "kosmo-exp-2024",
-  storageBucket: "kosmo-exp-2024.firebasestorage.app",
-  appId: "1:256155535167:web:85958fee516b7c745df58a",
-};
+// 20241224 박제성 검색부분 맵 및 마커 추가
+// 20241225 채준병 수정
+// 20241231 박제성 firebase 연동 // json 파일 기반으로 콤보박스 선택시 마커 노출 및 지도 이동 구현
 
 // Firebase 앱 초기화
 document.addEventListener("DOMContentLoaded", async () => {
@@ -23,19 +16,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     kakao.maps.load(async () => {
       console.log("Kakao 객체:", kakao);
 
+      // Firebase 설정 가져오기 (apiKeys.js의 API 호출)
+      const response = await fetch("/config");
+      if (!response.ok) {
+        console.error("Firebase 설정을 가져오지 못했습니다.");
+        return;
+      }
+      const configData = await response.json();
+
       // Firebase 초기화
+      const firebaseConfig = configData.firebase;
       const app = initializeApp(firebaseConfig); // Firebase 앱 초기화
       const storage = getStorage(app); // Firebase Storage 초기화
 
       const mapContainer = document.getElementById("map");
       const mapOption = {
-        center: new kakao.maps.LatLng(37.476823, 126.879512), // 한국소프트웨어인재개발원
-        level: 7,
+        center: new kakao.maps.LatLng(37.476823, 126.879512), // 기본위치 // 한국소프트웨어인재개발원
+        level: 7, // 확대비율 조절
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
       console.log("검색 페이지 지도 초기화 완료");
 
-      // 마커 이미지 설정
+      // 마커 이미지 설정 20241225 채준병
       const imageSrc = "/images/Map_pin.png"; // 사용자 정의 마커 이미지 경로
       const imageSize = new kakao.maps.Size(40, 40); // 이미지 크기
       const imageOption = { offset: new kakao.maps.Point(20, 40) }; // 중심 좌표
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let markers = [];
       let infoWindow = null; // 기존 정보 창을 관리할 변수
 
-      // 콤보박스 선택 이벤트 처리
+      // 콤보박스 선택 이벤트 처리  // search.ejs 의 <select id = "이부분" >과 일치하게
       const regionSelect = document.getElementById("regionSelect");
       const categorySelect = document.getElementById("categorySelect");
 
@@ -82,6 +84,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           // 선택된 카테고리 데이터 처리
           const restaurants = data[selectedCategory];
 
+          // 마커들의 좌표를 저장할 배열
+          const coordsArray = [];
+
           // 지도에 마커 추가
           restaurants.forEach((entry) => {
             const address = entry.주소.split("지번")[0].trim(); // 주소 전처리
@@ -99,6 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 // 마커를 배열에 추가
                 markers.push(marker);
+                coordsArray.push(coords);
 
                 console.log(
                   `JSON 마커 추가됨: ${entry.RID} ${entry.이름} (${result[0].y}, ${result[0].x})`
@@ -106,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 // 정보 창 추가
                 const newInfoWindow = new kakao.maps.InfoWindow({
-                  content: `<div style="padding:5px;">${entry.이름}</div>`,
+                  content: `<div style="padding:5px; font-size: 14px;word-wrap: break-word;">${entry.이름}</div>`,
                 });
 
                 kakao.maps.event.addListener(marker, "click", () => {
@@ -117,19 +123,29 @@ document.addEventListener("DOMContentLoaded", async () => {
                   // 새로운 정보 창 열기
                   newInfoWindow.open(map, marker);
                   infoWindow = newInfoWindow; // 새로운 정보 창 설정
-                  
+
                   kakao.maps.event.addListener(map, "click", () => {
                     if (infoWindow) {
                       infoWindow.close();
                       infoWindow = null; // 닫은 후 정보 창 초기화
                     }
-                  })
+                  });
                 });
               } else {
                 console.error(`주소 변환 실패: ${address}`);
               }
             });
           });
+          // 마커들이 추가된 후, 마커들의 중간 좌표로 지도 이동
+          setTimeout(() => {
+            if (coordsArray.length > 0) {
+              const bounds = new kakao.maps.LatLngBounds();
+              coordsArray.forEach((coords) => {
+                bounds.extend(coords); // 모든 마커 좌표를 bounds에 추가
+              });
+              map.setBounds(bounds); // 마커들이 포함되도록 지도 영역 조정
+            }
+          }, 500); // 마커가 모두 추가된 후에 지도의 영역을 조정
         } catch (error) {
           console.error(
             "Firebase Storage 또는 JSON 데이터 처리 중 오류:",
@@ -137,7 +153,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           );
         }
       }
-
       // 처음 로드 시 데이터 불러오기
       loadData();
     });
