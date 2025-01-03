@@ -6,17 +6,34 @@
 <link rel="stylesheet" href="/stylesheets/style.css">
 
 <div class="container my-5">
-  <!-- 검색어 입력창 -->
   <div class="row justify-content-center mb-4">
-    <div class="col-md-8">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for restaurants or cuisines">
-        <div class="input-group-append">
-          <button class="btn btn-dark" type="button" onclick="window.location.href = '/search'">Search</button>
+    <!-- 검색창과 콤보박스를 수평으로 배치 -->
+    <div class="col-md-6 d-flex align-items-center">
+      <!-- Select Region 콤보박스를 오른쪽으로 배치 -->
+      <div class="d-flex justify-content-end col-md-3 col-4" style="margin-right: -10px;">
+        <div class="form-group">
+          <label for="region" class="font-weight-bold" style="margin-top: -15px;">Select Region</label>
+          <select id="region" class="form-control" style="max-width: 120px;">
+            <option>전체</option>
+            <option>광명</option>
+            <option>구로</option>
+            <option>금천</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 검색어 입력창 -->
+      <div class="col-md-9 col-8">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for restaurants or cuisines">
+          <div class="input-group-append">
+            <button class="btn btn-dark" type="button" onclick="window.location.href = '/search'">Search</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <!-- 레스토랑 카드 섹션 -->
   <h3 class="mb-4 text-center">Recommended Restaurants</h3>

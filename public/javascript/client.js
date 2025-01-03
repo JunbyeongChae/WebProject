@@ -63,8 +63,10 @@ import {
   getFirestore,
   doc,
   setDoc,
+
   getDoc,
   updateDoc,
+
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
@@ -91,7 +93,6 @@ export function signup() {
   $("#signupForm").on("submit", async (e) => {
     e.preventDefault();
     console.log("Signup form submitted!");
-
     const name = $("#name").val();
     const email = $("#email").val();
     const password = $("#password").val();
@@ -181,7 +182,7 @@ export async function updateUserData(uid, updatedData) {
 export function login() {
   console.log("Firebase App:", app);
   const auth = getAuth(app);
-  const firestore = getFirestore(app);
+  //const firestore = getFirestore(app);
 
   // 로그인 폼 제출 이벤트 처리
   $("#frm").on("submit", async (e) => {
@@ -199,20 +200,30 @@ export function login() {
       );
       const user = userCredential.user;
 
-      // Firebase Authentication의 displayName이 없는 경우 Firestore에서 가져오기
-      let displayName = user.displayName;
-      if (!displayName) {
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (userDoc.exists()) {
-          displayName = userDoc.data().displayName || "사용자";
-        } else {
-          displayName = "사용자"; // Firestore에 정보가 없을 경우 기본값
-        }
-      }
+      // 2024-12-24 이희범 firestore에서 displayName 가져오기 추가
+      const displayName = await fetchDisplayName(user.uid)
+
+      /* 2024-12-24 이희범 이 부분은 맨 아래 dispalyName 값 가져오기 함수를 구현해서 일단 주석처리 해놨습니다. */
+
+      // // Firebase Authentication의 displayName이 없는 경우 Firestore에서 가져오기
+      // let displayName = user.displayName;
+      // if (!displayName) {
+      //   const userDoc = await getDoc(doc(firestore, "users", user.uid));
+      //   if (userDoc.exists()) {
+      //     displayName = userDoc.data().displayName || "사용자";
+      //   } else {
+      //     displayName = "사용자"; // Firestore에 정보가 없을 경우 기본값
+      //   }
+      // }
+
       // 로그인 성공 메시지
       alert(`로그인 성공! ${displayName}님 환영합니다.`);
       localStorage.setItem("email", user.email);
       localStorage.setItem("uid", user.uid);
+
+      /* 2024-12-24 이희범 localStorage에 displayName추가 */
+      localStorage.setItem("displayName", displayName);
+
       location.href = "/"; // 홈 화면으로 이동
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -352,7 +363,6 @@ export function googleLogin() {
     .then(async (result) => {
       const user = result.user;
       console.log("Google Login Success:", user);
-
       // Firestore에 사용자 정보 저장
       await setDoc(doc(getFirestore(app), "users", user.uid), {
         displayName: user.displayName,
@@ -360,11 +370,18 @@ export function googleLogin() {
         photoURL: user.photoURL,
         createdAt: serverTimestamp(),
       });
-
       // 로그인 성공 시, 사용자 정보 저장 및 페이지 이동
       alert(`로그인 성공! ${user.displayName}님 환영합니다.`);
       localStorage.setItem("email", user.email);
       localStorage.setItem("uid", user.uid);
+
+       /* 2024-12-24 이희범 추가 */
+       // displayName을 fetch 후 localStorage에 저장
+      await fetchDisplayName(user.uid).then((displayName) => {
+      
+      localStorage.setItem("displayName", displayName);
+      })
+      
       location.href = "/"; // 홈 화면으로 이동
     })
     .catch((error) => {
@@ -372,3 +389,26 @@ export function googleLogin() {
       alert("Google 로그인에 실패했습니다. 다시 시도해주세요.");
     });
 }
+
+
+
+/* 2024-12-24 이희범 */
+//firestore에서 displayName 가져오는 함수
+export async function fetchDisplayName(uid) {
+  const firestore = getFirestore(app)
+  try{
+    const userDoc = await getDoc(doc(firestore, "users", uid))
+    if(userDoc.exists()) {
+      const displayName = userDoc.data().displayName || "사용자"
+      console.log(`Firestore에서 가져온 displayName: ${displayName}`)
+      return displayName
+    }else {
+      console.warn("Firestore에 사용자 문서가 존재하지 않습니다.")
+      return "사용자"
+    }
+  }catch (error){
+    console.error("Firestore에서 displayName 가져오기 실패:", error)
+    return "사용자"
+  }
+}  
+
