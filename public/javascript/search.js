@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
           // Firebase Storage에서 JSON 파일 다운로드
-          const jsonRef = ref(storage, fileName); // Firebase Storage의 경로
+          const jsonRef = ref(storage, `json/${fileName}`); // Firebase Storage의 경로
           const url = await getDownloadURL(jsonRef); // URL을 가져옵니다
           const response = await fetch(url);
           if (!response.ok) throw new Error("JSON 파일 로드 실패");
@@ -147,6 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }, 500); // 마커가 모두 추가된 후에 지도의 영역을 조정
         } catch (error) {
+          console.log(`${selectedRegion}_${selectedCategory}`);
           console.error(
             "Firebase Storage 또는 JSON 데이터 처리 중 오류:",
             error
