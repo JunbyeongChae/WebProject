@@ -1,0 +1,129 @@
+/* ======== 공통 스타일 ======== */
+
+/* 전체 페이지 기본 설정 */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  max-width: 100%;
+  padding: 0 15px;
+}
+
+h4, h5, h6 {
+  margin-bottom: 1rem;
+}
+
+.home-card-img-top {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* 버튼 스타일 */
+.btn-dark {
+  background-color: #343a40;
+  color: white;
+  border: none;
+}
+
+.btn-dark:hover {
+  background-color: #23272b;
+  color: white;
+}
+
+/* 입력창 스타일 */
+.form-control {
+  box-shadow: none;
+  border-radius: 5px;
+}
+
+/* 리스트 스타일 */
+.list-group-item {
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+/* ======== 프로필 사진 스타일 ======== */
+#profilePreview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+#profilePreview:hover {
+  border-color: #aaa;
+}
+
+/* ======== 카드 스타일 ======== */
+.card {
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+/* ======== 중간 영역 스크롤 스타일 ======== */
+.flex-grow-1 {
+  max-height: 500px; /* 스크롤 영역 높이 */
+  overflow-y: auto; /* 세로 스크롤 허용 */
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+  padding-right: 10px; /* 스크롤바와 내용 여백 */
+  box-sizing: border-box;
+}
+
+/* ======== 지도 영역 ======== */
+#map {
+  height: 100%; /* 부모 영역에 맞춤 */
+  background-color: #e9ecef; /* 지도 미리보기 영역 */
+}
+
+/* ======== 레이아웃 간격 설정 ======== */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.no-gutters {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.col-md-6, .col-md-4, .col-md-5 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* ======== 기타 요소 ======== */
+.text-warning {
+  color: #ffc107; /* 별점 스타일 */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+

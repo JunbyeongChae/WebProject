@@ -1,0 +1,77 @@
+<!-- 2024-12-19 이희범 -->
+
+<%- include('../partials/header') %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- 로고 -->
+      <div class="text-center mb-4">
+        <img src="/images/CI.png" alt="Logo" class="mb-3" width="150">
+        <h3>Sign in to your account</h3>
+      </div>
+
+      <!-- 로그인 폼 -->
+      <!-- form태그에 id를 추가 -->
+      <form id="frm" method="post"> <!-- 폼 시작 -->
+        <div class="form-group mb-3">
+          <label for="email">E-mail</label>
+          <input type="email" class="form-control" id="email" placeholder="Insert your email">
+        </div>
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>
+      </form>
+
+      <!-- 소셜 로그인 -->
+      <div class="text-center">
+        <p class="mb-2">Sigin in with</p>
+        <a href="/auth/google" class="btn btn-light border w-100">
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20" class="mr-2">
+          Sign in with Google
+        </a>
+      </div>
+
+      <!-- 회원가입 링크 -->
+      <div class="text-center mt-4">
+        <p>Don't have an account? <a href="/signup">Sign up</a></p>
+        <p>Forgot your account or password? <a href="#">Find it</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+
+<!-- 수정 필요 :  firebase.js, client.js로 각각 목적에 맞게 정리해주세요-->
+<script type="module">
+  import { app } from "/javascript/firebase.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+  console.log("Firebase App:", app);
+
+  const auth = getAuth(app);
+
+  // 로그인 폼 제출 처리
+  $('#frm').on('submit', (e) => {
+    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data) => {
+        console.log(`uid ===> ${data.user.uid}`);
+        console.log(`email ===> ${data.user.email}`);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("uid", data.user.uid);
+        location.href = "/";
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(`Login failed: ${errorMessage}`);
+      });
+  });
+</script>
