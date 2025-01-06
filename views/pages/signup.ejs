@@ -2,115 +2,127 @@
 
 <%- include('../partials/header') %>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <!-- 로고 -->
-      <div class="text-center mb-4">
-        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
-        <h3>Create an Account</h3>
-      </div>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- 로고 -->
+        <div class="text-center mb-4">
+          <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
+          <h3>Create an Account</h3>
+        </div>
 
-      <!-- 프로필 사진 등록 -->
-      <div class="text-center mb-4">
-        <label for="profileImage" class="d-block">
-          <img
-            id="profilePreview"
-            src="https://placehold.co/120x120"
-            alt="Profile Image"
-            class="rounded-circle"
-            style="
+        <!-- 프로필 사진 등록 -->
+        <div class="text-center mb-4">
+          <label for="profileImage" class="d-block">
+            <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
+              style="
               width: 120px;
               height: 120px;
               object-fit: cover;
               cursor: pointer;
-            "
-          />
-        </label>
-        <input type="file" id="profileImage" accept="image/*" class="d-none" />
-        <small class="form-text text-muted"
-          >Click on the image to upload your profile picture.</small
-        >
-      </div>
+            " />
+          </label>
+          <input type="file" id="profileImage" accept="image/*" class="d-none" />
+          <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
+        </div>
 
-      <!-- 회원가입 폼 -->
-      <form id="signupForm">
-        <div class="form-group mb-3">
-          <label for="name">Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            placeholder="Enter your name"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="email">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="Enter your email"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="confirmPassword"
-            placeholder="Confirm your password"
-          />
-        </div>
-        <!-- 전화번호 입력란 추가 -->
-        <div class="form-group mb-3">
-          <label for="phoneNumber">Phone Number</label>
-          <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
-        </div>
-        <button type="submit" class="btn btn-dark w-100 mb-3">
-          Sign Up
-        </button>
-      </form>
+        <!-- 회원가입 폼 -->
+        <form id="signupForm">
+          <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" />
+          </div>
+          <!-- 전화번호 입력란 추가 -->
+          <div class="form-group mb-3">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
+          </div>
+          <!-- 개인정보수집 동의 -->
+          <div class="form-group mb-3">
+            <label>개인정보 수집 동의</label>
+            <textarea class="form-control" rows="5" readonly>
+1. 개인정보의 처리 목적
+다음의 목적을 위해 최소한의 개인정보를 수집 및 이용합니다. 수집된 개인정보는 정해진 목적 이외의 용도로는 이용되지 않으며, 수집목적이 변경될 경우 사전에 정보주체에게 알리고 동의를 받는 등 필요한 조치를 이행할 예정입니다.
 
-      <!-- 로그인 링크 -->
-      <div class="text-center">
-        <p>Already have an account? <a href="/login">Log in</a></p>
+가. 회원가입 및 관리
+1) 회원가입 시 이용약관 [동의함] 버튼을 클릭하면 개인정보 수집에 대해 동의한것으로간주합니다
+2) 비회원으로 서비스를 이용할 경우에도 동의함 버튼을 클릭하면 정보수집에 대해 동의한 것으로 간주합니다.
+
+2. 개인정보의 처리 및 보유 기간
+이용자의 개인정보는 원칙적으로 개인정보의 처리목적이 달성되면 지체없이(5일이내) 파기합니다.
+
+가. 회원정보
+- 수집항목 : 성명, 전화번호, 휴대폰번호, 이메일, 주소, 비밀번호
+- 보존기간 : 회원탈퇴 시까지
+- 수집근거 : 개인수집 동의에 의한 자료수집
+
+3. 처리하는 개인정보의 항목
+회원가입 및 각종 서비스를 위한 필수정보 및 선택정보를 아래와 같이 수집하고 있습니다.
+
+가. 수집항목
+1) 개인회원 가입시
+- 필수항목 : 성명, 아이디, 비밀번호, 주소, 이메일주소, 휴대폰번호, 전화번호, 공인인증서 DN 또는 휴대폰 인증 CI
+
+4. 동의를 거부할 권리가 있다는 사실과 동의 거부에 따른 불이익 내용
+이용자는 수집하는 개인정보에 대해 동의를 거부할 권리가 있으며 동의 거부 시에는 회원가입 및 서비스가 제한됩니다.
+          </textarea>
+          </div>
+          <!-- 동의 여부 선택 -->
+          <div class="form-group mb-3">
+            <div>
+              <input type="radio" id="agree" name="privacyAgreement" value="agree" required>
+              <label for="agree">동의</label>
+              <input type="radio" id="disagree" name="privacyAgreement" value="disagree">
+              <label for="disagree">동의하지 않음</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-dark w-100 mb-3">
+            Sign Up
+          </button>
+        </form>
+
+        <!-- 로그인 링크 -->
+        <div class="text-center">
+          <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<%- include('../partials/footer') %>
+  <%- include('../partials/footer') %>
 
-<!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script type="module">
-  import {
-    fetchFirebaseConfig,    // Firebase 초기화 함수
-    initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
-    signup,                  // 회원가입 함수
-    PreviewImage            // 프로필 이미지 미리보기 함수
-    } from "/javascript/client.js";
+    <script type="module">
+      import {
+        fetchFirebaseConfig,    // Firebase 초기화 함수
+        initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
+        signup,                  // 회원가입 함수
+        PreviewImage            // 프로필 이미지 미리보기 함수
+      } from "/javascript/client.js";
 
-  (async () => {
-    // 1) Firebase 설정 먼저 로드 + 초기화
-    await fetchFirebaseConfig();
-    
-    document.getElementById("profileImage").addEventListener("change", PreviewImage);
-    // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
-    signup();
+      (async () => {
+        // 1) Firebase 설정 먼저 로드 + 초기화
+        await fetchFirebaseConfig();
 
-    // 3) 필요하다면 페이지 초기화
-    initializeSignupPage();
-  })();
-</script>
+        document.getElementById("profileImage").addEventListener("change", PreviewImage);
+        // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
+        signup();
+
+        // 3) 필요하다면 페이지 초기화
+        initializeSignupPage();
+      })();
+    </script>
