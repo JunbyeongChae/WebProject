@@ -418,5 +418,32 @@ export async function fetchDisplayName(uid) {
     console.error("Firestore에서 displayName 가져오기 실패:", error)
     return "사용자"
   }
-}  
+}
+
+/* 2024-01-07 wonjun */
+//로그인 화면에서 이미지를 넣어주는 함수
+document.addEventListener("DOMContentLoaded", () => {
+  const profilePreview = document.getElementById("profilePreview");
+  const profileImageInput = document.getElementById("profileImage");
+
+  if (profilePreview && profileImageInput) {
+    // 이미지를 클릭했을 때 파일 선택 창 열기
+    profilePreview.addEventListener("click", () => {
+      profileImageInput.click();
+    });
+
+    // 파일 선택 후 이미지 미리보기 업데이트
+    profileImageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          profilePreview.src = e.target.result; // 이미지 미리보기 업데이트
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+
 
