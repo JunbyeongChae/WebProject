@@ -35,8 +35,22 @@
     <div class="col-md-5 d-flex flex-column">
       <h5>검색 결과</h5>
       <!-- 검색 결과 스크롤 영역 -->
-      <div class="border p-2 rounded flex-grow-1 overflow-auto" style="max-height: 600px;">d
-        <div class="row" id="searchResults"></div>
+      <div class="border p-2 rounded flex-grow-1 overflow-auto" style="max-height: 600px;">
+        <div class="row">
+          <% results.forEach(result => { %>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <a href="/details">
+                  <img src="<%= result.img %>" class="card-img-top" alt="<%= result.title %>">
+                </a>
+                <div class="card-body text-center">
+                  <h6 class="card-title"><%= result.title %></h6>
+                  <p class="card-text"><%= result.info %></p>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
       </div>
     </div>
 
@@ -52,7 +66,5 @@
 
 <%- include('../partials/footer') %>
 
-<!-- 카카오 지도 API 스크립트 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false&libraries=services"></script>
-
 <script type="module" src="/javascript/search.js"></script>

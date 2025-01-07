@@ -1,7 +1,14 @@
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /json/{allPaths=**} {
-      allow read: if true;
-    }
-  }
-}
+[
+     {
+          "origin": [
+               "*"
+          ],
+          "method": [
+          "GET", "POST", "UPDATE", "DELETE"
+          ],
+          "responseHeader": [
+          "Content-Type", "Authorization"
+          ],
+          "maxAgeSeconds": 3600
+     }
+]

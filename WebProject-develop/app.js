@@ -8,6 +8,7 @@ const searchRouter = require("./routes/searchroute"); // 검색 라우트
 const detailsRouter = require("./routes/detailsroute"); // 상세보기 라우트
 
 const app = express();
+const cors = require("cors");
 
 // 뷰 엔진 설정
 app.set("views", path.join(__dirname, "views"));
@@ -18,6 +19,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // API 키 관련 라우터 설정
 app.use("/config", apiKeysRouter);
+
+app.use(cors());
 
 // 라우터파일 연결로 수정 - 20241225 채준병
 app.use("/", authRouter); // auth.js 연결
