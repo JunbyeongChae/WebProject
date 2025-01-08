@@ -1,9 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (typeof kakao !== "undefined") {
@@ -45,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const regionSelect = document.getElementById("regionSelect");
       const categorySelect = document.getElementById("categorySelect");
       const searchInput = document.querySelector(".form-control[placeholder='음식점을 검색하세요']");
-      const searchResultsContainer = document.querySelector(".border.p-2.rounded");
+      const searchResultsContainer = document.getElementById("searchResultsContainer");
 
       regionSelect.addEventListener("change", loadData);
       categorySelect.addEventListener("change", loadData);
@@ -115,19 +111,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                   });
                 });
 
-                // 검색 결과 리스트 카드 형식으로 추가
+                // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
                 searchResultsContainer.innerHTML += `
-                  <div class="col-md-6 mb-3">
-                    <div class="card">
-                      <a href="/details">
-                        <img src="${entry.이미지}" class="card-img-top" alt="${entry.이름}">
-                      </a>
-                      <div class="card-body text-center">
-                        <h6 class="card-title">${entry.이름}</h6>
-                        <p class="card-text">${entry.카테고리}</p>
-                      </div>
+                <div class="col-md-6 mb-3">
+                  <div class="card">
+                    <a href="/details">
+                      <img src="${entry.이미지 ? entry.이미지 : 'https://placehold.co/100X100'}" class="card-img-top" alt="${entry.이름}">
+                    </a>
+                    <div class="card-body text-center">
+                      <h6 class="card-title">${entry.이름}</h6>
+                      <p class="card-text">${entry.카테고리}</p>
                     </div>
-                  </div>`;
+                  </div>
+                </div>`;
+
               }
             });
           });
