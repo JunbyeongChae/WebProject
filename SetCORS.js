@@ -9,7 +9,7 @@ const FIREBASE_STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET;
 // 서비스 계정 키 파일 경로 (Firebase Console에서 다운로드한 JSON 파일)
 const keyFilePath = path.join(
   __dirname,
-  "./wnsqud-kosmo152-firebase-adminsdk-knhsy-33d35c9082.json"
+  "dbwjd-kosmo-firebase-adminsdk-jrxb2-7381d57554"
 );
 //최상위 루트에 키 파일을 놓고 node SetCORS.js
 
