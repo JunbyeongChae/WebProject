@@ -93,13 +93,6 @@ export function signup() {
   $("#signupForm").on("submit", async (e) => {
     e.preventDefault();
     console.log("Signup form submitted!");
-
-    // 개인정보 동의 여부 확인
-    const agreement = document.querySelector('input[name="privacyAgreement"]:checked');
-    if (!agreement || agreement.value !== "agree") {
-      alert("회원가입을 위해 개인정보 수집 동의가 필요합니다.");
-      return;
-    }
     const name = $("#name").val();
     const email = $("#email").val();
     const password = $("#password").val();

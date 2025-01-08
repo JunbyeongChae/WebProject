@@ -10,7 +10,6 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrap.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,13 +18,6 @@
     <a href="/" class="navbar-brand">
       <img class="ci" src="/images/CI2.png" alt="logo" width="250">
     </a>
-    
-    <!-- 햄버거 메뉴 버튼 -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- 네비게이션 메뉴 -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- My Page 링크 -->
@@ -91,14 +83,3 @@
 
 </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuToggle = document.querySelector(".navbar-toggler");
-    const navMenu = document.querySelector("#navbarNav");
-
-    // 햄버거 메뉴 클릭 시 네비게이션 토글
-    menuToggle.addEventListener("click", () => {
-      navMenu.classList.toggle("show");
-    });
-  });
-</script>
