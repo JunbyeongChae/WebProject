@@ -18,27 +18,27 @@
 4. 해보고 안되거나, 더 좋은 방법이 있다면 알려주세요..
 ```
 
-1. cors.json 파일을 만들고 그 파일을 개인 FireBase Storage에 업로드 합니다.
+1. cors.json 파일을 만들고 그 파일을 개인 FireBase Storage에 업로드 합니다. ////완료
 
-2. npm install @google-cloud/storage 로 Google Cloud Storage를 설치합니다.
+2. npm install @google-cloud/storage 로 Google Cloud Storage를 설치합니다. ////완료
 
-3. Firebase Console로 이동한 뒤 아래 과정을 따라 서비스키(json 파일)를 발급 받습니다.
+3. Firebase Console로 이동한 뒤 아래 과정을 따라 서비스키(json 파일)를 발급 받습니다. ////완료
 
    - 프로젝트 개요 옆 톱니바퀴 -> 프로젝트 설정 클릭
    - 서비스 계정 탭 클릭
    - 아래 쪽의 "새 비공개키 생성" 클릭 // 스니펫의 Node.js 선택 확인
 
-4. 그 파일을 프로젝트 최상단[.env나 pakage.json 같은 위치]에 추가합니다.
+4. 그 파일을 프로젝트 최상단[.env나 pakage.json 같은 위치]에 추가합니다. ////완료
 
-5. SetCors.js 을 프로젝트 최상단에 만들고 서비스키의 파일명을 입력합니다.
+5. SetCors.js 을 프로젝트 최상단에 만들고 서비스키의 파일명을 입력합니다. ////완료
 
    - 키 파일명 예시) 프로젝트명-firebase-adminsdk-xxxxx-xxxxxxxx.json
 
-6. node SetCors.js 로 해당 파일을 실행합니다.
+6. node SetCors.js 로 해당 파일을 실행합니다. ////완료
 
-7. npm install cors 로 cors 를 설치합니다.
+7. npm install cors 로 cors 를 설치합니다.  ////완료
 
-8. app.js 에 코드를 추가합니다. // 제가 올린 app.js에 해당 내용이 첨부되어 있습니다.
+8. app.js 에 코드를 추가합니다. // 제가 올린 app.js에 해당 내용이 첨부되어 있습니다. ////완료
 
    - 주석으로 가려놓은 부분은 퍼플렉시티에서 알려준 코드지만 해당코드를 지워도 작동하긴합니다.
    - 아마 아래 두줄만 추가해도 될 것 같긴 합니다.
