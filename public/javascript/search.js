@@ -5,128 +5,150 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
-// Firebase 앱 초기화 ==> 제성님 코드 참고
 document.addEventListener("DOMContentLoaded", async () => {
-  // Firebase 설정 가져오기
-  const response = await fetch("/config");
-  if (!response.ok) {
-    console.error("Firebase 설정을 가져오지 못했습니다.");
-    return;
-  }
-  const configData = await response.json();
-  const firebaseConfig = configData.firebase;
-  const app = initializeApp(firebaseConfig); // Firebase 앱 초기화
-  const storage = getStorage(app); // Firebase Storage 초기화
-
-  // 지도 로딩
   if (typeof kakao !== "undefined") {
-    kakao.maps.load(() => {
+    kakao.maps.load(async () => {
+      console.log("Kakao 객체:", kakao);
+
+      // Firebase 설정 가져오기
+      const response = await fetch("/config");
+      if (!response.ok) {
+        console.error("Firebase 설정을 가져오지 못했습니다.");
+        return;
+      }
+      const configData = await response.json();
+      const firebaseConfig = configData.firebase;
+      const app = initializeApp(firebaseConfig);
+      const storage = getStorage(app);
+
+      // Kakao 지도 초기화
       const mapContainer = document.getElementById("map");
       const mapOption = {
-        center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
-        level: 5,
+        center: new kakao.maps.LatLng(37.476823, 126.879512),
+        level: 7,
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
+      console.log("검색 페이지 지도 초기화 완료");
 
-      const markers = [
-        { name: "Marker 1", lat: 37.5665, lng: 126.978 },
-        { name: "Marker 2", lat: 37.57, lng: 126.982 },
-        { name: "Marker 3", lat: 37.564, lng: 126.975 },
-      ];
+      // Kakao 지도 마커 이미지
+      const markerImage = new kakao.maps.MarkerImage(
+        "/images/Map_pin.png",
+        new kakao.maps.Size(40, 40),
+        { offset: new kakao.maps.Point(20, 40) }
+      );
 
-      const imageSrc = "/images/Map_pin.png"; // 사용자 정의 마커 이미지 경로
-      const imageSize = new kakao.maps.Size(40, 40); // 이미지 크기
-      const imageOption = { offset: new kakao.maps.Point(20, 40) };
+      const geocoder = new kakao.maps.services.Geocoder();
+      let markers = [];
+      let infoWindow = null;
 
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+      // UI 요소
+      const regionSelect = document.getElementById("regionSelect");
+      const categorySelect = document.getElementById("categorySelect");
+      const searchInput = document.querySelector(".form-control[placeholder='음식점을 검색하세요']");
+      const searchResultsContainer = document.querySelector(".border.p-2.rounded");
 
-      markers.forEach((markerData) => {
-        const markerPosition = new kakao.maps.LatLng(markerData.lat, markerData.lng);
-        const marker = new kakao.maps.Marker({
-          position: markerPosition,
-          map,
-          title: markerData.name,
-          image: markerImage,
-        });
-      });
+      regionSelect.addEventListener("change", loadData);
+      categorySelect.addEventListener("change", loadData);
+      searchInput.addEventListener("input", loadData);
+
+      async function loadData() {
+        // 기존 마커 초기화
+        markers.forEach((marker) => marker.setMap(null));
+        markers = [];
+
+        const selectedRegion = regionSelect.value;
+        const selectedCategory = categorySelect.value;
+        const searchQuery = searchInput.value.toLowerCase();
+        const fileName = `${selectedRegion}_${selectedCategory}.json`;  // 해당 지역 및 카테고리에 맞는 파일명
+
+        try {
+          // Firebase Storage에서 JSON 파일 URL 가져오기
+          const jsonRef = ref(storage, fileName); // 파일명 경로 수정
+          const url = await getDownloadURL(jsonRef);
+          console.log("생성된 JSON URL:", url);
+
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("JSON 파일 로드 실패");
+
+          const data = await response.json();
+          const restaurants = data[selectedCategory] || [];
+
+          // 검색 결과 필터링
+          const filteredResults = restaurants.filter((entry) =>
+            entry.이름.toLowerCase().includes(searchQuery)
+          );
+
+          searchResultsContainer.innerHTML = ""; // 기존 결과 초기화
+
+          const coordsArray = [];
+          filteredResults.forEach((entry) => {
+            const address = entry.주소.split("지번")[0].trim();
+
+            geocoder.addressSearch(address, (result, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도에 마커 추가
+                const marker = new kakao.maps.Marker({
+                  position: coords,
+                  map,
+                  title: entry.이름,
+                  image: markerImage,
+                });
+
+                markers.push(marker);
+                coordsArray.push(coords);
+
+                // 마커 클릭 시 정보창 표시
+                const newInfoWindow = new kakao.maps.InfoWindow({
+                  content: `<div style="padding:5px; font-size: 14px;">${entry.이름}</div>`,
+                });
+
+                kakao.maps.event.addListener(marker, "click", () => {
+                  if (infoWindow) infoWindow.close();
+                  newInfoWindow.open(map, marker);
+                  infoWindow = newInfoWindow;
+
+                  kakao.maps.event.addListener(map, "click", () => {
+                    if (infoWindow) infoWindow.close();
+                    infoWindow = null;
+                  });
+                });
+
+                // 검색 결과 리스트 카드 형식으로 추가
+                searchResultsContainer.innerHTML += `
+                  <div class="col-md-6 mb-3">
+                    <div class="card">
+                      <a href="/details">
+                        <img src="${entry.이미지}" class="card-img-top" alt="${entry.이름}">
+                      </a>
+                      <div class="card-body text-center">
+                        <h6 class="card-title">${entry.이름}</h6>
+                        <p class="card-text">${entry.카테고리}</p>
+                      </div>
+                    </div>
+                  </div>`;
+              }
+            });
+          });
+
+          // 지도 범위 조정
+          setTimeout(() => {
+            if (coordsArray.length > 0) {
+              const bounds = new kakao.maps.LatLngBounds();
+              coordsArray.forEach((coords) => bounds.extend(coords));
+              map.setBounds(bounds);
+            }
+          }, 500);
+        } catch (error) {
+          console.error("Firebase Storage 또는 JSON 데이터 처리 중 오류:", error);
+        }
+      }
+
+      // 초기 데이터 로드
+      loadData();
     });
   } else {
     console.error("Kakao 객체를 초기화할 수 없습니다.");
   }
-
-  // 콤보박스 및 검색어 입력 필드
-  const regionSelect = document.getElementById("regionSelect");
-  const categorySelect = document.getElementById("categorySelect");
-  const searchInput = document.getElementById("searchInput");
-
-  // 데이터 로드 함수
-  async function loadData() {
-    const selectedRegion = regionSelect.value;
-    const selectedCategory = categorySelect.value;
-    const searchQuery = searchInput.value.toLowerCase();
-    const fileName = `${selectedRegion}_${selectedCategory}.json`;
-
-    try {
-      const jsonRef = ref(storage, fileName);
-      const url = await getDownloadURL(jsonRef);
-      const response = await fetch(url);
-      const data = await response.json();
-
-      // 카테고리와 검색어로 필터링
-      const filteredResults = data[selectedCategory].filter(entry =>
-        entry.이름.toLowerCase().includes(searchQuery)
-      );
-
-      updateSearchResults(filteredResults);
-    } catch (error) {
-      console.error("데이터 로드 실패:", error);
-    }
-  }
-
-  // 검색 결과 업데이트 함수
-  function updateSearchResults(restaurants) {
-    const resultContainer = document.getElementById("searchResults");
-    resultContainer.innerHTML = '';  // 이전 결과 지우기
-
-    restaurants.forEach(entry => {
-      const card = document.createElement('div');
-      card.classList.add('col-md-6', 'mb-3');
-      card.innerHTML = `
-        <div class="card">
-          <a href="/details">
-            <img src="${entry.img || 'https://placehold.co/100x100'}" class="card-img-top" alt="${entry.name}">
-          </a>
-          <div class="card-body text-center">
-            <h6 class="card-title">${entry.이름}</h6>
-            <p class="card-text">${entry.정보}</p>
-          </div>
-        </div>
-      `;
-      resultContainer.appendChild(card);
-    });
-  }
-
-  // 검색 버튼 클릭 이벤트
-  document.getElementById("searchButton").addEventListener("click", loadData);
-
-  // 콤보박스 값이 변경될 때마다 데이터 불러오기
-  regionSelect.addEventListener("change", loadData);
-  categorySelect.addEventListener("change", loadData);
-
-  // 처음 로드 시 데이터 불러오기
-  loadData();
 });
-
-/*
-    Access to fetch at 'https://firebasestorage.googleapis.com/v0/b/kkh-project-61365.firebasestorage.app/o/%EA%B4%91%EB%AA%85%EC%8B%9C_%ED%95%9C%EC%8B%9D.json?alt=media&token=d0fd13e4-6a0d-482d-ac69-b24c6b461959' from origin 'http://localhost:4000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.Understand this errorAI
-    search.js:72 
-            
-            
-    GET https://firebasestorage.googleapis.com/v0/b/kkh-project-61365.firebasestorage.app/o/%EA%B4%91%EB%AA%85%EC%8B%9C_%ED%95%9C%EC%8B%9D.json?alt=media&token=d0fd13e4-6a0d-482d-ac69-b24c6b461959 net::ERR_FAILED 200 (OK)
-    loadData @ search.js:72
-    await in loadData
-    (anonymous) @ search.js:117Understand this errorAI
-    search.js:82 데이터 로드 실패: TypeError: Failed to fetch
-    at loadData (search.js:72:30)
-    ==> 데이터 로딩 오류 해결중
-*/
