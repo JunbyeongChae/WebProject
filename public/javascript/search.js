@@ -88,9 +88,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
           // Firebase Storage에서 JSON 파일 URL 가져오기
-          const jsonRef = ref(storage, fileName); // 파일명 경로 수정
+          const jsonRef = ref(storage, `json/${fileName}`); // 파일명 경로 수정
           const url = await getDownloadURL(jsonRef);
           console.log("생성된 JSON URL:", url);
+          console.log(fileName);
 
           const response = await fetch(url);
           if (!response.ok) throw new Error("JSON 파일 로드 실패");
