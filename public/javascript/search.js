@@ -6,6 +6,27 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
+/* 2025-01-07 이희범 URLSearchParams 사용하여 region, category 가져오고 select요소를 통해 콤보박스에 적용 */
+document.addEventListener("DOMContentLoaded", () => {
+  // URL에서 쿼리 파라미터를 가져오기
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedRegion = urlParams.get("region");
+  const selectedCategory = urlParams.get("category");
+
+  // region과 category 콤보박스에 선택된 값 반영
+  const regionSelect = document.getElementById("regionSelect");
+  const categorySelect = document.getElementById("categorySelect");
+
+  if (selectedRegion) {
+    regionSelect.value = selectedRegion;  // region 선택값 설정
+  }
+
+  if (selectedCategory) {
+    categorySelect.value = selectedCategory;  // category 선택값 설정
+  }
+
+});
+
 // 20241224 박제성 검색부분 맵 및 마커 추가
 // 20241225 채준병 수정
 // 20241231 박제성 firebase 연동 // json 파일 기반으로 콤보박스 선택시 마커 노출 및 지도 이동 구현
