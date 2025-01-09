@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "-": "^0.0.1",
     "@google-cloud/storage": "^7.14.0",
     "bootstrap": "^5.3.3",
     "cookie-parser": "~1.4.4",
@@ -18,13 +18,14 @@
     "express-session": "^1.18.1",
     "firebase": "^11.1.0",
     "firebase-admin": "^13.0.1",
-    "g": "^2.0.1",
+    "firebase-functions": "^6.2.0",
     "http-errors": "~1.6.3",
     "install": "^0.13.0",
     "morgan": "~1.9.1",
     "nodemon": "^3.1.9"
   },
   "devDependencies": {
-    "http-proxy-middleware": "^3.0.3"
+    "http-proxy-middleware": "^3.0.3",
+    "nodemon": "^3.1.9"
   }
 }

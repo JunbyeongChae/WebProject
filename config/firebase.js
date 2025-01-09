@@ -17,7 +17,4 @@ const firebaseConfig = {
   appId: data.firebase.appId,
 };
 
-
-
-
 export const app = initializeApp(firebaseConfig);
