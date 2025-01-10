@@ -1,6 +1,10 @@
 // public/javascript/search.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
 /* 2025-01-07 이희범 URLSearchParams 사용하여 region, category 가져오고 select요소를 통해 콤보박스에 적용 */
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,13 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const categorySelect = document.getElementById("categorySelect");
 
   if (selectedRegion) {
-    regionSelect.value = selectedRegion;  // region 선택값 설정
+    regionSelect.value = selectedRegion; // region 선택값 설정
   }
 
   if (selectedCategory) {
-    categorySelect.value = selectedCategory;  // category 선택값 설정
+    categorySelect.value = selectedCategory; // category 선택값 설정
   }
-
 });
 
 // 20241224 박제성 검색부분 맵 및 마커 추가
@@ -69,8 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       // UI 요소
       const regionSelect = document.getElementById("regionSelect");
       const categorySelect = document.getElementById("categorySelect");
-      const searchInput = document.querySelector(".form-control[placeholder='음식점을 검색하세요']");
-      const searchResultsContainer = document.getElementById("searchResultsContainer");
+      const searchInput = document.querySelector(
+        ".form-control[placeholder='음식점을 검색하세요']"
+      );
+      const searchResultsContainer = document.getElementById(
+        "searchResultsContainer"
+      );
 
       regionSelect.addEventListener("change", loadData);
       categorySelect.addEventListener("change", loadData);
@@ -84,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selectedRegion = regionSelect.value;
         const selectedCategory = categorySelect.value;
         const searchQuery = searchInput.value.toLowerCase();
-        const fileName = `${selectedRegion}_${selectedCategory}.json`;  // 해당 지역 및 카테고리에 맞는 파일명
+        const fileName = `${selectedRegion}_${selectedCategory}.json`; // 해당 지역 및 카테고리에 맞는 파일명
 
         try {
           // Firebase Storage에서 JSON 파일 URL 가져오기
@@ -146,7 +153,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="col-md-6 mb-3">
                   <div class="card">
                     <a href="/details">
-                      <img src="${entry.이미지 ? entry.이미지 : 'https://placehold.co/100X100'}" class="card-img-top" alt="${entry.이름}">
+                      <img src="${
+                        entry.이미지
+                          ? entry.이미지
+                          : "https://placehold.co/100X100"
+                      }" class="card-img-top" alt="${entry.이름}">
                     </a>
                     <div class="card-body text-center">
                       <h6 class="card-title">${entry.이름}</h6>
@@ -154,7 +165,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                   </div>
                 </div>`;
-
               }
             });
           });
@@ -168,7 +178,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }, 500);
         } catch (error) {
-          console.error("Firebase Storage 또는 JSON 데이터 처리 중 오류:", error);
+          console.error(
+            "Firebase Storage 또는 JSON 데이터 처리 중 오류:",
+            error
+          );
         }
       }
 
