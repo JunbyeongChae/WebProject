@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config(); //dotenv를 config > firebase.js에서 사용하기 위한 require. "심유정"
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
