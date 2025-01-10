@@ -90,20 +90,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 지도 컨테이너 설정
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
+        center: new kakao.maps.LatLng(37.476823, 126.879512), // 기본위치
         level: 3, // 확대 레벨
       };
 
       // 지도 생성
       const map = new kakao.maps.Map(container, options);
 
-      // 마커 데이터 (예제)
-      const markers = [
-        { name: "맛집1", lat: 37.5665, lng: 126.978 },
-        { name: "맛집2", lat: 37.57, lng: 126.982 },
-        { name: "맛집3", lat: 37.564, lng: 126.975 },
+      // 마커 데이터 (임의 가게 데이터)
+      const markersData = [
+        { name: "보릿골", lat: 37.4552973019092, lng: 126.877836052368 },
+        {
+          name: "황궁쟁반옛날손짜장",
+          lat: 37.5001012541426,
+          lng: 126.882291434996,
+        },
+        {
+          name: "백만그릇파스타",
+          lat: 37.4790648145907,
+          lng: 126.889097292556,
+        },
+        { name: "김태완스시", lat: 37.4745242026197, lng: 126.867592514877 },
+        { name: "잉크커피", lat: 37.4821079378772, lng: 126.895281502292 },
       ];
 
+      // 마커 이미지 설정
       // 마커 이미지 설정
       const imageSrc = "/images/Map_pin.png"; // 사용자 정의 마커 이미지 경로
       const imageSize = new kakao.maps.Size(40, 40); // 이미지 크기
@@ -114,19 +125,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         imageOption
       );
 
-      markers.forEach((markerData) => {
-        const markerPosition = new kakao.maps.LatLng(
-          markerData.lat,
-          markerData.lng
-        );
+      // 마커들의 좌표를 저장할 배열
+      const coordsArray = [];
 
-        new kakao.maps.Marker({
-          position: markerPosition,
-          map: map,
-          title: markerData.name,
-          image: markerImage, // 커스텀 마커 이미지 적용
+      // 마커 생성 및 지도에 추가
+      markersData.forEach((entry) => {
+        const coords = new kakao.maps.LatLng(entry.lat, entry.lng);
+
+        const marker = new kakao.maps.Marker({
+          position: coords,
+          map,
+          title: entry.name,
+          image: markerImage, // 커스텀 이미지 적용
         });
+
+        // 더블클릭 이벤트 추가
+        kakao.maps.event.addListener(marker, "click", () => {
+          // URL로 이동
+          window.location.href = "http://localhost:4000/details";
+          //`http://localhost:4000/details?name=${encodeURIComponent(entry.name)}`;
+        });
+
+        // 마커를 배열에 추가
+        coordsArray.push(coords);
       });
+
+      // 지도 중심과 확대 레벨을 마커에 맞게 조정
+      if (coordsArray.length > 0) {
+        const bounds = new kakao.maps.LatLngBounds();
+        coordsArray.forEach((coords) => {
+          bounds.extend(coords); // 모든 마커 좌표를 bounds에 추가
+        });
+        map.setBounds(bounds); // 마커들이 포함되도록 지도 영역 조정
+      }
     });
   }
 
