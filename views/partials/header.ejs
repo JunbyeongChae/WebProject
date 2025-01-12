@@ -9,22 +9,25 @@
   <!-- jQuery and Bootstrap Bundle (includes Popper.js) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrap.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <!-- 로고 이미지 링크 -->
     <a href="/" class="navbar-brand">
-      <img class="ci" src="/images/CI2.png" alt="logo" width="250">
+      <img class="ci" src="/images/CI2.png" alt="logo" width="250" />
     </a>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- My Page 링크 -->
-        <li class="nav-item" id="mypage" style="display: none;">
+        <li class="nav-item" id="mypage" style="display: none">
           <p class="mb-0 mr-3">
-            <span id="userNameDisplay" class="mr-2"></span> <!-- 사용자 이름 출력 위치 -->
-            <a href="/mypage" class="text-dark" style="text-decoration: none;">My page</a>
+            <span id="userNameDisplay" class="mr-2"></span>
+            <!-- 사용자 이름 출력 위치 -->
+            <a href="/mypage" class="text-dark" style="text-decoration: none"
+              >My page</a
+            >
           </p>
         </li>
         <!-- 로그인 링크 -->
@@ -33,16 +36,19 @@
         </li>
         <!-- displayName -->
         <!-- 2024-12-24 이희범 현 사용자 이름 출력 추가 -->
-        <li class="nav-item" id="displayName" style="display: none;">
-          <a href="#" aria-current="page" class="nav-link active">현사용자이름출력자리</a>
+        <li class="nav-item" id="displayName" style="display: none">
+          <a href="#" aria-current="page" class="nav-link active"
+            >현사용자이름출력자리</a
+          >
         </li>
         <!-- 회원가입 버튼 -->
         <li class="nav-item" id="signup">
           <a class="nav-link btn btn-dark text-white" href="/signup">signup</a>
         </li>
         <!-- 로그아웃 버튼 -->
-        <li class="nav-item" id="logout" style="display: none;">
+        <li class="nav-item" id="logout" style="display: none">
           <a class="nav-link active" aria-current="page" href="#">Logout</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -51,7 +57,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="module">
-  import { fetchFirebaseConfig, logout, getUserData } from "/javascript/client.js";
+  import {
+    fetchFirebaseConfig,
+    logout,
+    getUserData,
+  } from "/javascript/client.js";
 
   (async () => {
     // Firebase 설정 가져오기 및 앱 초기화
@@ -61,7 +71,11 @@
     logout();
 
     // Firestore에서 사용자 데이터 가져오기
-    console.log(`로그인 성공시 uid ===> ${localStorage.getItem("uid")}, ${localStorage.getItem("email")}`);
+    console.log(
+      `로그인 성공시 uid ===> ${localStorage.getItem(
+        "uid"
+      )}, ${localStorage.getItem("email")}`
+    );
 
     if (localStorage.getItem("email")) {
       console.log("email이 존재하면...");
@@ -73,13 +87,13 @@
       if (uid) {
         try {
           const userData = await getUserData(uid);
-          document.getElementById('userNameDisplay').textContent = `${userData.displayName}님`;
+          document.getElementById(
+            "userNameDisplay"
+          ).textContent = `${userData.displayName}님`;
         } catch (error) {
           console.error("Error getting user data:", error);
         }
       }
     }
   })();
-
 </script>
-

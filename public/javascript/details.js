@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const mapContainer = document.getElementById("map");
 
-      // 지도 초기화 (기본 좌표는 서울 시청)
+      // 지도 초기화 (기본 좌표는 kosmo)
       const mapOption = {
-        center: new kakao.maps.LatLng(37.5665, 126.978),
+        center: new kakao.maps.LatLng(37.476823, 126.879512),
         level: 3,
       };
 
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("상세보기 지도 초기화 완료");
 
       // 기본 마커 데이터
-      const markerPosition = new kakao.maps.LatLng(37.5665, 126.978);
+      const markerPosition = new kakao.maps.LatLng(37.476823, 126.879512);
 
       // 마커 이미지 설정 20241225 채준병
       const imageSrc = "/images/Map_pin.png"; // 사용자 정의 마커 이미지 경로
@@ -39,8 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Detail Marker",
         image: markerImage, // 커스텀 이미지 적용
       });
-
-      console.log(`마커 추가됨: ${markerData.name}`);
     });
   } else {
     console.error("Kakao Maps API 로드 실패");
