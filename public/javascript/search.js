@@ -7,55 +7,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
 /* 2025-01-07 이희범 URLSearchParams 사용하여 region, category 가져오고 select요소를 통해 콤보박스에 적용 */
-document.addEventListener("DOMContentLoaded", () => {
-  // URL에서 쿼리 파라미터를 가져오기
-  const urlParams = new URLSearchParams(window.location.search);
-  const selectedRegion = urlParams.get("region");
-  const selectedCategory = urlParams.get("category");
-
-  // region과 category 콤보박스에 선택된 값 반영
-  const regionSelect = document.getElementById("regionSelect");
-  const categorySelect = document.getElementById("categorySelect");
-
-  if (selectedRegion) {
-    regionSelect.value = selectedRegion; // region 선택값 설정
-  }
-
-  if (selectedCategory) {
-    categorySelect.value = selectedCategory; // category 선택값 설정
-  }
-
-  // 콤보박스 선택 시 URL을 동적으로 갱신
-  regionSelect.addEventListener("change", () => {
-    updateURL();
-    loadData(); // URL이 변경된 후 데이터 로드
-  });
-
-  categorySelect.addEventListener("change", () => {
-    updateURL();
-    loadData(); // URL이 변경된 후 데이터 로드
-  });
-
-  // URL을 동적으로 갱신하는 함수
-  function updateURL() {
-    const selectedRegion = regionSelect.value;
-    const selectedCategory = categorySelect.value;
-
-    // URL의 쿼리 파라미터 갱신
-    const newURL = new URL(window.location.href);
-    newURL.searchParams.set("region", selectedRegion);
-    newURL.searchParams.set("category", selectedCategory);
-
-    // 페이지 URL을 갱신
-    window.history.pushState({ path: newURL.href }, "", newURL.href);
-  }
-});
-
-// 20241224 박제성 검색부분 맵 및 마커 추가
-// 20241225 채준병 수정
-// 20241231 박제성 firebase 연동 // json 파일 기반으로 콤보박스 선택시 마커 노출 및 지도 이동 구현
-
-// Firebase 앱 초기화
 document.addEventListener("DOMContentLoaded", async () => {
   if (typeof kakao !== "undefined") {
     kakao.maps.load(async () => {
@@ -104,10 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         "searchResultsContainer"
       );
 
-      regionSelect.addEventListener("change", loadData);
-      categorySelect.addEventListener("change", loadData);
-      searchInput.addEventListener("input", loadData);
-
+      //////////////////////////////////////////
+      // 데이터를 로드하는 함수
       async function loadData() {
         // 기존 마커 초기화
         markers.forEach((marker) => marker.setMap(null));
@@ -183,7 +132,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }?region=${selectedRegion}&category=${selectedCategory}">
         <img src="${
           entry.이미지 ? entry.이미지 : "https://placehold.co/100X100"
-        }" class="card-img-top" alt="${entry.이름}">
+        }" class="card-img-top" alt="${entry.이름}"/>
       </a>
       <div class="card-body text-center">
         <h6 class="card-title">${entry.이름}</h6>
@@ -209,6 +158,34 @@ document.addEventListener("DOMContentLoaded", async () => {
             error
           );
         }
+      }
+      //////////////////////////////////////////
+
+      // 콤보박스 및 검색 입력 이벤트
+      regionSelect.addEventListener("change", () => {
+        updateURL();
+        loadData(); // URL이 변경된 후 데이터 로드
+      });
+
+      categorySelect.addEventListener("change", () => {
+        updateURL();
+        loadData(); // URL이 변경된 후 데이터 로드
+      });
+
+      searchInput.addEventListener("input", loadData);
+
+      // URL을 동적으로 갱신하는 함수
+      function updateURL() {
+        const selectedRegion = regionSelect.value;
+        const selectedCategory = categorySelect.value;
+
+        // URL의 쿼리 파라미터 갱신
+        const newURL = new URL(window.location.href);
+        newURL.searchParams.set("region", selectedRegion);
+        newURL.searchParams.set("category", selectedCategory);
+
+        // 페이지 URL을 갱신
+        window.history.pushState({ path: newURL.href }, "", newURL.href);
       }
 
       // 초기 데이터 로드
