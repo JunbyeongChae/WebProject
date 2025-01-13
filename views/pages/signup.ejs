@@ -87,13 +87,6 @@
     </div>
   </div>
 </div>
-      <!-- 로그인 링크 -->
-      <div class="text-center">
-        <p>Already have an account? <a href="/login">Log in</a></p>
-      </div>
-    </div>
-  </div>
-</div>
 
 <%- include('../partials/footer') %>
 
@@ -112,7 +105,12 @@
     // 1) Firebase 설정 먼저 로드 + 초기화
     await fetchFirebaseConfig();
     
+    document.getElementById("profilePreview").addEventListener("click", () => {
+      document.getElementById("profileImage").click();
+    });
+
     document.getElementById("profileImage").addEventListener("change", PreviewImage);
+
     // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
     signup();
 
