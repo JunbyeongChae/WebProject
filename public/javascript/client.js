@@ -390,8 +390,6 @@ export function googleLogin() {
     });
 }
 
-
-
 /* 2024-12-24 이희범 */
 //firestore에서 displayName 가져오는 함수
 export async function fetchDisplayName(uid) {

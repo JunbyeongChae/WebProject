@@ -24,6 +24,31 @@ document.addEventListener("DOMContentLoaded", () => {
   if (selectedCategory) {
     categorySelect.value = selectedCategory; // category 선택값 설정
   }
+
+  // 콤보박스 선택 시 URL을 동적으로 갱신
+  regionSelect.addEventListener("change", () => {
+    updateURL();
+    loadData(); // URL이 변경된 후 데이터 로드
+  });
+
+  categorySelect.addEventListener("change", () => {
+    updateURL();
+    loadData(); // URL이 변경된 후 데이터 로드
+  });
+
+  // URL을 동적으로 갱신하는 함수
+  function updateURL() {
+    const selectedRegion = regionSelect.value;
+    const selectedCategory = categorySelect.value;
+
+    // URL의 쿼리 파라미터 갱신
+    const newURL = new URL(window.location.href);
+    newURL.searchParams.set("region", selectedRegion);
+    newURL.searchParams.set("category", selectedCategory);
+
+    // 페이지 URL을 갱신
+    window.history.pushState({ path: newURL.href }, "", newURL.href);
+  }
 });
 
 // 20241224 박제성 검색부분 맵 및 마커 추가
@@ -149,22 +174,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
-                searchResultsContainer.innerHTML += `
-                <div class="col-md-6 mb-3">
-                  <div class="card">
-                    <a href="/details">
-                      <img src="${
-                        entry.이미지
-                          ? entry.이미지
-                          : "https://placehold.co/100X100"
-                      }" class="card-img-top" alt="${entry.이름}">
-                    </a>
-                    <div class="card-body text-center">
-                      <h6 class="card-title">${entry.이름}</h6>
-                      <p class="card-text">${entry.카테고리}</p>
-                    </div>
-                  </div>
-                </div>`;
+                // 20250113 박제성 => 주소 이동 하이퍼태그 추가.
+                searchResultsContainer.innerHTML += ` 
+  <div class="col-md-6 mb-3">
+    <div class="card">
+      <a href="/details/${
+        entry.RID
+      }?region=${selectedRegion}&category=${selectedCategory}">
+        <img src="${
+          entry.이미지 ? entry.이미지 : "https://placehold.co/100X100"
+        }" class="card-img-top" alt="${entry.이름}">
+      </a>
+      <div class="card-body text-center">
+        <h6 class="card-title">${entry.이름}</h6>
+        <p class="card-text">${entry.카테고리}</p>
+      </div>
+    </div>
+  </div>`;
               }
             });
           });
