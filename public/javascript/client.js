@@ -60,8 +60,10 @@ import {
   getFirestore,
   doc,
   setDoc,
+
   getDoc,
   updateDoc,
+
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
@@ -197,7 +199,11 @@ export function login() {
       const user = userCredential.user;
 
       // 2024-12-24 이희범 firestore에서 displayName 가져오기 추가
+<<<<<<< HEAD
+      const displayName = await fetchDisplayName(user.uid)
+=======
       const displayName = await fetchDisplayName(user.uid);
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
 
       /* 2024-12-24 이희범 이 부분은 맨 아래 dispalyName 값 가져오기 함수를 구현해서 일단 주석처리 해놨습니다. */
 
@@ -260,6 +266,7 @@ export function logout() {
 
 // 페이지별 초기화 함수 (예: 추가로 회원정보 수정 등을 처리)
 export function initializeSignupPage() {
+  const form = document.getElementById("infoForm");
   const form = document.getElementById("infoForm");
   if (form) {
     form.addEventListener("submit", function (event) {
@@ -371,12 +378,22 @@ export function googleLogin() {
       localStorage.setItem("email", user.email);
       localStorage.setItem("uid", user.uid);
 
+<<<<<<< HEAD
+       /* 2024-12-24 이희범 추가 */
+       // displayName을 fetch 후 localStorage에 저장
+      await fetchDisplayName(user.uid).then((displayName) => {
+      
+      localStorage.setItem("displayName", displayName);
+      })
+      
+=======
       /* 2024-12-24 이희범 추가 */
       // displayName을 fetch 후 localStorage에 저장
       await fetchDisplayName(user.uid).then((displayName) => {
         localStorage.setItem("displayName", displayName);
       });
 
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
       location.href = "/"; // 홈 화면으로 이동
     })
     .catch((error) => {
@@ -385,6 +402,305 @@ export function googleLogin() {
     });
 }
 
+<<<<<<< HEAD
+
+
+/* 2024-12-24 이희범 */
+//firestore에서 displayName 가져오는 함수
+export async function fetchDisplayName(uid) {
+  const firestore = getFirestore(app)
+  try{
+    const userDoc = await getDoc(doc(firestore, "users", uid))
+    if(userDoc.exists()) {
+      const displayName = userDoc.data().displayName || "사용자"
+      console.log(`Firestore에서 가져온 displayName: ${displayName}`)
+      return displayName
+    }else {
+      console.warn("Firestore에 사용자 문서가 존재하지 않습니다.")
+      return "사용자"
+    }
+  }catch (error){
+    console.error("Firestore에서 displayName 가져오기 실패:", error)
+    return "사용자"
+  }
+}
+
+/* 2024-01-07 wonjun */
+//로그인 화면에서 이미지를 넣어주는 함수
+document.addEventListener("DOMContentLoaded", () => {
+  const profilePreview = document.getElementById("profilePreview");
+  const profileImageInput = document.getElementById("profileImage");
+
+  if (profilePreview && profileImageInput) {
+    // 이미지를 클릭했을 때 파일 선택 창 열기
+    profilePreview.addEventListener("click", () => {
+      profileImageInput.click();
+    });
+
+    // 파일 선택 후 이미지 미리보기 업데이트
+    profileImageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          profilePreview.src = e.target.result; // 이미지 미리보기 업데이트
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+
+
+
+// 홈화면 캐로셀 - 장원준 > 20241223 채준병 수정
+export function initCarousel() {
+  const carouselSlide = document.querySelector(".carousel-slide");
+  let carouselItems = document.querySelectorAll(".carousel-slide .card"); // 주의: 이후 복제 후 다시 갱신할 예정
+
+  const prevBtn = document.querySelector("#prevBtn");
+  const nextBtn = document.querySelector("#nextBtn");
+
+  const visibleItems = 4; // 한 화면에 보여질 카드 수
+  const totalItems = carouselItems.length;
+  const itemWidth = carouselItems[0].offsetWidth; // 카드 하나의 실제 너비
+
+  // --- 1) 맨 앞/뒤에 각각 4장씩 복제하기 ---
+  for (let i = 0; i < visibleItems; i++) {
+    // 앞쪽(첫 4장)을 복제하여 맨 뒤에 추가
+    const endClone = carouselItems[i].cloneNode(true);
+    carouselSlide.appendChild(endClone);
+
+    // 뒤쪽(마지막 4장)을 복제하여 맨 앞에 추가
+    const startClone = carouselItems[totalItems - 1 - i].cloneNode(true);
+    carouselSlide.insertBefore(startClone, carouselSlide.firstChild);
+  }
+
+  // 복제 후 다시 아이템 목록 갱신
+  carouselItems = document.querySelectorAll(".carousel-slide .card");
+  // 복제 포함 전체 개수 = 원본 + 앞쪽 4장 + 뒤쪽 4장
+  const extendedTotal = carouselItems.length;
+
+  // --- 2) 초기 위치 설정 ---
+  // counter를 "맨 앞에 붙인 클론 4장"을 지나쳐서, 원본 첫 번째 카드가 보이는 위치로 잡는다.
+  let counter = visibleItems;
+  carouselSlide.style.transform = `translateX(-${itemWidth * counter}px)`;
+
+  // --- 3) 다음 버튼(1장씩 이동) ---
+  nextBtn.addEventListener("click", () => {
+    // 맨 끝(원본 끝 + 뒤쪽 클론 4장)까지 이동 시도
+    if (counter >= extendedTotal - 1) return;
+    counter++;
+    carouselSlide.style.transition = "transform 0.4s ease-in-out";
+    carouselSlide.style.transform = `translateX(-${itemWidth * counter}px)`;
+  });
+
+  // --- 4) 이전 버튼(1장씩 이동) ---
+  prevBtn.addEventListener("click", () => {
+    // 맨 앞(맨 앞 클론 4장)보다 더 가려고 하면 중단
+    if (counter <= 0) return;
+    counter--;
+    carouselSlide.style.transition = "transform 0.4s ease-in-out";
+    carouselSlide.style.transform = `translateX(-${itemWidth * counter}px)`;
+  });
+
+  // --- 5) transition 끝난 뒤 무한 루프 보정 ---
+  carouselSlide.addEventListener("transitionend", () => {
+    // 1) 만약 ‘오른쪽 끝’을 넘어갔다면(즉, 원본 마지막 카드 이후의 클론들까지 갔을 때),
+    //    다시 ‘원본 마지막 카드’ 부근으로 점프
+    //    -> counter를 (원본 마지막 카드 인덱스)로 보정
+    if (counter >= totalItems + visibleItems) {
+      carouselSlide.style.transition = "none"; // 점프할 때 애니메이션 제거
+      // 원본 마지막 카드 인덱스는 totalItems + visibleItems - 1
+      // (예: 원본이 8장이면, 맨 앞 클론 4장 + 실제 8장 = 12, 그중 마지막은 인덱스 11)
+      counter = visibleItems;
+      carouselSlide.style.transform = `translateX(-${itemWidth * counter}px)`;
+    }
+
+    // 2) 만약 ‘왼쪽 끝’을 넘어갔다면(즉, 원본 첫 번째 카드 이전의 클론 구역으로 갔을 때),
+    //    다시 ‘원본 첫 카드’ 부근으로 점프
+    if (counter < visibleItems) {
+      carouselSlide.style.transition = "none";
+      // 원본 첫 카드 인덱스 = visibleItems
+      counter = totalItems + counter;
+      carouselSlide.style.transform = `translateX(-${itemWidth * counter}px)`;
+    }
+  });
+}
+
+// Google 로그인 함수
+export function googleLogin() {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider)
+    .then(async (result) => {
+      const user = result.user;
+      console.log("Google Login Success:", user);
+      // Firestore에 사용자 정보 저장
+      await setDoc(doc(getFirestore(app), "users", user.uid), {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: serverTimestamp(),
+      });
+      // 로그인 성공 시, 사용자 정보 저장 및 페이지 이동
+      alert(`로그인 성공! ${user.displayName}님 환영합니다.`);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("uid", user.uid);
+
+       /* 2024-12-24 이희범 추가 */
+       // displayName을 fetch 후 localStorage에 저장
+      await fetchDisplayName(user.uid).then((displayName) => {
+      
+      localStorage.setItem("displayName", displayName);
+      })
+      
+      location.href = "/"; // 홈 화면으로 이동
+    })
+    .catch((error) => {
+      console.error("Google 로그인 실패:", error);
+      alert("Google 로그인에 실패했습니다. 다시 시도해주세요.");
+    });
+}
+
+
+
+/* 2024-12-24 이희범 */
+//firestore에서 displayName 가져오는 함수
+export async function fetchDisplayName(uid) {
+  const firestore = getFirestore(app)
+  try{
+    const userDoc = await getDoc(doc(firestore, "users", uid))
+    if(userDoc.exists()) {
+      const displayName = userDoc.data().displayName || "사용자"
+      console.log(`Firestore에서 가져온 displayName: ${displayName}`)
+      return displayName
+    }else {
+      console.warn("Firestore에 사용자 문서가 존재하지 않습니다.")
+      return "사용자"
+    }
+  }catch (error){
+    console.error("Firestore에서 displayName 가져오기 실패:", error)
+    return "사용자"
+  }
+}
+
+/* 2024-01-07 wonjun */
+//로그인 화면에서 이미지를 넣어주는 함수
+document.addEventListener("DOMContentLoaded", () => {
+  const profilePreview = document.getElementById("profilePreview");
+  const profileImageInput = document.getElementById("profileImage");
+
+  if (profilePreview && profileImageInput) {
+    // 이미지를 클릭했을 때 파일 선택 창 열기
+    profilePreview.addEventListener("click", () => {
+      profileImageInput.click();
+    });
+
+    // 파일 선택 후 이미지 미리보기 업데이트
+    profileImageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          profilePreview.src = e.target.result; // 이미지 미리보기 업데이트
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+
+
+
+////////////////////////////////////////////////////////////////2024-12-21 심유정
+//회원가입 함수 구현
+export function signup() {
+  const auth = getAuth(app);
+  const storage = getStorage(app);
+
+  $("#signupForm").on("submit", async (e) => {
+    e.preventDefault();
+    console.log("Signup form submitted!");
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let confirmPassword = $("#confirmPassword").val(); //password 확인 기능을 추가
+    const file = $("#profileImage")[0].files[0];
+
+    if (password !== confirmPassword) {
+      // password를 대조하는 if문을 추가
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      let profileImageUrl = "";
+      if (file) {
+        //비동기 함수 uploadProfileImage를 호출하여 파일을 업로드 하고
+        // 그 결과 반환된 업로드된 파일의 URL profileImageUrl에 저장함.
+        profileImageUrl = await uploadProfileImage(file);
+      }
+      //새로운 이메일, 비밀번호를 통해 새 사용자를 등록
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User created:", userCredential.user);
+
+      //프로필 이미지 url이 존재하면 홈화면으로 이동
+      if (profileImageUrl) {
+        console.log("Profile image URL:", profileImageUrl);
+      }
+
+      location.href = "/";
+    } catch (error) {
+      // 회원가입 실패
+      console.error(error.code, error.message);
+      alert(`회원가입 실패: ${error.message}`);
+    }
+  });
+
+  // Firebase Storage에서 파일이 저장될 위치를 정의하고 해당파일을 업로드 하며
+  //업로드가 완료되면 getDownloadURL() 통해 업로드된 파일의 다운로드 URL을 가져옴
+  //이 url을 반환하여 다른곳에서 사용할 수 있도록 함
+  const uploadProfileImage = (file) => {
+    const storageRef = ref(storage, `profileImages/${file.name}`);
+    return uploadBytes(storageRef, file).then((snapshot) =>
+      getDownloadURL(snapshot.ref)
+    );
+  };
+}
+
+
+////////////////////////////////////////////////////////////////2024-12-21 심유정
+//로그인 함수 구현
+export function login() {
+  console.log("Firebase App:", app);
+  const auth = getAuth(app);
+
+  // 로그인 폼 제출 처리
+  $('#frm').on('submit', (e) => {
+    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data) => {
+        console.log(`uid ===> ${data.user.uid}`);
+        console.log(`email ===> ${data.user.email}`);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("uid", data.user.uid);
+        location.href = "/";
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(`Login failed: ${errorMessage}`);
+      });
+  });
+}
+=======
 /* 2024-12-24 이희범 */
 //firestore에서 displayName 가져오는 함수
 export async function fetchDisplayName(uid) {
@@ -404,3 +720,4 @@ export async function fetchDisplayName(uid) {
     return "사용자";
   }
 }
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
