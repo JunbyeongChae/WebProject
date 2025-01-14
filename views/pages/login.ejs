@@ -2,6 +2,9 @@
 
 <%- include('../partials/header') %>
 
+<!-- CSS 파일 포함 -->
+<link rel="stylesheet" href="/stylesheets/style.css">
+
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -13,6 +16,7 @@
 
       <!-- 로그인 폼 -->
       <!-- form태그에 id를 추가 -->
+      <form id="frm"> <!-- 폼 시작 -->
       <form id="frm"> <!-- 폼 시작 -->
         <div class="form-group mb-3">
           <label for="email">E-mail</label>
@@ -48,6 +52,7 @@
 <!-- jQuery (로그인 폼 이벤트를 위해 사용) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!-- client.js에 구현된 로그인 함수 호출 -->
 <!-- client.js에 구현된 로그인 함수 호출 -->
 <script type="module">
   import { fetchFirebaseConfig, login } from "/javascript/client.js";

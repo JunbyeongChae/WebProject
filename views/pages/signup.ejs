@@ -2,36 +2,35 @@
 
 <%- include('../partials/header') %>
 
+<!-- CSS 파일 포함 -->
+<link rel="stylesheet" href="/stylesheets/style.css">
+
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <!-- 로고 -->
       <div class="text-center mb-4">
         <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
+        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
         <h3>Create an Account</h3>
       </div>
 
-      <!-- 프로필 사진 등록 -->
-      <div class="text-center mb-4">
-        <label for="profileImage" class="d-block">
-          <img
-            id="profilePreview"
-            src="https://placehold.co/120x120"
-            alt="Profile Image"
-            class="rounded-circle"
-            style="
-              width: 120px;
-              height: 120px;
-              object-fit: cover;
-              cursor: pointer;
-            "
-          />
-        </label>
-        <input type="file" id="profileImage" accept="image/*" class="d-none" />
-        <small class="form-text text-muted"
-          >Click on the image to upload your profile picture.</small
-        >
-      </div>
+        <!-- 프로필 사진 등록 -->
+        <div class="text-center mb-4">
+          <img id="profilePreview" 
+              src="https://placehold.co/120x120" 
+              alt="Profile Image" 
+              class="rounded-circle"
+              style="
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+                cursor: pointer;
+              " />
+          <input type="file" id="profileImage" accept="image/*" class="d-none" />
+          <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
+        </div>
+
 
       <!-- 회원가입 폼 -->
       <form id="signupForm">
@@ -81,6 +80,13 @@
         </button>
       </form>
 
+      <!-- 로그인 링크 -->
+      <div class="text-center">
+        <p>Already have an account? <a href="/login">Log in</a></p>
+      </div>
+    </div>
+  </div>
+</div>
       <!-- 로그인 링크 -->
       <div class="text-center">
         <p>Already have an account? <a href="/login">Log in</a></p>

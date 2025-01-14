@@ -1,5 +1,3 @@
-<!-- views/pages/mypage.ejs -->
-
 <%- include('../partials/header') %>
 
 <!-- CSS 파일 import -->
@@ -12,12 +10,13 @@
       <h4 class="mb-4">내 정보</h4>
       <!-- 프로필 사진 업로드 -->
       <div class="text-center mb-4">
-        <label for="profileImage" class="d-block">
+        <!-- 프로필 이미지 -->
+        <label class="d-block">
           <img src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle"
             style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;" id="profilePreview">
         </label>
         <small class="form-text text-muted">Upload your profile picture</small>
-        <input type="file" id="profileImage" class="form-control-file mt-2">
+        <input type="file" id="profileImage" class="form-control-file mt-2" style="display: none;">
       </div>
 
       <!-- 회원정보 수정 양식 -->
@@ -56,7 +55,6 @@
 
 <!-- 241224 박제성 맵 호출 및 스크립트 호출 -->
 <!-- 카카오 지도 API 스크립트 -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false"></script>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false&libraries=services"></script>
 <!-- 마이페이지 전용 스크립트 -->
 <script type="module" src="/javascript/mypage.js"></script>
-

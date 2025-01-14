@@ -1,4 +1,21 @@
+<!-- views/pages/search.ejs -->
+
 <%- include('../partials/header') %>
+
+<!-- CSS 파일 포함 -->
+<link rel="stylesheet" href="/stylesheets/style.css">
+<style>
+.container {
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+}
+.row { 
+  display: flex; 
+  justify-content: center; /* 가로 가운데 정렬 */
+  flex-wrap: wrap; /* 줄바꿈 허용 */ 
+  width: 100%;
+}
+</style>
 
 <div class="container my-5">
   <div class="row">
@@ -7,13 +24,15 @@
       <h5>Search</h5>
       <!-- 검색어 입력창과 버튼 -->
       <div class="mb-3">
-        <input type="text" class="form-control mb-2" placeholder="음식점을 검색하세요" id="searchInput">
-        <button class="btn btn-dark w-100" id="searchButton">Search</button>
+        <input type="text" class="form-control mb-2" placeholder="음식점을 검색하세요">
+        <button class="btn btn-dark w-100">Search</button>
       </div>
       <!-- 옵션 선택 콤보박스 -->
+      <!-- 241230 박제성 지역명 변경 및 카테고리 id 변경.  -->
       <div>
         <label for="region" class="font-weight-bold">Select Region:</label>
-        <select id="regionSelect" class="form-control">
+        <!-- 2025-01-07 이희범 name 추가 -->
+        <select id="regionSelect" name="region" class="form-control">
           <option>광명시</option>
           <option>구로구</option>
           <option>금천구</option>
@@ -21,7 +40,8 @@
       </div>
       <div>
         <label for="Category" class="font-weight-bold">Select Category:</label>
-        <select id="categorySelect" class="form-control">
+        <!-- 2025-01-07 이희범 name 추가 -->
+        <select id="categorySelect" name="category" class="form-control">
           <option>한식</option>
           <option>중식</option>
           <option>양식</option>
@@ -31,7 +51,7 @@
       </div>
     </div>
 
-    <!-- 중간 칸: 검색 결과 -->
+    <!-- 2025-01-08 강경훈 중간 칸: 검색 결과 --> 
     <div class="col-md-5 d-flex flex-column">
       <h5>검색 결과</h5>
       <!-- 검색 결과 스크롤 영역 -->
