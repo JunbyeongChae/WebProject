@@ -1,7 +1,6 @@
 import { getFirestore, collection, query, where, getDocs, addDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { app } from "../../config/firebase.js";
 
-// Firestore에서 db받아오기
 const db = getFirestore(app);
 console.log("DB : ",db)
 
@@ -14,19 +13,21 @@ console.log("RID : " + rid);
 if (!rid) {
     const storedRID = localStorage.getItem("RID");
     if (storedRID) {
-        rid = storedRID; // LocalStorage에서 RID 복원
-        console.log("RID restored from localStorage: ", rid);
+        rid = storedRID; // LocalStorage에서 RID 가져오기
     } else {
         console.error("RID를 찾을 수 없습니다.");
     }
 } else {
     localStorage.setItem("RID", rid); // RID를 LocalStorage에 저장
-    console.log("RID stored to localStorage: ", rid);
+    console.log("RID 저장 ", rid);
 }
 
 const getReviewList = async () => {
     try {
-        const q = query(collection(db, "reviews"), where("RID", "==", rid), orderBy("comment_no", "desc")); // RID 기준으로 리뷰 가져오기
+        //orederBy관련 에러
+        //에러 메시지에 포함된 링크를 클릭하면, Firestore에서 필요한 인덱스를 
+        //자동으로 생성하는 페이지로 이동합니다. -> 생성 눌러주시면 됩니다.
+        const q = query(collection(db, "reviews"), where("RID", "==", rid), orderBy("comment_no", "desc"));
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
@@ -56,7 +57,7 @@ const renderReviews = (reviews) => {
         .map(
             (review) => `
         <div class="mb-3 border-bottom pb-2">
-            <h6>${review.username || "Anonymous"}</h6>
+            <h6>${review.username}</h6>
             <p>${review.comment}</p>
             <small>${new Date(review.comment_no).toLocaleString()}</small>
         </div>
@@ -74,7 +75,7 @@ const handleReviewSubmission = async () => {
         return;
     }
 
-    // 리뷰 데이터 객체 (4개 필드)
+    // 리뷰 데이터 객체
     const reviewData = {
         RID: rid,               // 리뷰가 속한 가게의 고유 ID
         username: username,      // 작성자 (로그인된 사용자명)
@@ -95,13 +96,41 @@ const handleReviewSubmission = async () => {
     }
 };
 
-window.onload = () => {
-    const submitBtn = document.getElementById("submitBtn");
-    if (submitBtn) {
-        submitBtn.addEventListener("click", handleReviewSubmission);
-    } else {
-        console.log("submitBtn을 찾을 수 없습니다.");
+
+window.onload = function () {
+    try {
+        const submitBtn = document.getElementById("submitBtn");
+
+        // 버튼이 존재하는지 확인
+        if (!submitBtn) {
+            console.error("Error: submitBtn 버튼을 찾을 수 없습니다.");
+            return;
+        }
+
+        // 사용자 이름 확인
+        const username = localStorage.getItem("displayName");
+        if (!username) {
+            console.warn("사용자 이름이 LocalStorage에 저장되지 않았습니다.");
+        }
+
+        // 클릭 이벤트 등록
+        submitBtn.addEventListener("click", function (event) {
+            event.preventDefault(); // 기본 동작 방지 (폼 전송 등)
+            console.log("Submit 버튼 클릭 이벤트 발생");
+
+            // 로그인 상태 체크
+            if (!username) {
+                alert("로그인 후 리뷰 작성 가능합니다.");
+                return;
+            }
+
+            // 리뷰 제출 처리
+            handleReviewSubmission();
+        });
+
+        console.log("Submit 버튼 초기화 완료");
+    } catch (error) {
+        console.error("window.onload 처리 중 오류 발생:", error);
     }
 };
-
 
