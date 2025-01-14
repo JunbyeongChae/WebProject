@@ -149,10 +149,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
+                // 250114 심유정 : URL로 RID 넘겨주는 코드 추가
                 searchResultsContainer.innerHTML += `
                 <div class="col-md-6 mb-3">
                   <div class="card">
-                    <a href="/details">
+                    <a href="/details?RID=${entry.RID}">
                       <img src="${
                         entry.이미지
                           ? entry.이미지
