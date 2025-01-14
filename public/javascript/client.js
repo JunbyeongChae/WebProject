@@ -201,7 +201,11 @@ export function login() {
       const user = userCredential.user;
 
       // 2024-12-24 이희범 firestore에서 displayName 가져오기 추가
+<<<<<<< HEAD
       const displayName = await fetchDisplayName(user.uid)
+=======
+      const displayName = await fetchDisplayName(user.uid);
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
 
       /* 2024-12-24 이희범 이 부분은 맨 아래 dispalyName 값 가져오기 함수를 구현해서 일단 주석처리 해놨습니다. */
 
@@ -376,6 +380,7 @@ export function googleLogin() {
       localStorage.setItem("email", user.email);
       localStorage.setItem("uid", user.uid);
 
+<<<<<<< HEAD
        /* 2024-12-24 이희범 추가 */
        // displayName을 fetch 후 localStorage에 저장
       await fetchDisplayName(user.uid).then((displayName) => {
@@ -383,6 +388,14 @@ export function googleLogin() {
       localStorage.setItem("displayName", displayName);
       })
       
+=======
+      /* 2024-12-24 이희범 추가 */
+      // displayName을 fetch 후 localStorage에 저장
+      await fetchDisplayName(user.uid).then((displayName) => {
+        localStorage.setItem("displayName", displayName);
+      });
+
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
       location.href = "/"; // 홈 화면으로 이동
     })
     .catch((error) => {
@@ -391,6 +404,7 @@ export function googleLogin() {
     });
 }
 
+<<<<<<< HEAD
 
 
 /* 2024-12-24 이희범 */
@@ -688,3 +702,24 @@ export function login() {
       });
   });
 }
+=======
+/* 2024-12-24 이희범 */
+//firestore에서 displayName 가져오는 함수
+export async function fetchDisplayName(uid) {
+  const firestore = getFirestore(app);
+  try {
+    const userDoc = await getDoc(doc(firestore, "users", uid));
+    if (userDoc.exists()) {
+      const displayName = userDoc.data().displayName || "사용자";
+      console.log(`Firestore에서 가져온 displayName: ${displayName}`);
+      return displayName;
+    } else {
+      console.warn("Firestore에 사용자 문서가 존재하지 않습니다.");
+      return "사용자";
+    }
+  } catch (error) {
+    console.error("Firestore에서 displayName 가져오기 실패:", error);
+    return "사용자";
+  }
+}
+>>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
