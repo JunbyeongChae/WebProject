@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     kakao.maps.load(async () => {
       const auth = getAuth();
 
+      //2024-01-14 박제성 즐겨찾기 데이터 지도에 마커 박기
       // Firebase에서 즐겨찾기 데이터 가져오기
       const getFavoriteStores = async (uid) => {
         const db = getDatabase();

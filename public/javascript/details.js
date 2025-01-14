@@ -19,6 +19,7 @@ import {
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded 이벤트 실행");
 
+  //2025-01-13 박제성 상세정보 노출 추가
   // URL에서 RID, region, category 추출
   const path = window.location.pathname;
   const RID = path.split("/")[2];
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 주소 정보를 기반으로 마커 생성
         addMarkersToMap(storeData, map, markerImage, markers);
 
+        //2024-01-13 박제성 하트 클릭 할때마다 즐겨찾기 추가 삭제 기능 추가
         // 즐겨찾기 하트 클릭 이벤트 설정
         onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -152,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // 지도 중앙을 해당 마커로 설정
           map.setCenter(coords);
-          map.setLevel(5); // 원하는 레벨로 확대비율 설정
+          map.setLevel(6); // 원하는 레벨로 확대비율 설정
         } else {
           console.warn(`주소 변환 실패: ${storeData.주소}`);
         }
@@ -208,14 +210,14 @@ document.addEventListener("DOMContentLoaded", () => {
             heartIcon.classList.remove("fas", "heart-icon-active");
             heartIcon.classList.add("far");
           } else {
-            // 즐겨찾기 추가
+            // firebase에 즐겨찾기 추가
             await set(favoritesRef, {
               RID,
               name: storeData.이름,
               address: storeData.주소.split("지번")[0].trim(),
               timestamp: Date.now(),
-              region: urlParams.get("region"), 
-              category: urlParams.get("category")
+              region: urlParams.get("region"),
+              category: urlParams.get("category"),
             });
             console.log("Firebase에 즐겨찾기 저장 성공!");
             heartIcon.classList.remove("far");
