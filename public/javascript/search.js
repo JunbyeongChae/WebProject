@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const selectedRegion = urlParams.get("region");
   const selectedCategory = urlParams.get("category");
-<<<<<<< HEAD
 
   // region과 category 콤보박스에 선택된 값 반영
   const regionSelect = document.getElementById("regionSelect");
@@ -53,45 +52,6 @@ if (typeof kakao !== "undefined") {
     const firebaseConfig = configData.firebase;
     const app = initializeApp(firebaseConfig);
     const storage = getStorage(app);
-=======
-
-  // region과 category 콤보박스에 선택된 값 반영
-  const regionSelect = document.getElementById("regionSelect");
-  const categorySelect = document.getElementById("categorySelect");
-
-  if (selectedRegion) {
-    regionSelect.value = selectedRegion;  // region 선택값 설정
-  }
-
-  if (selectedCategory) {
-    categorySelect.value = selectedCategory;  // category 선택값 설정
-  }
-
-});
-
-// 20241224 박제성 검색부분 맵 및 마커 추가
-// 20241225 채준병 수정
-// 20241231 박제성 firebase 연동 // json 파일 기반으로 콤보박스 선택시 마커 노출 및 지도 이동 구현
-
-// Firebase 앱 초기화
-document.addEventListener("DOMContentLoaded", async () => {
-  if (typeof kakao !== "undefined") {
-    kakao.maps.load(async () => {
-      console.log("Kakao 객체:", kakao);
-
-      // Firebase 설정 가져오기 (apiKeys.js의 API 호출)
-      const response = await fetch("/config");
-      if (!response.ok) {
-        console.error("Firebase 설정을 가져오지 못했습니다.");
-        return;
-      }
-      const configData = await response.json();
-
-      // Firebase 초기화
-      const firebaseConfig = configData.firebase;
-      const app = initializeApp(firebaseConfig); // Firebase 앱 초기화
-      const storage = getStorage(app); // Firebase Storage 초기화
->>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
 
       // Kakao 지도 초기화
       const mapContainer = document.getElementById("map");
@@ -139,12 +99,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
           // Firebase Storage에서 JSON 파일 URL 가져오기
-<<<<<<< HEAD
-          const jsonRef = ref(storage, fileName); // 2024-01-08 강경훈 파일명 경로 수정
+          const jsonRef = ref(storage, `json/${fileName}`); // 2024-01-08 강경훈 파일명 경로 수정
           // storage 최상단에 파일들이 위치해야함
-=======
-          const jsonRef = ref(storage, `json/${fileName}`); // 파일명 경로 수정
->>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
           const url = await getDownloadURL(jsonRef);
           console.log("생성된 JSON URL:", url);
           console.log(fileName);
@@ -199,13 +155,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
-<<<<<<< HEAD
                 searchResultsContainer.innerHTML += `
                 <div class="col-md-6 mb-3 restaurant-item" data-RID="${entry.RID}">
-=======
-                resultsRow.innerHTML += `
-                <div class="col-md-6 mb-3">
->>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
                   <div class="card">
                     <a href="/details?RID=${entry.RID}">
                       <img src="${entry.이미지 || 'https://placehold.co/100X100'}" class="card-img-top" alt="${entry.이름}">
@@ -242,9 +193,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   } else {
     console.error("Kakao 객체를 초기화할 수 없습니다.");
-<<<<<<< HEAD
   };
-=======
-  }
-});
->>>>>>> 038d915380ae9a0e84d4777f6b336eb496885aad
