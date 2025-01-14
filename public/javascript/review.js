@@ -1,4 +1,4 @@
-import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs, addDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { app } from "../../config/firebase.js";
 
 // Firestore에서 db받아오기
@@ -26,7 +26,7 @@ if (!rid) {
 
 const getReviewList = async () => {
     try {
-        const q = query(collection(db, "reviews"), where("RID", "==", rid)); // RID 기준으로 리뷰 가져오기
+        const q = query(collection(db, "reviews"), where("RID", "==", rid), orderBy("comment_no", "desc")); // RID 기준으로 리뷰 가져오기
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
@@ -66,6 +66,42 @@ const renderReviews = (reviews) => {
 };
 getReviewList();
 
+const handleReviewSubmission = async () => {
+    const reviewComment = document.getElementById("reviewComment").value.trim(); // 입력된 리뷰 내용
 
+    if (!reviewComment) {
+        alert("리뷰 내용을 입력해주세요.");
+        return;
+    }
+
+    // 리뷰 데이터 객체 (4개 필드)
+    const reviewData = {
+        RID: rid,               // 리뷰가 속한 가게의 고유 ID
+        username: username,      // 작성자 (로그인된 사용자명)
+        comment: reviewComment,  // 리뷰 내용
+        comment_no: Date.now()   // 작성 시간 (타임스탬프)
+    };
+
+    try {
+        // Firestore에 리뷰 추가
+        await addDoc(collection(db, "reviews"), reviewData);
+        console.log("리뷰가 성공적으로 추가되었습니다.");
+        getReviewList()
+        // 리뷰 입력 필드 초기화
+        document.getElementById("reviewComment").value = ""; // 텍스트 영역 비우기
+        alert("리뷰가 성공적으로 제출되었습니다.");
+    } catch (error) {
+        console.error("리뷰를 추가하는 중 오류가 발생했습니다: ", error);
+    }
+};
+
+window.onload = () => {
+    const submitBtn = document.getElementById("submitBtn");
+    if (submitBtn) {
+        submitBtn.addEventListener("click", handleReviewSubmission);
+    } else {
+        console.log("submitBtn을 찾을 수 없습니다.");
+    }
+};
 
 
