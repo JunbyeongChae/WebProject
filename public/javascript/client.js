@@ -46,11 +46,8 @@ import {
   updateProfile, // 사용자 프로필 업데이트 함수 추가
   GoogleAuthProvider,
   signInWithPopup,
+  signOut // 2024-12-23 이희범
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
-// 2024-12-23 이희범
-import { signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-// 2024-12-23 이희범
 
 import {
   getStorage,
