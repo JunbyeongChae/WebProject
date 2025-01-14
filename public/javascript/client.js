@@ -156,6 +156,7 @@ export function signup() {
   };
 }
 
+
 // Firestore에서 사용자 정보 가져오기 함수 export
 export async function getUserData(uid) {
   const firestore = getFirestore(app);
