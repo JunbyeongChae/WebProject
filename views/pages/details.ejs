@@ -52,27 +52,24 @@
       <!-- 오른쪽 칸 -->
       <div class="col-md-4 d-flex flex-column">
         <h5>Reviews</h5>
-        <!-- 상단부터 중간: 리뷰 목록 -->
-        <div class="flex-grow-1 mb-3 overflow-auto border p-3 rounded" style="max-height: 400px;">
+        <!-- 상단부터 중간: 리뷰 목록 // 2025.01.13 심유정 : 리뷰목록 id 추가 -->
+        <div id="reviews-container" class="flex-grow-1 mb-3 overflow-auto border p-3 rounded" style="max-height: 400px;">
           <div class="mb-2 border-bottom pb-2">
-            <strong>User1</strong>
-            <p>Great food and excellent service!</p>
-          </div>
-          <div class="mb-2 border-bottom pb-2">
-            <strong>User2</strong>
-            <p>The pasta was fantastic. Highly recommend!</p>
-          </div>
-          <div class="mb-2 border-bottom pb-2">
-            <strong>User3</strong>
-            <p>Good place to visit with family.</p>
           </div>
         </div>
         <!-- 하단: 리뷰 입력 -->
         <div class="mt-auto">
           <h5>Add a Review</h5>
-          <form>
+          <!-- 2025.01.13 심유정 : 리뷰폼 id 추가 -->
+          <form id="reviewForm">
             <div class="form-group mb-2">
-              <textarea class="form-control" rows="3" placeholder="Write your review here"></textarea>
+              <!-- 2025.01.13 심유정 : textarea id 추가 -->
+              <textarea 
+              id="reviewComment"
+              class="form-control" 
+              rows="3" 
+              placeholder="Write your review here">
+              </textarea>
             </div>
             <button type="submit" class="btn btn-dark w-100">Submit</button>
           </form>
@@ -80,6 +77,9 @@
       </div>
     </div>
   </div>
+
+  <!-- 250114 심유정 : review.js파일 연결 -->
+  <script src="/javascript/review.js" type="module"></script>
 
   <%- include('../partials/footer') %>
   <!-- 241224 박제성 맵 호출 및 스크립트 호출 -->
