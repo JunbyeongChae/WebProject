@@ -155,11 +155,16 @@ if (typeof kakao !== "undefined") {
                 });
 
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
+                // 250114 심유정 : URL로 RID 넘겨주는 코드 추가
                 searchResultsContainer.innerHTML += `
                 <div class="col-md-6 mb-3 restaurant-item" data-RID="${entry.RID}">
                   <div class="card">
                     <a href="/details?RID=${entry.RID}">
-                      <img src="${entry.이미지 || 'https://placehold.co/100X100'}" class="card-img-top" alt="${entry.이름}">
+                      <img src="${
+                        entry.이미지
+                          ? entry.이미지
+                          : "https://placehold.co/100X100"
+                      }" class="card-img-top" alt="${entry.이름}">
                     </a>
                     <div class="card-body text-center">
                       <h6 class="card-title">${entry.이름}</h6>

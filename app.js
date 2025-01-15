@@ -44,6 +44,8 @@ app.get('/api/data', (req, res) => {
 });
  */
 // API 키 관련 라우터 설정
+/* review.js에서 app 불러오기 위해 사용 */
+app.use('/config', express.static(path.join(__dirname, 'config')))
 app.use("/config", apiKeysRouter);
 
 // 추가 라우터 연결
