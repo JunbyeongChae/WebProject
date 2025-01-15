@@ -159,6 +159,7 @@ export function signup() {
   };
 }
 
+
 // Firestore에서 사용자 정보 가져오기 함수 export
 export async function getUserData(uid) {
   const firestore = getFirestore(app);
@@ -401,8 +402,123 @@ export async function fetchDisplayName(uid) {
       console.warn("Firestore에 사용자 문서가 존재하지 않습니다.");
       return "사용자";
     }
-  } catch (error) {
-    console.error("Firestore에서 displayName 가져오기 실패:", error);
-    return "사용자";
+  }catch (error){
+    console.error("Firestore에서 displayName 가져오기 실패:", error)
+    return "사용자"
   }
+}
+
+/* 2024-01-07 wonjun */
+//로그인 화면에서 이미지를 넣어주는 함수
+document.addEventListener("DOMContentLoaded", () => {
+  const profilePreview = document.getElementById("profilePreview");
+  const profileImageInput = document.getElementById("profileImage");
+
+  if (profilePreview && profileImageInput) {
+    // 이미지를 클릭했을 때 파일 선택 창 열기
+    profilePreview.addEventListener("click", () => {
+      profileImageInput.click();
+    });
+
+    // 파일 선택 후 이미지 미리보기 업데이트
+    profileImageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          profilePreview.src = e.target.result; // 이미지 미리보기 업데이트
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+
+
+
+////////////////////////////////////////////////////////////////2024-12-21 심유정
+//회원가입 함수 구현
+export function signup() {
+  const auth = getAuth(app);
+  const storage = getStorage(app);
+
+  $("#signupForm").on("submit", async (e) => {
+    e.preventDefault();
+    console.log("Signup form submitted!");
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let confirmPassword = $("#confirmPassword").val(); //password 확인 기능을 추가
+    const file = $("#profileImage")[0].files[0];
+
+    if (password !== confirmPassword) {
+      // password를 대조하는 if문을 추가
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      let profileImageUrl = "";
+      if (file) {
+        //비동기 함수 uploadProfileImage를 호출하여 파일을 업로드 하고
+        // 그 결과 반환된 업로드된 파일의 URL profileImageUrl에 저장함.
+        profileImageUrl = await uploadProfileImage(file);
+      }
+      //새로운 이메일, 비밀번호를 통해 새 사용자를 등록
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User created:", userCredential.user);
+
+      //프로필 이미지 url이 존재하면 홈화면으로 이동
+      if (profileImageUrl) {
+        console.log("Profile image URL:", profileImageUrl);
+      }
+
+      location.href = "/";
+    } catch (error) {
+      // 회원가입 실패
+      console.error(error.code, error.message);
+      alert(`회원가입 실패: ${error.message}`);
+    }
+  });
+
+  // Firebase Storage에서 파일이 저장될 위치를 정의하고 해당파일을 업로드 하며
+  //업로드가 완료되면 getDownloadURL() 통해 업로드된 파일의 다운로드 URL을 가져옴
+  //이 url을 반환하여 다른곳에서 사용할 수 있도록 함
+  const uploadProfileImage = (file) => {
+    const storageRef = ref(storage, `profileImages/${file.name}`);
+    return uploadBytes(storageRef, file).then((snapshot) =>
+      getDownloadURL(snapshot.ref)
+    );
+  };
+}
+
+
+////////////////////////////////////////////////////////////////2024-12-21 심유정
+//로그인 함수 구현
+export function login() {
+  console.log("Firebase App:", app);
+  const auth = getAuth(app);
+
+  // 로그인 폼 제출 처리
+  $('#frm').on('submit', (e) => {
+    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data) => {
+        console.log(`uid ===> ${data.user.uid}`);
+        console.log(`email ===> ${data.user.email}`);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("uid", data.user.uid);
+        location.href = "/";
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(`Login failed: ${errorMessage}`);
+      });
+  });
 }

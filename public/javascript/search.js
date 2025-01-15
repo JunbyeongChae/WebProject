@@ -31,23 +31,27 @@ document.addEventListener("DOMContentLoaded", () => {
 // 20241231 박제성 firebase 연동 // json 파일 기반으로 콤보박스 선택시 마커 노출 및 지도 이동 구현
 
 // Firebase 앱 초기화
-document.addEventListener("DOMContentLoaded", async () => {
-  if (typeof kakao !== "undefined") {
-    kakao.maps.load(async () => {
-      console.log("Kakao 객체:", kakao);
+document.querySelectorAll('.restaurant-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const RID = this.dataset.RID;  // 2025-01-08 강경훈 이 부분에서 각 식당의 RID를 가져옵니다.
+    window.location.href = `/detail?RID=${RID}`;  // 2025-01-08 강경훈 detail 페이지로 RID를 전달하면서 이동
+  });
+});
 
-      // Firebase 설정 가져오기 (apiKeys.js의 API 호출)
-      const response = await fetch("/config");
-      if (!response.ok) {
-        console.error("Firebase 설정을 가져오지 못했습니다.");
-        return;
-      }
-      const configData = await response.json();
+if (typeof kakao !== "undefined") {
+  kakao.maps.load(async () => {
+    console.log("Kakao 객체:", kakao);
 
-      // Firebase 초기화
-      const firebaseConfig = configData.firebase;
-      const app = initializeApp(firebaseConfig); // Firebase 앱 초기화
-      const storage = getStorage(app); // Firebase Storage 초기화
+    // Firebase 설정 가져오기
+    const response = await fetch("/config");
+    if (!response.ok) {
+      console.error("Firebase 설정을 가져오지 못했습니다.");
+      return;
+    }
+    const configData = await response.json();
+    const firebaseConfig = configData.firebase;
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
 
       // Kakao 지도 초기화
       const mapContainer = document.getElementById("map");
@@ -95,7 +99,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
           // Firebase Storage에서 JSON 파일 URL 가져오기
-          const jsonRef = ref(storage, `json/${fileName}`); // 파일명 경로 수정
+          const jsonRef = ref(storage, `json/${fileName}`); // 2024-01-08 강경훈 파일명 경로 수정
+          // storage 최상단에 파일들이 위치해야함
           const url = await getDownloadURL(jsonRef);
           console.log("생성된 JSON URL:", url);
           console.log(fileName);
@@ -111,7 +116,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             entry.이름.toLowerCase().includes(searchQuery)
           );
 
-          searchResultsContainer.innerHTML = ""; // 기존 결과 초기화
+          const resultsRow = document.getElementById("resultsRow");
+          resultsRow.innerHTML = ""; // 기존 결과 초기화
 
           const coordsArray = [];
           filteredResults.forEach((entry) => {
@@ -151,9 +157,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
                 // 250114 심유정 : URL로 RID 넘겨주는 코드 추가
                 searchResultsContainer.innerHTML += `
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 restaurant-item" data-RID="${entry.RID}">
                   <div class="card">
-                    <a href="/details?RID=${entry.RID}">
+                    <a href="/details">
                       <img src="${
                         entry.이미지
                           ? entry.이미지
@@ -165,7 +171,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                       <p class="card-text">${entry.카테고리}</p>
                     </div>
                   </div>
-                </div>`;
+                </div>
+                `;
               }
             });
           });
@@ -191,5 +198,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   } else {
     console.error("Kakao 객체를 초기화할 수 없습니다.");
-  }
-});
+  };

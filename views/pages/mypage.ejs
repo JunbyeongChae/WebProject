@@ -1,3 +1,4 @@
+<!-- views/pages/mypage.ejs -->
 <%- include('../partials/header') %>
 
 <!-- CSS 파일 import -->
@@ -17,6 +18,7 @@
         </label>
         <small class="form-text text-muted">Upload your profile picture</small>
         <input type="file" id="profileImage" class="form-control-file mt-2" style="display: none;">
+        <div id="fileName" style="display: none;"></div> <!-- fileName 요소 추가 -->
       </div>
 
       <!-- 회원정보 수정 양식 -->
