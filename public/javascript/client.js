@@ -377,9 +377,10 @@ export function googleLogin() {
       /* 2024-12-24 이희범 추가 */
       // displayName을 fetch 후 localStorage에 저장
       await fetchDisplayName(user.uid).then((displayName) => {
-        localStorage.setItem("displayName", displayName);
-      });
-
+      
+      localStorage.setItem("displayName", displayName);
+      })
+      
       location.href = "/"; // 홈 화면으로 이동
     })
     .catch((error) => {
@@ -433,92 +434,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-
-
-////////////////////////////////////////////////////////////////2024-12-21 심유정
-//회원가입 함수 구현
-export function signup() {
-  const auth = getAuth(app);
-  const storage = getStorage(app);
-
-  $("#signupForm").on("submit", async (e) => {
-    e.preventDefault();
-    console.log("Signup form submitted!");
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let confirmPassword = $("#confirmPassword").val(); //password 확인 기능을 추가
-    const file = $("#profileImage")[0].files[0];
-
-    if (password !== confirmPassword) {
-      // password를 대조하는 if문을 추가
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    try {
-      let profileImageUrl = "";
-      if (file) {
-        //비동기 함수 uploadProfileImage를 호출하여 파일을 업로드 하고
-        // 그 결과 반환된 업로드된 파일의 URL profileImageUrl에 저장함.
-        profileImageUrl = await uploadProfileImage(file);
-      }
-      //새로운 이메일, 비밀번호를 통해 새 사용자를 등록
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("User created:", userCredential.user);
-
-      //프로필 이미지 url이 존재하면 홈화면으로 이동
-      if (profileImageUrl) {
-        console.log("Profile image URL:", profileImageUrl);
-      }
-
-      location.href = "/";
-    } catch (error) {
-      // 회원가입 실패
-      console.error(error.code, error.message);
-      alert(`회원가입 실패: ${error.message}`);
-    }
-  });
-
-  // Firebase Storage에서 파일이 저장될 위치를 정의하고 해당파일을 업로드 하며
-  //업로드가 완료되면 getDownloadURL() 통해 업로드된 파일의 다운로드 URL을 가져옴
-  //이 url을 반환하여 다른곳에서 사용할 수 있도록 함
-  const uploadProfileImage = (file) => {
-    const storageRef = ref(storage, `profileImages/${file.name}`);
-    return uploadBytes(storageRef, file).then((snapshot) =>
-      getDownloadURL(snapshot.ref)
-    );
-  };
-}
-
-
-////////////////////////////////////////////////////////////////2024-12-21 심유정
-//로그인 함수 구현
-export function login() {
-  console.log("Firebase App:", app);
-  const auth = getAuth(app);
-
-  // 로그인 폼 제출 처리
-  $('#frm').on('submit', (e) => {
-    e.preventDefault();//폼이 제출되면 기본적으로 페이지가 새로고침되거나 서버로 POST 요청이 보내지는데, 이 동작을 막기 위해 사용
-    const email = $('#email').val();
-    const password = $('#password').val();
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((data) => {
-        console.log(`uid ===> ${data.user.uid}`);
-        console.log(`email ===> ${data.user.email}`);
-        localStorage.setItem("email", data.user.email);
-        localStorage.setItem("uid", data.user.uid);
-        location.href = "/";
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        alert(`Login failed: ${errorMessage}`);
-      });
-  });
-}
