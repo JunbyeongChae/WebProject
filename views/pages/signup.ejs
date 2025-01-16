@@ -5,12 +5,11 @@
 <!-- CSS 파일 포함 -->
 <link rel="stylesheet" href="/stylesheets/style.css">
 
-<div class="container my-5">
-  <div class="row justify-content-center">
+<div id="content-wrapper" class="container my-5">
+  <div class="row justify-content-center mb-1">
     <div class="col-md-6">
       <!-- 로고 -->
       <div class="text-center mb-4">
-        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
         <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
         <h3>Create an Account</h3>
       </div>
@@ -21,7 +20,6 @@
           <input type="file" id="profileImage" accept="image/*" class="d-none" />
           <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
         </div>
-
 
       <!-- 회원가입 폼 -->
       <form id="signupForm">
@@ -66,7 +64,7 @@
           <label for="phoneNumber">Phone Number</label>
           <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
         </div>
-        <button type="submit" class="btn btn-dark w-100 mb-3">
+        <button type="submit" class="btn btn-dark w-100 mb-2">
           Sign Up
         </button>
       </form>

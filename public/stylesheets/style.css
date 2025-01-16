@@ -9,6 +9,9 @@ body, html {
   font-family: Arial, Helvetica, sans-serif;
   background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../images/Background.png') no-repeat center center fixed;
   background-size: cover;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -213,15 +216,12 @@ h4, h5, h6 {
   color: red;
 }
 
+#content-wrapper {
+  flex: 1; /* 페이지 본문을 남은 공간 채우기 */
+}
 
-
-
-
-
-
-
-
-
-
-
-
+footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 1rem;
+}

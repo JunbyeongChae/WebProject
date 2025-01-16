@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="/stylesheets/style.css">
 
 <div class="container my-5">
-  <div class="row justify-content-center mb-4">
+  <div class="row justify-content-center mt-5">
     <!-- 검색창과 콤보박스를 수평으로 배치 -->
     <div class="col-md-8 d-flex align-items-center">
       <!--2025-01-07 이희범 폼으로 감싸서 값들이 GET 방식으로 전달되도록 설정 -->
@@ -48,17 +48,17 @@
 </div>
 
   <!-- 레스토랑 카드 섹션 -->
-  <h3 class="mb-4 text-center">Recommended Restaurants</h3>
-  <div class="carousel-wrapper position-relative">
+  <h3 class="text-center mb-1">Recommended Restaurants</h3>
+  <div class="carousel-wrapper position-relative mt-3">
     <button id="prevBtn" class="carousel-btn">❮</button>
     <div class="carousel-container">
       <div class="carousel-slide d-flex">
         <% const restaurants = [
-          { img: 'images/돈가스.jpg', title: '헤키', info: '서울 마포구 동교로9길 33 1층 헤키', rating: 4.8 },
-          { img: 'images/GTS버거.jpg', title: 'GTS버거 성수점', info: '서울 성동구 뚝섬로17가길 48 1층 GTS BURGER', rating: 4.9 },
-          { img: 'images/pasta.jpg', title: '포노 부오노', info: '서울 강남구 도산대로45길 8-7 2층', rating: 4.7 },
-          { img: 'images/하이디라오.jpg', title: '하이디라오 서초지점', info: '서울 서초구 서초대로77길 54 2층 하이디라오 훠궈', rating: 4.8 },
-          { img: 'images/데이릿.jpg', title: '데이릿', info: '서울 성동구 상원1길 39 B1', rating: 4.5 } // 추가 카드 섹션
+          { img: 'images/돈가스.jpg', title: '헤키', info: '서울 마포구 동교로9길 33 1층 헤키'},
+          { img: 'images/GTS버거.jpg', title: 'GTS버거 성수점', info: '서울 성동구 뚝섬로17가길 48 1층 GTS BURGER' },
+          { img: 'images/pasta.jpg', title: '포노 부오노', info: '서울 강남구 도산대로45길 8-7 2층' },
+          { img: 'images/하이디라오.jpg', title: '하이디라오 서초지점', info: '서울 서초구 서초대로77길 54 2층 하이디라오 훠궈'},
+          { img: 'images/데이릿.jpg', title: '데이릿', info: '서울 성동구 상원1길 39 B1'} // 추가 카드 섹션
         ]; %>
 
         <% restaurants.forEach(restaurant => { %>
@@ -67,7 +67,6 @@
             <div class="card-body text-center">
               <h5 class="card-title"><%= restaurant.title %></h5>
               <p class="card-text"><%= restaurant.info %></p>
-              <p class="text-warning">&#9733; <%= restaurant.rating %></p>
             </div>
           </div>
         <% }); %>
