@@ -190,6 +190,11 @@ document.addEventListener("DOMContentLoaded", async () => {
               kakao.maps.event.addListener(marker, "mouseover", () => {
                 infowindow.open(map, marker);
               });
+              
+              // 마커에 마우스아웃 이벤트 추가
+              kakao.maps.event.addListener(marker, "mouseout", () => {
+                infowindow.close();
+              });
             }
           }
 
