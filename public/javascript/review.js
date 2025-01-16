@@ -7,8 +7,9 @@ console.log("DB : ",db)
 const username = localStorage.getItem("displayName")
 
 // URL parameters에서 RID 값 가져오기
-const urlParams = new URLSearchParams(window.location.search);
-const rid = urlParams.get("RID");
+const path = window.location.pathname;
+const rid = path.split("/")[2];
+
 console.log("RID : " + rid);
 if (!rid) {
     const storedRID = localStorage.getItem("RID");
@@ -97,40 +98,20 @@ const handleReviewSubmission = async () => {
 };
 
 
-window.onload = function () {
-    try {
-        const submitBtn = document.getElementById("submitBtn");
-
-        // 버튼이 존재하는지 확인
-        if (!submitBtn) {
-            console.error("Error: submitBtn 버튼을 찾을 수 없습니다.");
-            return;
-        }
-
-        // 사용자 이름 확인
-        const username = localStorage.getItem("displayName");
-        if (!username) {
-            console.warn("사용자 이름이 LocalStorage에 저장되지 않았습니다.");
-        }
-
-        // 클릭 이벤트 등록
-        submitBtn.addEventListener("click", function (event) {
+document.getElementById("reviewForm").addEventListener("submit", function (event) {
             event.preventDefault(); // 기본 동작 방지 (폼 전송 등)
             console.log("Submit 버튼 클릭 이벤트 발생");
-
             // 로그인 상태 체크
+            try{
             if (!username) {
                 alert("로그인 후 리뷰 작성 가능합니다.");
                 return;
+            }else {
+                // 리뷰 제출 처리
+                handleReviewSubmission();   
             }
-
-            // 리뷰 제출 처리
-            handleReviewSubmission();
-        });
-
-        console.log("Submit 버튼 초기화 완료");
-    } catch (error) {
-        console.error("window.onload 처리 중 오류 발생:", error);
+        }catch (error) {
+        console.error("리뷰 제출 처리 중 오류 발생:", error);
     }
-};
+})
 
