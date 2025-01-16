@@ -44,35 +44,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       const geocoder = new kakao.maps.services.Geocoder();
       let markers = [];
       let infoWindow = null;
-      // 채준병 20250115
-      let isLoading = false; // 중복 실행 방지 플래그
-      let debounceTimer; // 디바운싱 타이머
 
+      // 2025-01-13 해당 구역과 카테고리를 받아오는 코드.
       const regionSelect = document.getElementById("regionSelect");
       const categorySelect = document.getElementById("categorySelect");
       const searchInput = document.querySelector(
         ".form-control[placeholder='음식점을 검색하세요']"
       );
-      const searchButton = document.getElementById("searchButton");
+      const searchResultsContainer = document.getElementById(
+        "searchResultsContainer"
+      );
 
       // 데이터를 로드하는 함수
       async function loadData() {
-        if (isLoading) return; // 중복 실행 방지
-        isLoading = true;
+        // 기존 마커 초기화
+        markers.forEach((marker) => marker.setMap(null));
+        markers = [];
+
+        const selectedRegion = regionSelect.value;
+        const selectedCategory = categorySelect.value;
+        const searchQuery = searchInput.value.toLowerCase();
+        const fileName = `${selectedRegion}_${selectedCategory}.json`; // 해당 지역 및 카테고리에 맞는 파일명
 
         try {
-          // 기존 마커 초기화
-          markers.forEach((marker) => marker.setMap(null));
-          markers = [];
-
-          const selectedRegion = regionSelect.value;
-          const selectedCategory = categorySelect.value;
-          const searchQuery = searchInput.value.toLowerCase();
-          const fileName = `${selectedRegion}_${selectedCategory}.json`; // 해당 지역 및 카테고리에 맞는 파일명
-
           // Firebase Storage에서 JSON 파일 URL 가져오기
-          const jsonRef = ref(storage, `json/${fileName}`);
+          const jsonRef = ref(storage, `json/${fileName}`); // 2024-01-08 강경훈 파일명 경로 수정
+          // storage 최상단에 파일들이 위치해야함
           const url = await getDownloadURL(jsonRef);
+          console.log("생성된 JSON URL:", url);
+          console.log(fileName);
 
           const response = await fetch(url);
           if (!response.ok) throw new Error("JSON 파일 로드 실패");
@@ -127,27 +127,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
                 // 20250113 박제성 => 주소 이동 관련 항목 추가.
                 resultsRow.innerHTML += `
-                  <div class="col-md-6 mb-3">
-                    <div class="card">
-                      <a href="/details/${encodeURIComponent(
-                        entry.RID
-                      )}?region=${encodeURIComponent(
+  <div class="col-md-6 mb-3">              
+    <div class="card">
+      <a href="/details/${encodeURIComponent(
+        entry.RID
+      )}?region=${encodeURIComponent(
                   selectedRegion
                 )}&category=${encodeURIComponent(selectedCategory)}">
-                        <img src="${
-                          entry.이미지 || "https://placehold.co/100x100"
-                        }" 
-                            class="card-img-top" 
-                            alt="${entry.이름 || "이미지 없음"}">
-                      </a>
-                      <div class="card-body text-center">
-                        <h6 class="card-title">${entry.이름 || "이름 없음"}</h6>
-                        <p class="card-text">${
-                          selectedCategory || "카테고리 없음"
-                        }</p>
-                      </div>
-                    </div>
-                  </div>`;
+        <img src="${entry.이미지 || "https://placehold.co/100x100"}" 
+            class="card-img-top" 
+            alt="${entry.이름 || "이미지 없음"}">
+      </a>
+      <div class="card-body text-center">
+        <h6 class="card-title">${entry.이름 || "이름 없음"}</h6>
+        <p class="card-text">${selectedCategory || "카테고리 없음"}</p>
+      </div>
+    </div>
+  </div>`;
               }
             });
           });
@@ -165,8 +161,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Firebase Storage 또는 JSON 데이터 처리 중 오류:",
             error
           );
-        } finally {
-          isLoading = false;
         }
       }
       // URLSearchParams 사용하여 region, category 가져오고 select 요소를 통해 콤보박스에 적용
@@ -189,19 +183,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadData(); // URL이 변경된 후 데이터 로드
       });
 
-      searchInput.addEventListener("input", () => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          loadData();
-        }, 300);
-      });
+      searchInput.addEventListener("input", loadData);
 
-      if (searchButton) {
-        searchButton.addEventListener("click", () => {
-          loadData();
-        });
-      }
-
+      // URL을 동적으로 갱신하는 함수
       function updateURL() {
         const selectedRegion = regionSelect.value;
         const selectedCategory = categorySelect.value;
