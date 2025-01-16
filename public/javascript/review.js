@@ -55,10 +55,10 @@ const renderReviews = (reviews) => {
     }
 
     reviewsContainer.innerHTML = reviews
-        .map(
+        .map( //250116 심유정 : <h6>usename</h6> 볼드 처리 추가
             (review) => `
         <div class="mb-3 border-bottom pb-2">
-            <h6>${review.username}</h6>
+            <h6 style="font-weight: bold;">${review.username}</h6>
             <p>${review.comment}</p>
             <small>${new Date(review.comment_no).toLocaleString()}</small>
         </div>
@@ -103,13 +103,13 @@ document.getElementById("reviewForm").addEventListener("submit", function (event
             console.log("Submit 버튼 클릭 이벤트 발생");
             // 로그인 상태 체크
             try{
-            if (!username) {
-                alert("로그인 후 리뷰 작성 가능합니다.");
-                return;
-            }else {
-                // 리뷰 제출 처리
-                handleReviewSubmission();   
-            }
+                if (!username) {
+                    alert("로그인 후 리뷰 작성 가능합니다.");
+                    return;
+                }else {
+                    // 리뷰 제출 처리
+                    handleReviewSubmission();   
+                }
         }catch (error) {
         console.error("리뷰 제출 처리 중 오류 발생:", error);
     }

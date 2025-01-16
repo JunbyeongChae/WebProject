@@ -206,3 +206,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Kakao 객체를 초기화할 수 없습니다.");
   }
 });
+
+
+/* 250116 심유정 : 로그인 안 되어 있으면 로그인 페이지로 이동 시키기 */
+document.getElementById("searchForm").addEventListener("submit", function(event) {
+  const username = localStorage.getItem("displayName")
+  if (!username) {
+    //새로 고침 방지
+    event.preventDefault();
+    // 경고 메시지 표시
+    alert('로그인 후 이용가능합니다.');
+    // 로그인 페이지로 이동
+    window.location.href = '/login'; // 로그인 페이지로 이동
+  } 
+});

@@ -10,7 +10,8 @@
     <!-- 검색창과 콤보박스를 수평으로 배치 -->
     <div class="col-md-8 d-flex align-items-center">
       <!--2025-01-07 이희범 폼으로 감싸서 값들이 GET 방식으로 전달되도록 설정 -->
-      <form action="/search" method="GET" class="d-flex w-100">
+      <!--250116 심유정 : 폼 id값 추가 -->
+      <form id="searchForm" action="/search" method="GET" class="d-flex w-100">
         <!--2025-01-07 이희범 Select Region 콤보박스 -->
         <div class="form-group mr-2" style="margin-left: -5px;">
           <label for="region" class="font-weight-bold" style="margin-top: -40px;">Select Region</label>
@@ -84,4 +85,6 @@
     initCarousel();
   });
 </script>
+<!-- 250116 심유정 : 로그인한 사용자인지 확인하기 위해 search.js 추가 -->
+<script type="module" src="/javascript/search.js"></script>
 
