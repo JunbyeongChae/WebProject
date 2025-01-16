@@ -121,13 +121,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const menuElement = document.getElementById("storeMenu");
       const menuItems = storeData.메뉴.split("\n");
       const limitedMenuItems = menuItems.slice(0, 10); // 첫 10개 항목만 가져오기
-      menuElement.innerHTML = limitedMenuItems.map((item) => `${item}<br>`).join("");
+      menuElement.innerHTML = limitedMenuItems
+        .map((item) => `${item}<br>`)
+        .join("");
 
       try {
         const hours = JSON.parse(storeData.영업시간);
         document.getElementById("storeHours").textContent = hours.월.영업시간;
       } catch (e) {
         console.error("영업시간 데이터 처리 중 오류:", e);
+      }
+      // 이미지 처리 (JSON 데이터에서 이미지 URL 사용)
+      if (storeData.이미지) {
+        const imageElement = document.getElementById("storeImage");
+        imageElement.src = storeData.이미지; // JSON 데이터의 이미지 링크 사용
+        imageElement.alt = storeData.이름; // 접근성을 위한 alt 속성 추가
+      } else {
+        console.warn("이미지 URL이 없습니다.");
       }
     };
 
