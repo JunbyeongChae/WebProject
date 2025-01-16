@@ -117,7 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
         .split("지번")[0]
         .trim();
       document.getElementById("storeContact").textContent = storeData.전화번호;
-      document.getElementById("storeMenu").textContent = storeData.메뉴;
+      // 메뉴 줄바꿈 처리
+      const menuElement = document.getElementById("storeMenu");
+      const menuItems = storeData.메뉴.split("\n");
+      const limitedMenuItems = menuItems.slice(0, 10); // 첫 10개 항목만 가져오기
+      menuElement.innerHTML = limitedMenuItems.map((item) => `${item}<br>`).join("");
 
       try {
         const hours = JSON.parse(storeData.영업시간);
