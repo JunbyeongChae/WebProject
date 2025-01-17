@@ -1,5 +1,14 @@
 <!-- views/pages/login.ejs -->
 
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+  }
+</style>
+
 <%- include('../partials/header') %>
 
 <!-- CSS 파일 포함 -->
@@ -18,20 +27,20 @@
       <!-- form태그에 id를 추가 -->
       <form id="frm"> <!-- 폼 시작 -->
         <div class="form-group mb-3">
-          <label for="email">E-mail</label>
-          <input type="email" class="form-control" id="email" placeholder="Insert your email">
+          <label for="email" style="position: relative; top: 1px; left: 140px;">E-mail</label>
+          <input type="email" class="form-control" id="email" placeholder="Insert your email" style="width: 70%; margin: 0 auto;">
         </div>
         <div class="form-group mb-3">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+          <label for="password" style="position: relative; top: 1px; left: 140px;">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" style="width: 70%; margin: 0 auto;">
         </div>
-        <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>
+        <button type="submit" class="btn btn-dark border" style="width: 70%; display: block; margin: 10px auto;">Login</button>
       </form>
 
       <!-- 소셜 로그인 -->
       <div class="text-center mb-4">
         <p>Sign in with</p>
-        <button id="googleLoginBtn" class="btn btn-light border w-100">
+        <button id="googleLoginBtn" class="btn btn-light border" style="width: 70%; display: block; margin: 10px auto;">
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20" class="mr-2">
           Sign in with Google
         </button>

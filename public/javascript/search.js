@@ -163,23 +163,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
                 // 20250113 박제성 => 주소 이동 관련 항목 추가.
                 resultsRow.innerHTML += `
-                  <div class="col-md-6 mb-3">              
-                    <div class="card">
-                      <a href="/details/${encodeURIComponent(
-                        entry.RID
-                      )}?region=${encodeURIComponent(
-                                  selectedRegion
-                                )}&category=${encodeURIComponent(selectedCategory)}">
-                        <img src="${entry.이미지 || "https://placehold.co/100x100"}" 
-                            class="card-img-top" 
-                            alt="${entry.이름}">
-                      </a>
-                      <div class="card-body text-center">
-                        <h6 class="card-title">${entry.이름}</h6>
-                        <p class="card-text">${selectedCategory || "카테고리 없음"}</p>
-                      </div>
-                    </div>
-                  </div>`;
+  <div class="col-md-6 mb-3">              
+    <div class="card">
+      <a href="/details/${encodeURIComponent(
+        entry.RID
+      )}?region=${encodeURIComponent(
+                  selectedRegion
+                )}&category=${encodeURIComponent(selectedCategory)}">
+        <img src="${entry.이미지 || "https://placehold.co/100x100"}" 
+            class="card-img-top" 
+            alt="${entry.이름 || "이미지 없음"}">
+      </a>
+      <div class="card-body text-center">
+        <h6 class="card-title" style = "font-weight : bold">${entry.이름 || "이름 없음"}</h6>
+        <p class="card-text">${selectedCategory || "카테고리 없음"}</p>
+      </div>
+    </div>
+  </div>`;
               }
             });
           });

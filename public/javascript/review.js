@@ -58,7 +58,7 @@ const renderReviews = (reviews) => {
         .map( //250116 심유정 : <h6>usename</h6> 볼드 처리 추가
             (review) => `
         <div class="mb-3 border-bottom pb-2">
-            <h6 style="font-weight: bold;">${review.username}</h6>
+            <h6 style = "font-weight : bold">${review.username}</h6>
             <p>${review.comment}</p>
             <small>${new Date(review.comment_no).toLocaleString()}</small>
         </div>
