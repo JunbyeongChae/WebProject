@@ -1,11 +1,12 @@
 <!-- views/pages/signup.ejs -->
 
 <style>
-  html, body {
+  html,
+  body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; 
+    overflow: hidden;
   }
 </style>
 
@@ -14,9 +15,9 @@
   <!-- CSS 파일 포함 -->
   <link rel="stylesheet" href="/stylesheets/style.css">
 
-<div id="content-wrapper" class="container my-5">
-  <div class="row justify-content-center mb-1">
-    <div class="col-md-6">
+  <div id="content-wrapper" class="container my-5">
+    <div class="row justify-content-center mb-1">
+      <div class="col-md-6">
         <!-- 프로필 사진 등록 -->
         <div class="text-center mb-4">
           <img id="profilePreview" src="https://placehold.co/120x120" alt="Profile Image" class="rounded-circle" />
@@ -28,28 +29,33 @@
         <form id="signupForm">
           <div class="form-group mb-3">
             <label for="name" style="position: relative; top: 1px; left: 140px;">Name</label>
-            <input style="width: 70%; margin: 0 auto;" type="text" class="form-control" id="name" placeholder="Enter your name" />
+            <input style="width: 70%; margin: 0 auto;" type="text" class="form-control" id="name"
+              placeholder="Enter your name" />
           </div>
           <div class="form-group mb-3">
             <label for="email" style="position: relative; top: 1px; left: 140px;">Email address</label>
-            <input style="width: 70%; margin: 0 auto;" type="email" class="form-control" id="email" placeholder="Enter your email" />
+            <input style="width: 70%; margin: 0 auto;" type="email" class="form-control" id="email"
+              placeholder="Enter your email" />
           </div>
           <div class="form-group mb-3">
             <label for="password" style="position: relative; top: 1px; left: 140px;">Password</label>
-            <input style="width: 70%; margin: 0 auto;" type="password" class="form-control" id="password" placeholder="Enter your password" />
+            <input style="width: 70%; margin: 0 auto;" type="password" class="form-control" id="password"
+              placeholder="Enter your password" />
           </div>
           <div class="form-group mb-3">
             <label for="confirmPassword" style="position: relative; top: 1px; left: 140px;">Confirm Password</label>
-            <input style="width: 70%; margin: 0 auto;" type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" />
+            <input style="width: 70%; margin: 0 auto;" type="password" class="form-control" id="confirmPassword"
+              placeholder="Confirm your password" />
           </div>
           <!-- 전화번호 입력란 추가 -->
           <div class="form-group mb-3">
             <label for="phoneNumber" style="position: relative; top: 1px; left: 140px;">Phone Number</label>
-            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" style="width: 70%; margin: 0 auto;" required>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number"
+              style="width: 70%; margin: 0 auto;" required>
           </div>
           <div class="form-group mb-3">
-            <label>개인정보 동의서</label>
-            <textarea id="consentText" readonly rows="11">
+            <label style="position: relative; top: 1px; left: 140px;">개인정보 동의서</label><br />
+            <textarea readonly rows="11" style="width: 70%;">
       개인정보 처리방침
 
       1. 수집하는 개인정보의 항목
