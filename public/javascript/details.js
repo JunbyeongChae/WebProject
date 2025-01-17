@@ -82,6 +82,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const storeList = Object.values(await dataResponse.json());
         const flattenedStoreList = storeList.flat();
+    const { firebase: firebaseConfig } = await configResponse.json();
+
+    // Firebase 초기화
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    // Kakao 지도 초기화
+    const mapContainer = document.getElementById("map");
+    const map = new kakao.maps.Map(mapContainer, {
+      center: new kakao.maps.LatLng(37.476823, 126.879512),
+      level: 7,
+    });
+
+    const markerImage = new kakao.maps.MarkerImage(
+      "/images/Map_pin.png",
+      new kakao.maps.Size(40, 40),
+      { offset: new kakao.maps.Point(20, 40) }
+    );
+
+    let markers = []; // 기존 마커 저장용
+
+    const loadData = async () => {
+      try {
+        // JSON 파일 경로 설정 및 다운로드
+        const fileName = `${region}_${category}.json`;
+        const jsonRef = ref(storage, `json/${fileName}`);
+        const downloadUrl = await getDownloadURL(jsonRef);
+        console.log("Firebase JSON 다운로드 URL:", downloadUrl);
+
+        const dataResponse = await fetch(downloadUrl);
+        if (!dataResponse.ok) {
+          console.error("JSON 데이터를 가져오지 못했습니다.");
+          return;
+        }
+
+        const storeList = Object.values(await dataResponse.json());
+        const flattenedStoreList = storeList.flat();
 
         // RID에 해당하는 가게 정보 검색
         const storeData = flattenedStoreList.find((store) => store.RID === RID);

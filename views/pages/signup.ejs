@@ -2,17 +2,17 @@
 
 <%- include('../partials/header') %>
 
-<!-- CSS 파일 포함 -->
-<link rel="stylesheet" href="/stylesheets/style.css">
+  <!-- CSS 파일 포함 -->
+  <link rel="stylesheet" href="/stylesheets/style.css">
 
-<div id="content-wrapper" class="container my-5">
-  <div class="row justify-content-center mb-1">
-    <div class="col-md-6">
-      <!-- 로고 -->
-      <div class="text-center mb-4">
-        <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
-        <h3>Create an Account</h3>
-      </div>
+  <div id="content-wrapper" class="container my-5">
+    <div class="row justify-content-center mb-1">
+      <div class="col-md-6">
+        <!-- 로고 -->
+        <div class="text-center mb-4">
+          <img src="/images/CI.png" alt="Logo" class="mb-3" width="80" />
+          <h3>Create an Account</h3>
+        </div>
 
         <!-- 프로필 사진 등록 -->
         <div class="text-center mb-4">
@@ -21,89 +21,90 @@
           <small class="form-text text-muted">Click on the image to upload your profile picture.</small>
         </div>
 
-      <!-- 회원가입 폼 -->
-      <form id="signupForm">
-        <div class="form-group mb-3">
-          <label for="name">Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            placeholder="Enter your name"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="email">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="Enter your email"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label for="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="confirmPassword"
-            placeholder="Confirm your password"
-          />
-        </div>
-        <!-- 전화번호 입력란 추가 -->
-        <div class="form-group mb-3">
-          <label for="phoneNumber">Phone Number</label>
-          <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
-        </div>
-        <button type="submit" class="btn btn-dark w-100 mb-2">
-          Sign Up
-        </button>
-      </form>
+        <!-- 회원가입 폼 -->
+        <form id="signupForm">
+          <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" />
+          </div>
+          <!-- 전화번호 입력란 추가 -->
+          <div class="form-group mb-3">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
+          </div>
+          <div class="form-group mb-3">
+            <label>개인정보 동의서</label>
+            <textarea id="consentText" readonly rows="11">
+      개인정보 처리방침
 
-      <!-- 로그인 링크 -->
-      <div class="text-center">
-        <p>Already have an account? <a href="/login">Log in</a></p>
+      1. 수집하는 개인정보의 항목
+      - 이름, 이메일, 전화번호 등
+
+      2. 개인정보의 수집 및 이용목적
+      - 회원가입 및 서비스 제공을 위한 본인 확인
+
+      3. 개인정보의 보유 및 이용기간
+      - 회원 탈퇴 후 즉시 삭제
+          </textarea>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="agree" required>
+              동의합니다
+            </label>
+          </div>
+          <button type="submit" class="btn btn-dark w-100 mb-2">
+            Sign Up
+          </button>
+        </form>
+
+        <!-- 로그인 링크 -->
+        <div class="text-center">
+          <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<%- include('../partials/footer') %>
+  <%- include('../partials/footer') %>
 
-<!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 로그인, 회원가입에 jQuery문법을 사용하셔서 아래 사항 추가해놓았습니다!! -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script type="module">
-  import {
-    fetchFirebaseConfig,    // Firebase 초기화 함수
-    initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
-    signup,                  // 회원가입 함수
-    PreviewImage            // 프로필 이미지 미리보기 함수
-    } from "/javascript/client.js";
+    <script type="module">
+      import {
+        fetchFirebaseConfig,    // Firebase 초기화 함수
+        initializeSignupPage,   // 페이지 초기화 함수 (폼 검증 등)
+        signup,                  // 회원가입 함수
+        PreviewImage            // 프로필 이미지 미리보기 함수
+      } from "/javascript/client.js";
 
-  (async () => {
-    // 1) Firebase 설정 먼저 로드 + 초기화
-    await fetchFirebaseConfig();
-    
-    document.getElementById("profilePreview").addEventListener("click", () => {
-      document.getElementById("profileImage").click();
-    });
+      (async () => {
+        // 1) Firebase 설정 먼저 로드 + 초기화
+        await fetchFirebaseConfig();
 
-    document.getElementById("profileImage").addEventListener("change", PreviewImage);
+        document.getElementById("profilePreview").addEventListener("click", () => {
+          document.getElementById("profileImage").click();
+        });
 
-    // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
-    signup();
+        document.getElementById("profileImage").addEventListener("change", PreviewImage);
 
-    // 3) 필요하다면 페이지 초기화
-    initializeSignupPage();
-  })();
-</script>
+        // 2) 그 다음에 폼 이벤트를 바인딩 (signup)
+        signup();
+
+        // 3) 필요하다면 페이지 초기화
+        initializeSignupPage();
+      })();
+    </script>
