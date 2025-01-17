@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 2025-01-17 강경훈  자음부터 스스로 필터링을 하기 때문에 검색했을 때 결과가 늦게 나옴
         // 전체 병합 파일 불러오기
         const fileName = 
-        // searchQuery ? "전체_식당.json" // 2025-01-17 강경훈  검색어가 있을 때는 전체 데이터를 가져옴 ==> 전체_식당.json 불럴오기
-        `${selectedRegion}_${selectedCategory}.json`; // 지역/카테고리 데이터를 가져옴
+          // searchQuery ? "전체_식당.json" : // 2025-01-17 강경훈  검색어가 있을 때는 전체 데이터를 가져옴 ==> 전체_식당.json 불럴오기 
+          `${selectedRegion}_${selectedCategory}.json` // 지역/카테고리 데이터를 가져옴
         
       
         try {
@@ -87,19 +87,20 @@ document.addEventListener("DOMContentLoaded", async () => {
           // **데이터 필터링**: 검색어가 있는 경우 전체 데이터에서 필터링
           
           // 2025-01-17 강경훈  검색 결과 불러오기
-            let restaurants;
-          // if (searchQuery) { ==> 식당 이름 검색했을 때
-          // console.log("검색어를 기준으로 전체 데이터를 필터링:", searchQuery);
+          let restaurants = Array.isArray(data[selectedCategory]) ? data[selectedCategory] : [];
+          if (searchQuery) { // ==> 식당 이름 검색했을 때
+            console.log("검색어를 기준으로 전체 데이터를 필터링:", searchQuery);
 
-         // 데이터 필터링
-          restaurants = Object.values(data)
+         // 2025-01-17 데이터 필터링 (카테고리_지역 알맞게 검색해야함)
+          restaurants = restaurants.filter((entry) => 
+            entry.이름 && entry.이름.toLowerCase().includes(searchQuery));
           // 2025-01-17 강경훈 아래 2줄 코딩 ==> 검색했을 때 전체_식당.json에서 검색 결과에 식당 이름 불러오기
-          // .flatMap((category) => Array.isArray(category) ? category : Object.values(category).flat())
-          // .filter((entry) => entry.이름 && entry.이름.startsWith(searchQuery)); // "이름" 필드 참조
-          //} else {
+          //  .flatMap((category) => Array.isArray(category) ? category : Object.values(category).flat())
+          //  .filter((entry) => entry.이름 && entry.이름.startsWith(searchQuery)); // "이름" 필드 참조
+          } else {
             console.log("콤보박스를 기준으로 지역/카테고리 데이터 필터링");
-            restaurants = Array.isArray(data[selectedCategory]) ? data[selectedCategory] : [];
-          // }
+            restaurants
+          }
 
           console.log("필터링된 결과 (중복 제거 전):", restaurants);
 
