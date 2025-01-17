@@ -25,11 +25,11 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, "0.0.0.0"); // 모든 IP에서 요청을 수락
 server.on("error", (error) => {
   if (error.code === "EADDRINUSE") {
     console.error(`Port ${port} is in use, trying another port...`);
-    server.listen(++port);
+    server.listen(++port, "0.0.0.0"); // 포트 변경 시에도 IP 설정 유지
   } else {
     onError(error);
   }

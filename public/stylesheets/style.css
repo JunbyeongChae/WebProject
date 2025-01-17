@@ -227,7 +227,7 @@ footer {
   padding: 1rem;
 }
 
-#consentText {
+#consentText, #reviewComment {
   width: 100%; /* input 요소들과 같은 폭으로 설정 */
   resize: none; /* 사용자가 크기 변경 불가 */
 }
