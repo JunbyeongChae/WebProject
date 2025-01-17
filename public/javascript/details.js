@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // 메뉴 줄바꿈 처리
       const menuElement = document.getElementById("storeMenu");
       const menuItems = storeData.메뉴.split("\n");
-      const limitedMenuItems = menuItems.slice(0, 10); // 첫 10개 항목만 가져오기
+      const limitedMenuItems = menuItems.slice(0, 5); // 첫 5개 항목만 가져오기
       menuElement.innerHTML = limitedMenuItems.map((item) => `${item}<br>`).join("");
 
       try {

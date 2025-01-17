@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             alt="${entry.이름 || "이미지 없음"}">
       </a>
       <div class="card-body text-center">
-        <h6 class="card-title">${entry.이름 || "이름 없음"}</h6>
+        <h6 class="card-title" style = "font-weight : bold">${entry.이름 || "이름 없음"}</h6>
         <p class="card-text">${selectedCategory || "카테고리 없음"}</p>
       </div>
     </div>

@@ -13,7 +13,7 @@
       <form action="/search" method="GET" class="d-flex w-100">
         <!--2025-01-07 이희범 Select Region 콤보박스 -->
         <div class="form-group mr-2" style="margin-left: -5px;">
-          <label for="region" class="font-weight-bold" style="margin-top: -40px;">Select Region</label>
+          <label for="region" class="font-weight-bold" style="margin-top: -40px;">Region</label>
           <select id="region" name="region" class="form-control" style="max-width: 120px;">
             <option value="광명시">광명시</option>
             <option value="구로구">구로구</option>
@@ -23,7 +23,7 @@
 
         <!--2025-01-07 이희범 Select Category 콤보박스 -->
         <div class="form-group mr-1" style="margin-right: 5px;">
-          <label for="category" class="font-weight-bold" style="margin-top: -40px;">Select Category</label>
+          <label for="category" class="font-weight-bold" style="margin-top: -40px;">Category</label>
           <select id="category" name="category" class="form-control" style="max-width: 110px;">
             <option value="한식">한식</option>
             <option value="중식">중식</option>
@@ -54,18 +54,18 @@
     <div class="carousel-container">
       <div class="carousel-slide d-flex">
         <% const restaurants = [
-          { img: 'images/돈가스.jpg', title: '헤키', info: '서울 마포구 동교로9길 33 1층 헤키'},
-          { img: 'images/GTS버거.jpg', title: 'GTS버거 성수점', info: '서울 성동구 뚝섬로17가길 48 1층 GTS BURGER' },
-          { img: 'images/pasta.jpg', title: '포노 부오노', info: '서울 강남구 도산대로45길 8-7 2층' },
-          { img: 'images/하이디라오.jpg', title: '하이디라오 서초지점', info: '서울 서초구 서초대로77길 54 2층 하이디라오 훠궈'},
-          { img: 'images/데이릿.jpg', title: '데이릿', info: '서울 성동구 상원1길 39 B1'} // 추가 카드 섹션
+          { img: 'images/돈가스.jpg', title: '오늘 돈카츠', info: '서울 금천구 가산디지털1로 171 가산SKV1센터 1층 103호'},
+          { img: 'images/GTS버거.jpg', title: '왓더버거 가산직영점', info: '서울 금천구 가산디지털1로 181 119호' },
+          { img: 'images/pasta.jpg', title: '미태리 한라원앤원점', info: '서울 금천구 가산디지털2로 101 1층 126호' },
+          { img: 'images/하이디라오.jpg', title: '하이디라오 가산점', info: '서울 금천구 디지털로10길 9 현대아울렛 가산점 6층'},
+          { img: 'images/데이릿.jpg', title: '오토김밥', info: '서울 금천구 가산디지털2로 101 1층 102호, 오토김밥 가산디지털점'} // 추가 카드 섹션
         ]; %>
 
         <% restaurants.forEach(restaurant => { %>
           <div class="card">
             <img src="<%= restaurant.img %>" class="home-card-img-top" alt="<%= restaurant.title %>">
             <div class="card-body text-center">
-              <h5 class="card-title"><%= restaurant.title %></h5>
+              <h5 class="card-title" style="font-weight: bold;"><%= restaurant.title %></h5>
               <p class="card-text"><%= restaurant.info %></p>
             </div>
           </div>

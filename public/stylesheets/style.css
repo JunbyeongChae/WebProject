@@ -225,3 +225,7 @@ footer {
   text-align: center;
   padding: 1rem;
 }
+
+textarea {
+  resize: none; /* 크기 조정 기능을 제거 */
+}
