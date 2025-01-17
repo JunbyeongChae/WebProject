@@ -226,10 +226,6 @@ footer {
   padding: 1rem;
 }
 
-textarea {
-  resize: none; /* 크기 조정 기능을 제거 */
-}
-
 #consentText {
   width: 100%; /* input 요소들과 같은 폭으로 설정 */
   resize: none; /* 사용자가 크기 변경 불가 */
