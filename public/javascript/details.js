@@ -19,7 +19,6 @@ import {
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded 이벤트 실행");
 
-  //2025-01-13 박제성 상세정보 노출 추가
   // URL에서 RID, region, category 추출
   const path = window.location.pathname;
   const RID = path.split("/")[2];
@@ -29,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("RID:", RID, "Region:", region, "Category:", category);
 
+  // Kakao 지도 API 로드 확인
   if (typeof kakao === "undefined") {
     console.error("Kakao 객체를 초기화할 수 없습니다.");
     return;
@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Firebase 설정을 가져오지 못했습니다.");
       return;
     }
-    const { firebase: firebaseConfig } = await configResponse.json();
 
     // Firebase 초기화
+    const { firebase: firebaseConfig } = await configResponse.json();
     const app = initializeApp(firebaseConfig);
     const storage = getStorage(app);
     const db = getDatabase(app);
@@ -54,21 +54,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // Kakao 지도 초기화
     const mapContainer = document.getElementById("map");
     const map = new kakao.maps.Map(mapContainer, {
-      center: new kakao.maps.LatLng(37.476823, 126.879512),
-      level: 7,
+      center: new kakao.maps.LatLng(37.476823, 126.879512), // 지도 중심 좌표 설정
+      level: 7, // 지도 확대 레벨 설정
     });
 
+    // 마커 이미지 설정
     const markerImage = new kakao.maps.MarkerImage(
       "/images/Map_pin.png",
       new kakao.maps.Size(40, 40),
-      { offset: new kakao.maps.Point(20, 40) }
+      { offset: new kakao.maps.Point(20, 40) } // 마커 이미지의 기준점
     );
 
-    let markers = []; // 기존 마커 저장용
+    let markers = []; // 기존 마커 저장용 배열
 
+    // 데이터 로드 함수
     const loadData = async () => {
       try {
-        // JSON 파일 경로 설정 및 다운로드
+        // Firebase Storage에서 JSON 파일 다운로드
         const fileName = `${region}_${category}.json`;
         const jsonRef = ref(storage, `json/${fileName}`);
         const downloadUrl = await getDownloadURL(jsonRef);
@@ -80,45 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        const storeList = Object.values(await dataResponse.json());
-        const flattenedStoreList = storeList.flat();
-    const { firebase: firebaseConfig } = await configResponse.json();
-
-    // Firebase 초기화
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-
-    // Kakao 지도 초기화
-    const mapContainer = document.getElementById("map");
-    const map = new kakao.maps.Map(mapContainer, {
-      center: new kakao.maps.LatLng(37.476823, 126.879512),
-      level: 7,
-    });
-
-    const markerImage = new kakao.maps.MarkerImage(
-      "/images/Map_pin.png",
-      new kakao.maps.Size(40, 40),
-      { offset: new kakao.maps.Point(20, 40) }
-    );
-
-    let markers = []; // 기존 마커 저장용
-
-    const loadData = async () => {
-      try {
-        // JSON 파일 경로 설정 및 다운로드
-        const fileName = `${region}_${category}.json`;
-        const jsonRef = ref(storage, `json/${fileName}`);
-        const downloadUrl = await getDownloadURL(jsonRef);
-        console.log("Firebase JSON 다운로드 URL:", downloadUrl);
-
-        const dataResponse = await fetch(downloadUrl);
-        if (!dataResponse.ok) {
-          console.error("JSON 데이터를 가져오지 못했습니다.");
-          return;
-        }
-
+        // JSON 데이터를 가져와서 가게 리스트 생성
         const storeList = Object.values(await dataResponse.json());
         const flattenedStoreList = storeList.flat();
 
@@ -129,14 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // 가게 정보 표시
+        // 가게 정보 업데이트
         updateStoreInfo(storeData);
 
-        // 주소 정보를 기반으로 마커 생성
+        // 지도에 마커 추가
         addMarkersToMap(storeData, map, markerImage, markers);
 
-        //2024-01-13 박제성 하트 클릭 할때마다 즐겨찾기 추가 삭제 기능 추가
-        // 즐겨찾기 하트 클릭 이벤트 설정
+        // Firebase Auth 사용자 상태 확인 후 즐겨찾기 이벤트 설정
         onAuthStateChanged(auth, (user) => {
           if (user) {
             const uid = user.uid;
@@ -150,41 +113,55 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
+    // 가게 정보 업데이트 함수
     const updateStoreInfo = (storeData) => {
       document.getElementById("storeName").textContent = storeData.이름;
       document.getElementById("storeAddress").textContent = storeData.주소
         .split("지번")[0]
         .trim();
       document.getElementById("storeContact").textContent = storeData.전화번호;
-      // 메뉴 줄바꿈 처리
+
+      // 메뉴 항목 줄바꿈 처리
       const menuElement = document.getElementById("storeMenu");
       const menuItems = storeData.메뉴.split("\n");
-      const limitedMenuItems = menuItems.slice(0, 10); // 첫 10개 항목만 가져오기
-      menuElement.innerHTML = limitedMenuItems.map((item) => `${item}<br>`).join("");
+      const limitedMenuItems = menuItems.slice(0, 10); // 첫 10개 항목만 표시
+      menuElement.innerHTML = limitedMenuItems
+        .map((item) => `${item}<br>`)
+        .join("");
 
       try {
+        // 영업시간 처리
         const hours = JSON.parse(storeData.영업시간);
         document.getElementById("storeHours").textContent = hours.월.영업시간;
       } catch (e) {
         console.error("영업시간 데이터 처리 중 오류:", e);
       }
+
+      // 가게 이미지 업데이트
+      if (storeData.이미지) {
+        const imageElement = document.getElementById("storeImage");
+        imageElement.src = storeData.이미지;
+        imageElement.alt = storeData.이름;
+      } else {
+        console.warn("이미지 URL이 없습니다.");
+      }
     };
 
+    // 지도에 마커 추가 함수
     const addMarkersToMap = (storeData, map, markerImage, markers) => {
       const geocoder = new kakao.maps.services.Geocoder();
-      const coordsArray = [];
 
       // 기존 마커 제거
       markers.forEach((marker) => marker.setMap(null));
       markers.length = 0;
 
-      // RID에 해당하는 가게만 마커 추가
+      // 가게 주소를 기준으로 마커 추가
       const address = storeData.주소.split("지번")[0].trim();
       geocoder.addressSearch(address, (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
           const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-          // 마커 생성
+          // 마커 생성 및 지도에 추가
           const marker = new kakao.maps.Marker({
             position: coords,
             map,
@@ -193,36 +170,27 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           markers.push(marker);
-          coordsArray.push(coords);
-
-          // 지도 중앙을 해당 마커로 설정
           map.setCenter(coords);
-          map.setLevel(6); // 원하는 레벨로 확대비율 설정
+          map.setLevel(6);
         } else {
           console.warn(`주소 변환 실패: ${storeData.주소}`);
         }
       });
     };
 
-    // Firebase에 즐겨찾기 추가 및 삭제 함수
+    // 즐겨찾기 하트 클릭 이벤트 설정 함수
     const setupHeartClickEvent = (db, uid, RID, storeData) => {
       const heartIcon = document.getElementById("heart-icon");
 
-      // Firebase에서 즐겨찾기 상태 확인 후 초기화
+      // Firebase에서 즐겨찾기 상태 확인 및 초기화
       const initHeartState = async () => {
         const favoritesRef = dbRef(db, `favorites/${uid}/${RID}`);
-        console.log("데이터베이스 참조 경로:", favoritesRef.toString());
-
         try {
           const snapshot = await get(favoritesRef);
-          console.log("Firebase snapshot 데이터:", snapshot.val());
-
           if (snapshot.exists()) {
-            console.log("즐겨찾기 활성화 상태로 초기화됨");
             heartIcon.classList.remove("far");
             heartIcon.classList.add("fas", "heart-icon-active");
           } else {
-            console.log("즐겨찾기 비활성화 상태로 초기화됨");
             heartIcon.classList.remove("fas", "heart-icon-active");
             heartIcon.classList.add("far");
           }
@@ -231,29 +199,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
 
-      // 페이지 로드 시 초기화
+      // 초기 상태 설정
       initHeartState();
 
+      // 하트 클릭 이벤트
       heartIcon.addEventListener("click", async () => {
-        console.log("하트 클릭 이벤트 실행됨!");
         const favoritesRef = dbRef(db, `favorites/${uid}/${RID}`);
-
         try {
           const snapshot = await get(favoritesRef);
-          const isCurrentlyFavorited = snapshot.exists();
-          console.log(
-            "현재 즐겨찾기 상태:",
-            isCurrentlyFavorited ? "활성화됨" : "비활성화됨"
-          );
-
-          if (isCurrentlyFavorited) {
-            // 즐겨찾기 삭제
+          if (snapshot.exists()) {
             await remove(favoritesRef);
-            console.log("Firebase에서 즐겨찾기 삭제 성공!");
             heartIcon.classList.remove("fas", "heart-icon-active");
             heartIcon.classList.add("far");
           } else {
-            // firebase에 즐겨찾기 추가
             await set(favoritesRef, {
               RID,
               name: storeData.이름,
@@ -262,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
               region: urlParams.get("region"),
               category: urlParams.get("category"),
             });
-            console.log("Firebase에 즐겨찾기 저장 성공!");
             heartIcon.classList.remove("far");
             heartIcon.classList.add("fas", "heart-icon-active");
           }
