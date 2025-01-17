@@ -51,9 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const searchInput = document.querySelector(
         ".form-control[placeholder='음식점을 검색하세요']"
       );
-      const searchResultsContainer = document.getElementById(
-        "searchResultsContainer"
-      );
 
       // 데이터를 로드하는 함수
       async function loadData() {
@@ -80,60 +77,60 @@ document.addEventListener("DOMContentLoaded", async () => {
           const data = await response.json();
           const restaurants = data[selectedCategory] || [];
 
-          // 검색 결과 필터링
-          const filteredResults = restaurants.filter((entry) =>
-            entry.이름.toLowerCase().includes(searchQuery)
-          );
-
           const resultsRow = document.getElementById("resultsRow");
           resultsRow.innerHTML = ""; // 기존 결과 초기화
 
           // json 파일의 주소에서 지번 이란 글자 앞을 자르고 address에 추가
           const coordsArray = [];
-          filteredResults.forEach((entry) => {
-            const address = entry.주소.split("지번")[0].trim();
-            // 해당 주소로 좌표 검색
-            geocoder.addressSearch(address, (result, status) => {
-              if (status === kakao.maps.services.Status.OK) {
-                const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          restaurants
+            .filter((entry) => entry.이름.toLowerCase().includes(searchQuery))
+            .forEach((entry) => {
+              const address = entry.주소.split("지번")[0].trim();
+              // 해당 주소로 좌표 검색
+              geocoder.addressSearch(address, (result, status) => {
+                if (status === kakao.maps.services.Status.OK) {
+                  const coords = new kakao.maps.LatLng(
+                    result[0].y,
+                    result[0].x
+                  );
 
-                // 지도에 마커 추가
-                const marker = new kakao.maps.Marker({
-                  position: coords,
-                  map,
-                  title: entry.이름,
-                  image: markerImage,
-                });
-
-                markers.push(marker);
-                coordsArray.push(coords);
-
-                // 마커 클릭 시 정보창 표시
-                const newInfoWindow = new kakao.maps.InfoWindow({
-                  content: `<div style="padding:5px; font-size: 14px;">${entry.이름}</div>`,
-                });
-                // 다른 마커 클릭하면 기존 정보창 닫힘
-                kakao.maps.event.addListener(marker, "click", () => {
-                  if (infoWindow) infoWindow.close();
-                  newInfoWindow.open(map, marker);
-                  infoWindow = newInfoWindow;
-                  // 지도 클릭해도 정보창 닫힘
-                  kakao.maps.event.addListener(map, "click", () => {
-                    if (infoWindow) infoWindow.close();
-                    infoWindow = null;
+                  // 지도에 마커 추가
+                  const marker = new kakao.maps.Marker({
+                    position: coords,
+                    map,
+                    title: entry.이름,
+                    image: markerImage,
                   });
-                });
 
-                // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
-                // 20250113 박제성 => 주소 이동 관련 항목 추가.
-                resultsRow.innerHTML += `
+                  markers.push(marker);
+                  coordsArray.push(coords);
+
+                  // 마커 클릭 시 정보창 표시
+                  const newInfoWindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px; font-size: 14px;">${entry.이름}</div>`,
+                  });
+                  // 다른 마커 클릭하면 기존 정보창 닫힘
+                  kakao.maps.event.addListener(marker, "click", () => {
+                    if (infoWindow) infoWindow.close();
+                    newInfoWindow.open(map, marker);
+                    infoWindow = newInfoWindow;
+                    // 지도 클릭해도 정보창 닫힘
+                    kakao.maps.event.addListener(map, "click", () => {
+                      if (infoWindow) infoWindow.close();
+                      infoWindow = null;
+                    });
+                  });
+
+                  // 2025-01-08 강경훈 => 검색 결과 카드 HTML 추가
+                  // 20250113 박제성 => 주소 이동 관련 항목 추가.
+                  resultsRow.innerHTML += `
   <div class="col-md-6 mb-3">              
     <div class="card">
       <a href="/details/${encodeURIComponent(
         entry.RID
       )}?region=${encodeURIComponent(
-                  selectedRegion
-                )}&category=${encodeURIComponent(selectedCategory)}">
+                    selectedRegion
+                  )}&category=${encodeURIComponent(selectedCategory)}">
         <img src="${entry.이미지 || "https://placehold.co/100x100"}" 
             class="card-img-top" 
             alt="${entry.이름 || "이미지 없음"}">
@@ -144,9 +141,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
   </div>`;
-              }
+                }
+              });
             });
-          });
 
           // 지도 범위 조정
           setTimeout(() => {
@@ -175,15 +172,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 콤보박스 및 검색 입력 이벤트
       regionSelect.addEventListener("change", () => {
         updateURL();
-        loadData(); // URL이 변경된 후 데이터 로드
       });
 
       categorySelect.addEventListener("change", () => {
         updateURL();
-        loadData(); // URL이 변경된 후 데이터 로드
       });
-
-      searchInput.addEventListener("input", loadData);
 
       // URL을 동적으로 갱신하는 함수
       function updateURL() {
@@ -199,6 +192,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.pushState({ path: newURL.href }, "", newURL.href);
       }
 
+      // 검색 폼 이벤트 리스너 설정
+      const searchForm = document.getElementById("searchForm");
+      searchForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // 기본 동작(페이지 새로고침) 방지
+        loadData(); // 데이터 로드 함수 호출
+      });
+
       // 초기 데이터 로드
       loadData();
     });
@@ -207,16 +207,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
 /* 250116 심유정 : 로그인 안 되어 있으면 로그인 페이지로 이동 시키기 */
-document.getElementById("searchForm").addEventListener("submit", function(event) {
-  const username = localStorage.getItem("displayName")
-  if (!username) {
-    //새로 고침 방지
-    event.preventDefault();
-    // 경고 메시지 표시
-    alert('로그인 후 이용가능합니다.');
-    // 로그인 페이지로 이동
-    window.location.href = '/login'; // 로그인 페이지로 이동
-  } 
-});
+document
+  .getElementById("searchForm")
+  .addEventListener("submit", function (event) {
+    const username = localStorage.getItem("displayName");
+    if (!username) {
+      //새로 고침 방지
+      event.preventDefault();
+      // 경고 메시지 표시
+      alert("로그인 후 이용가능합니다.");
+      // 로그인 페이지로 이동
+      window.location.href = "/login"; // 로그인 페이지로 이동
+    }
+  });
