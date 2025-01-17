@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.pushState({ path: newURL.href }, "", newURL.href);
       }
 
-      // 검색 폼 이벤트 리스너 설정
+      // 검색 폼 이벤트 리스너 설정 20250117 채준병
       const searchForm = document.getElementById("searchForm");
       searchForm.addEventListener("submit", function (event) {
         event.preventDefault(); // 기본 동작(페이지 새로고침) 방지
