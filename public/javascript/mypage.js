@@ -237,11 +237,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    // 이미지 클릭 시 파일 선택 창 열기
+   /*  // 이미지 클릭 시 파일 선택 창 열기
     profilePreview.addEventListener("click", (event) => {
       event.stopPropagation(); // 이벤트 전파 차단
       profileImage.click();
-    });
+    }); */
 
     // 파일 선택 버튼 클릭 시 파일 선택 창 열기
     document

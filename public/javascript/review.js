@@ -69,7 +69,7 @@ const renderReviews = (reviews) => {
 getReviewList();
 
 const handleReviewSubmission = async () => {
-    const reviewComment = document.getElementById("reviewComment").value.trim(); // 입력된 리뷰 내용
+    const reviewComment = document.getElementById("consentText").value.trim(); // 입력된 리뷰 내용
 
     if (!reviewComment) {
         alert("리뷰 내용을 입력해주세요.");
@@ -90,7 +90,7 @@ const handleReviewSubmission = async () => {
         console.log("리뷰가 성공적으로 추가되었습니다.");
         getReviewList()
         // 리뷰 입력 필드 초기화
-        document.getElementById("reviewComment").value = ""; // 텍스트 영역 비우기
+        document.getElementById("consentText").value = ""; // 텍스트 영역 비우기
         alert("리뷰가 성공적으로 제출되었습니다.");
     } catch (error) {
         console.error("리뷰를 추가하는 중 오류가 발생했습니다: ", error);
