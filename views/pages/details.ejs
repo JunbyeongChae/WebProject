@@ -1,105 +1,109 @@
 <!-- views/pages/details.ejs -->
 <%- include('../partials/header') %>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Store Details</title>
-  <!-- CSS 파일 포함 -->
-  <link rel="stylesheet" href="/stylesheets/style.css" />
-  <!-- FontAwesome 아이콘 사용 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <style>
-    /* css에 적용시키면 mypage에도 같은 id값으로 되어있어서 이상해져서 여기에 직접적용 */
-    #content-wrapper {
-      display: flex;
-      flex-direction: row;  
-      justify-content: center;  
-      align-items: flex-start; 
-      gap: 30px;  
-    }
 
-    .map-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store Details</title>
+    <!-- CSS 파일 포함 -->
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <!-- FontAwesome 아이콘 사용 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+      /* css에 적용시키면 mypage에도 같은 id값으로 되어있어서 이상해져서 여기에 직접적용 */
+      #content-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+      }
 
-<body>
-  <div id="content-wrapper" class="container my-5 d-flex flex-row justify-content-center align-items-start gap-4">
-    <!-- 왼쪽 칸 -->
-    <div class="col-md-4 d-flex flex-column">
-      <h5>
-        Store Details
-        <i id="heart-icon" class="far fa-heart" style="cursor: pointer; float: right"></i>
-      </h5>
-      <!-- 상단: 가게 이미지 -->
-      <div class="mb-3">
-        <img id="storeImage" style="height: 250px; width: 400px;" src="https://placehold.co/600x400" alt="Store Image" class="img-fluid rounded" />
-      </div>
-      <!-- 중간: 가게 정보 -->
-      <div class="mb-3" style="background-color: white;">
-        <h5>Store Information</h5>
-        <p><strong>Name:</strong> <span id="storeName">The Italian Corner</span></p>
-        <p><strong>Address:</strong> <span id="storeAddress">123 Main St, City</span></p>
-        <p><strong>Contact:</strong> <span id="storeContact">+123-456-7890</span></p>
-        <p><strong>Opening Hours:</strong> <span id="storeHours">9:00 AM - 10:00 PM</span></p>
-        <p style="font-weight: bold;">Menu:</p>
-        <ul id="storeMenu" class="list-group" >
-          <!-- 메뉴 항목들이 동적으로 추가됩니다 -->
-        </ul>
-      </div>
-    </div>
+      .map-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+  </head>
 
-    <!-- 중간 칸: 지도 -->
-    <div class="col-md-4">
-      <h5>Location</h5>
-      <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
-        <p class="text-center my-5">Map Area</p>
+  <body>
+    <div id="content-wrapper" class="container my-5 d-flex flex-row justify-content-center align-items-start gap-4">
+      <!-- 왼쪽 칸 -->
+      <div class="col-md-4 d-flex flex-column">
+        <h5>
+          Store Details
+          <i id="heart-icon" class="far fa-heart" style="cursor: pointer; float: right"></i>
+        </h5>
+        <!-- 상단: 가게 이미지 -->
+        <div class="mb-3">
+          <img id="storeImage" style="height: 250px; width: 400px;" src="https://placehold.co/600x400" alt="Store Image"
+            class="img-fluid rounded" />
+        </div>
+        <!-- 중간: 가게 정보 -->
+        <div class="mb-3" style="background-color: white;">
+          <h5>Store Information</h5>
+          <p><strong>Name:</strong> <span id="storeName">The Italian Corner</span></p>
+          <p><strong>Address:</strong> <span id="storeAddress">123 Main St, City</span></p>
+          <p><strong>Contact:</strong> <span id="storeContact">+123-456-7890</span></p>
+          <p><strong>Opening Hours:</strong> <span id="storeHours">9:00 AM - 10:00 PM</span></p>
+          <p style="font-weight: bold;">Menu:</p>
+          <ul id="storeMenu" class="list-group">
+            <!-- 메뉴 항목들이 동적으로 추가됩니다 -->
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!-- 오른쪽 칸 -->
-    <div class="col-md-4 d-flex flex-column">
-      <h5>Reviews</h5>
-      <!-- 상단부터 중간: 리뷰 목록 -->
-      <!-- 250115 심유정 : id값 추가 -->
-      <div class="flex-grow-1 mb-3 overflow-auto border p-3 rounded" style="max-height: 400px; background-color: white;" id="reviews-container" >
-        <div class="mb-2 border-bottom pb-2"></div>
+      <!-- 중간 칸: 지도 -->
+      <div class="col-md-4">
+        <h5>Location</h5>
+        <div id="map" class="border rounded" style="height: 100%; background-color: #e9ecef;">
+          <p class="text-center my-5">Map Area</p>
+        </div>
       </div>
-      <!-- 하단: 리뷰 입력 -->
-      <div class="mt-auto">
-        <h5>Add a Review</h5>
+
+      <!-- 오른쪽 칸 -->
+      <div class="col-md-4 d-flex flex-column">
+        <h5>Reviews</h5>
+        <!-- 상단부터 중간: 리뷰 목록 -->
         <!-- 250115 심유정 : id값 추가 -->
-        <form id="reviewForm">
-          <div class="form-group mb-2">
-            <!-- 250115 심유정 : id값 추가 -->
-            <textarea id="reviewComment" class="form-control" rows="3" placeholder="Write your review here"></textarea>
-          </div>
+        <div class="flex-grow-1 mb-3 overflow-auto border p-3 rounded"
+          style="max-height: 400px; background-color: white;" id="reviews-container">
+          <div class="mb-2 border-bottom pb-2"></div>
+        </div>
+        <!-- 하단: 리뷰 입력 -->
+        <div class="mt-auto">
+          <h5>Add a Review</h5>
           <!-- 250115 심유정 : id값 추가 -->
-          <button class="btn btn-dark w-100" id="submitBtn">Submit</button>
-        </form>
+          <form id="reviewForm">
+            <div class="form-group mb-2">
+              <!-- 250115 심유정 : id값 추가 -->
+              <textarea id="consentText" class="form-control" rows="3" placeholder="Write your review here"></textarea>
+            </div>
+            <!-- 250115 심유정 : id값 추가 -->
+            <button class="btn btn-dark w-100" id="submitBtn">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
 
-  <%- include('../partials/footer') %>
-</body>
+    <%- include('../partials/footer') %>
+  </body>
 
-<!-- 241224 박제성 맵 호출 및 스크립트 호출 -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false&libraries=services"></script>
-<script type="module" src="/javascript/details.js"></script>
-<!-- 241224 맵 호출 및 스크립트 호출 부분 끝 -->
+  <!-- 241224 박제성 맵 호출 및 스크립트 호출 -->
+  <script
+    src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= javascriptKey %>&autoload=false&libraries=services"></script>
+  <script type="module" src="/javascript/details.js"></script>
+  <!-- 241224 맵 호출 및 스크립트 호출 부분 끝 -->
 
-<!-- 하트 버튼 활성화 스크립트 -->
-<script>
-  document.getElementById('heart-icon').addEventListener('click', function () {
-    this.classList.toggle('fas');
-    this.classList.toggle('far');
-    this.classList.toggle('heart-icon-active'); /* 하트 활성화 상태에서 색상 변경 */
-  });
-</script>
+  <!-- 하트 버튼 활성화 스크립트 -->
+  <script>
+    document.getElementById('heart-icon').addEventListener('click', function () {
+      this.classList.toggle('fas');
+      this.classList.toggle('far');
+      this.classList.toggle('heart-icon-active'); /* 하트 활성화 상태에서 색상 변경 */
+    });
+  </script>
 
-<!-- 250115 심유정 : review.js 추가 -->
-<script type="module" src="/javascript/review.js"></script>
+  <!-- 250115 심유정 : review.js 추가 -->
+  <script type="module" src="/javascript/review.js"></script>
